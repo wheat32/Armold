@@ -17,19 +17,21 @@ public class UltrasonicTest
 	
 	public static void setUp()
 	{
-		Wheel wheels = new Wheel;
-		WheeledChassis chasis = new WheeledChassis(null, 0);
-		MovePilot pilot = new MovePilot(chasis);  // parameters in inches
-		EV3UltrasonicSensor    ultra = new EV3UltrasonicSensor(SensorPort.S1);
+		Wheel[] wheels = new Wheel[2];
+		wheels[1] = WheeledChassis.modelWheel(Motor.A, 2.1);
+		wheels[2] = WheeledChassis.modelWheel(Motor.D, 2.1);
+		WheeledChassis chasis = new WheeledChassis(wheels, WheeledChassis.TYPE_DIFFERENTIAL);
+		MovePilot pilot = new MovePilot(chasis); 
+		EV3UltrasonicSensor ultra = new EV3UltrasonicSensor(SensorPort.S1);
 		
-		init();
+		init(pilot, ultra);
 	}
 	
-	private static void init() 
+	private static void init(MovePilot pilot, EV3UltrasonicSensor ultra) 
 	{
 		Sound.beepSequenceUp();  // make sound when ready.
 		final RangeFinderAdapter sonar = new RangeFinderAdapter(ultra); 
-		pilot.setRotateSpeed(10); // cm per second
+		pilot.setAngularSpeed(10); // cm per second
 		
 		Timer timer = new Timer(200,new TimerListener() 
 		{
@@ -55,14 +57,17 @@ public class UltrasonicTest
 		}
 	}
 	
-	private static void move(MovePilot pilot) {
+	private static void move(MovePilot pilot) 
+	{
 		int n = 1;
-		do {
-		while (noObstacle) {
-			pilot.travel(4);
-		}
-		recover(pilot);
-		n++;
+		do 
+		{
+			while (noObstacle) 
+			{
+				pilot.travel(4);
+			}
+			recover(pilot);
+			n++;
 		} while(n < 2);
 	}
 	

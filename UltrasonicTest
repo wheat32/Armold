@@ -1,0 +1,80 @@
+package clr2027.ultra;
+
+import lejos.hardware.Sound;
+import lejos.hardware.motor.Motor;
+import lejos.hardware.port.SensorPort;
+import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.robotics.RangeFinderAdapter;
+import lejos.robotics.navigation.DifferentialPilot;
+import lejos.utility.Timer;
+import lejos.utility.TimerListener;
+
+public class UltrasonicTest {
+	
+	private boolean noObstacle = true;
+
+	public UltrasonicTest() {
+		init();
+		
+	}
+	
+	private void init() {
+		DifferentialPilot pilot = new DifferentialPilot(2.1f, 2.1f, 6.0f, Motor.A, Motor.D, true);  // parameters in inches
+		EV3UltrasonicSensor    ultra = new EV3UltrasonicSensor(SensorPort.S1);
+		Sound.beepSequenceUp();  // make sound when ready.
+		final RangeFinderAdapter sonar = new RangeFinderAdapter(ultra);
+		pilot.setTravelSpeed(4);  // cm per second
+		pilot.setRotateSpeed(10);
+		Timer timer = new Timer(200,new TimerListener() {
+			
+			@Override
+			public void timedOut() {
+				sensorCheck(sonar);
+			}
+		});
+		timer.start();
+		move(pilot);
+	}
+		
+	private void sensorCheck(RangeFinderAdapter sonar) {
+		if (sonar.getRange() < 0.25f) {
+			//obstacleAhead();
+			Sound.beep();
+			noObstacle = false;
+		} else {
+			noObstacle = true;
+		}
+	}
+	
+	private void move(DifferentialPilot pilot) {
+		int n = 1;
+		do {
+		while (noObstacle) {
+			pilot.travel(4);
+		}
+		recover(pilot);
+		n++;
+		} while(n < 2);
+	}
+	
+	private void recover(DifferentialPilot pilot) {
+		pilot.travel(-20);
+		pilot.rotateLeft();
+	}
+	
+	public static void main(String[] args) {
+		
+		UltrasonicTest a = new UltrasonicTest();
+		//ultra.enable();
+		
+		
+		 //pilot.travel(4);         // cm
+		 
+		 //distance.fetchSample(sample, 0);
+		 
+		// fetch a sample
+		 
+
+	}
+
+}

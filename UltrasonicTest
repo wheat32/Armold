@@ -2,22 +2,15 @@ package movingTest;
 
 import lejos.hardware.Sound;
 import lejos.hardware.motor.Motor;
-import lejos.hardware.port.SensorPort;
-import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.robotics.RangeFinderAdapter;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
 import lejos.robotics.navigation.MovePilot;
-import lejos.utility.Timer;
-import lejos.utility.TimerListener;
 
-public class UltrasonicTest 
+public class MovementTest 
 {
-	
-	private  boolean noObstacle = true;
 	private MovePilot pilot;
 	
-	public  UltrasonicTest() 
+	public  MovementTest() 
 	{
 		// TODO Auto-generated constructor stub
 		Wheel[] wheels = new Wheel[2];
@@ -41,20 +34,9 @@ public class UltrasonicTest
 		pilot.stop();
 	}
 	
-	private  void move(MovePilot pilot) 
-	{
-		recover(pilot);
-	}
-	
-	private static void recover(MovePilot pilot) 
-	{
-		
-		pilot.rotateLeft();
-	}
-	
 	public static void main(String[] args) 
 	{	
-		new UltrasonicTest();
+		new MovementTest();
 	}
 
 }

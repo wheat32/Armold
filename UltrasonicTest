@@ -1,39 +1,44 @@
-package clr2027.ultra;
+package movingTest;
 
 import lejos.hardware.Sound;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.RangeFinderAdapter;
-import lejos.robotics.navigation.DifferentialPilot;
+import lejos.robotics.chassis.Wheel;
+import lejos.robotics.chassis.WheeledChassis;
+import lejos.robotics.navigation.MovePilot;
 import lejos.utility.Timer;
 import lejos.utility.TimerListener;
 
-public class UltrasonicTest {
+public class UltrasonicTest 
+{
 	
-	private boolean noObstacle = true;
-
-	public UltrasonicTest() {
-		init();
+	private  boolean noObstacle = true;
+	private MovePilot pilot;
+	private EV3UltrasonicSensor ultra;
+	
+	public  UltrasonicTest() {
+		// TODO Auto-generated constructor stub
+		Wheel[] wheels = new Wheel[2];
+		wheels[0] = WheeledChassis.modelWheel(Motor.A, 2.1).offset(70);
+		wheels[1] = WheeledChassis.modelWheel(Motor.D, 2.1).offset(-70);
+		WheeledChassis chasis = new WheeledChassis(wheels, WheeledChassis.TYPE_DIFFERENTIAL);
+		pilot = new MovePilot(chasis); 
+		ultra = new EV3UltrasonicSensor(SensorPort.S1);
 		
+		init(pilot, ultra);
 	}
 	
-	private void init() {
-		DifferentialPilot pilot = new DifferentialPilot(2.1f, 2.1f, 6.0f, Motor.A, Motor.D, true);  // parameters in inches
-		EV3UltrasonicSensor    ultra = new EV3UltrasonicSensor(SensorPort.S1);
+	private static void init(final MovePilot pilot, EV3UltrasonicSensor ultra) 
+	{
 		Sound.beepSequenceUp();  // make sound when ready.
-		final RangeFinderAdapter sonar = new RangeFinderAdapter(ultra);
-		pilot.setTravelSpeed(4);  // cm per second
-		pilot.setRotateSpeed(10);
-		Timer timer = new Timer(200,new TimerListener() {
-			
-			@Override
-			public void timedOut() {
-				sensorCheck(sonar);
-			}
-		});
-		timer.start();
-		move(pilot);
+		RangeFinderAdapter sonar = new RangeFinderAdapter(ultra); 
+		pilot.setAngularSpeed(10); // cm per second
+		
+		pilot.travel(20);
+
+		pilot.stop();
 	}
 		
 	private void sensorCheck(RangeFinderAdapter sonar) {
@@ -46,35 +51,20 @@ public class UltrasonicTest {
 		}
 	}
 	
-	private void move(DifferentialPilot pilot) {
-		int n = 1;
-		do {
-		while (noObstacle) {
-			pilot.travel(4);
-		}
+	private  void move(MovePilot pilot) 
+	{
 		recover(pilot);
-		n++;
-		} while(n < 2);
 	}
 	
-	private void recover(DifferentialPilot pilot) {
-		pilot.travel(-20);
+	private static void recover(MovePilot pilot) 
+	{
+		
 		pilot.rotateLeft();
 	}
 	
-	public static void main(String[] args) {
-		
-		UltrasonicTest a = new UltrasonicTest();
-		//ultra.enable();
-		
-		
-		 //pilot.travel(4);         // cm
-		 
-		 //distance.fetchSample(sample, 0);
-		 
-		// fetch a sample
-		 
-
+	public static void main(String[] args) 
+	{	
+		new UltrasonicTest();
 	}
 
 }

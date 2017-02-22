@@ -1,0 +1,75 @@
+import lejos.hardware.Sound;
+import lejos.hardware.motor.Motor;
+import lejos.hardware.port.SensorPort;
+import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.robotics.RangeFinderAdapter;
+import lejos.robotics.chassis.Chassis;
+import lejos.robotics.chassis.Wheel;
+import lejos.robotics.chassis.WheeledChassis;
+import lejos.robotics.navigation.MovePilot;
+import lejos.utility.Timer;
+import lejos.utility.TimerListener;
+
+public class NavTest {
+	
+	Wheel wheel1 = WheeledChassis.modelWheel(Motor.A, 43.2).offset(-72);
+	 Wheel wheel2 = WheeledChassis.modelWheel(Motor.D, 43.2).offset(72);
+	 Chassis chassis = new WheeledChassis(new Wheel[]{wheel1, wheel2}); 
+	//WheeledChassis chassis = new WheeledChassis(wheels, WheeledChassis.TYPE_DIFFERENTIAL);	
+	MovePilot pilot = new MovePilot(chassis); 
+	private static EV3UltrasonicSensor ultra = new EV3UltrasonicSensor(SensorPort.S1);
+	final RangeFinderAdapter sonar = new RangeFinderAdapter(ultra); 
+	
+	private boolean noObstacle = true;
+	
+	public NavTest() {
+		init();
+	}
+	
+	private void init() {
+		Sound.beepSequenceUp();  // make sound when ready.		
+		pilot.setAngularSpeed(10); // cm per second
+		
+		Timer timer = new Timer(200,new TimerListener() {
+			
+			@Override
+			public void timedOut() {
+				sensorCheck(sonar);
+			}
+		});
+		
+		timer.start();
+		move(pilot);
+	}
+		
+	private void sensorCheck(RangeFinderAdapter sonar) {
+		if (sonar.getRange() < 0.25f) {
+			//obstacleAhead();
+			Sound.beep();
+			noObstacle = false;
+		} else {
+			noObstacle = true;
+		}
+	}
+	
+	private void move(MovePilot pilot) {
+		int n = 1;
+		do {
+			while (noObstacle) {
+				pilot.travel(4);
+			}
+			recover(pilot);
+			n++;
+		} while(n < 2);
+	}
+	
+	private void recover(MovePilot pilot) {
+		pilot.travel(-20);
+		pilot.rotateLeft();
+	}
+	
+	public static void main(String[] args) {	
+		NavTest a = new NavTest();
+	}
+
+}

@@ -16,39 +16,29 @@ public class UltrasonicTest
 	
 	private  boolean noObstacle = true;
 	private MovePilot pilot;
-	private EV3UltrasonicSensor ultra;
 	
-	public  UltrasonicTest() {
+	public  UltrasonicTest() 
+	{
 		// TODO Auto-generated constructor stub
 		Wheel[] wheels = new Wheel[2];
 		wheels[0] = WheeledChassis.modelWheel(Motor.A, 2.1).offset(70);
 		wheels[1] = WheeledChassis.modelWheel(Motor.D, 2.1).offset(-70);
 		WheeledChassis chasis = new WheeledChassis(wheels, WheeledChassis.TYPE_DIFFERENTIAL);
 		pilot = new MovePilot(chasis); 
-		ultra = new EV3UltrasonicSensor(SensorPort.S1);
 		
-		init(pilot, ultra);
+		init(pilot);
 	}
 	
-	private static void init(final MovePilot pilot, EV3UltrasonicSensor ultra) 
+	private static void init(final MovePilot pilot) 
 	{
 		Sound.beepSequenceUp();  // make sound when ready.
-		RangeFinderAdapter sonar = new RangeFinderAdapter(ultra); 
-		pilot.setAngularSpeed(10); // cm per second
 		
-		pilot.travel(20);
+		pilot.setAngularSpeed(10); // cm per second
+		pilot.setLinearSpeed(5);
+		
+		pilot.travel(-8);
 
 		pilot.stop();
-	}
-		
-	private void sensorCheck(RangeFinderAdapter sonar) {
-		if (sonar.getRange() < 0.25f) {
-			//obstacleAhead();
-			Sound.beep();
-			noObstacle = false;
-		} else {
-			noObstacle = true;
-		}
 	}
 	
 	private  void move(MovePilot pilot) 

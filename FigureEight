@@ -1,0 +1,54 @@
+import lejos.hardware.Sound;
+import lejos.hardware.motor.Motor;
+import lejos.robotics.chassis.Wheel;
+import lejos.robotics.chassis.WheeledChassis;
+import lejos.robotics.navigation.MovePilot;
+
+public class FigureEight 
+{
+	private MovePilot pilot;
+	
+	public  FigureEight() 
+	{
+		// TODO Auto-generated constructor stub
+		Wheel[] wheels = new Wheel[2];
+		wheels[0] = WheeledChassis.modelWheel(Motor.A, 2.1).offset(70);
+		wheels[1] = WheeledChassis.modelWheel(Motor.D, 2.1).offset(-70);
+		WheeledChassis chasis = new WheeledChassis(wheels, WheeledChassis.TYPE_DIFFERENTIAL);
+		pilot = new MovePilot(chasis); 
+		
+		init(pilot);
+	}
+	
+	private static void init(final MovePilot pilot) 
+	{
+		Sound.beepSequenceUp();  // make sound when ready.
+		
+		pilot.setAngularSpeed(6); // cm per second
+		pilot.setLinearSpeed(6);
+		
+		//pilot.travel(-2);
+		//pilot.arcForward(50);
+		//pilot.travelArc(-180, -80);
+		//pilot.travel(-2);
+		//pilot.travelArc(180, -80);
+
+		loop(pilot);
+		//pilot.stop();
+	}
+	
+	private static void loop(final MovePilot pilot) {
+		for (int i = 0; i < 2; i++) {
+			pilot.travelArc(-180, -80);
+			//pilot.travel(-2);
+			pilot.travelArc(180, -80);
+			//pilot.travel(-2);
+		}
+	}
+	
+	public static void main(String[] args) 
+	{	
+		new FigureEight();
+	}
+
+}

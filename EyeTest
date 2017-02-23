@@ -47,7 +47,7 @@ public class EyeTest
 		
 		while(pilot.isMoving() == true)
 		{
-			if(sonar.getRange() <= 8)
+			if(sonar.getRange() <= 10)//with large bumber attached, don't go below this value
 			{
 				break;
 			}

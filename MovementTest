@@ -1,42 +1,62 @@
-package movingTest;
+package eyeTest;
 
 import lejos.hardware.Sound;
 import lejos.hardware.motor.Motor;
+import lejos.hardware.port.SensorPort;
+import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.robotics.RangeFinderAdapter;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
 import lejos.robotics.navigation.MovePilot;
 
-public class MovementTest 
+public class EyeTest 
 {
 	private MovePilot pilot;
+	private EV3UltrasonicSensor sensor = new EV3UltrasonicSensor(SensorPort.S1);
+	private RangeFinderAdapter sonar = new RangeFinderAdapter(sensor);
 	
-	public  MovementTest() 
+	public EyeTest()
 	{
-		// TODO Auto-generated constructor stub
+		setUp();
+		testEyes();
+	}
+	
+	public void setUp()
+	{
 		Wheel[] wheels = new Wheel[2];
 		wheels[0] = WheeledChassis.modelWheel(Motor.A, 2.1).offset(70);
 		wheels[1] = WheeledChassis.modelWheel(Motor.D, 2.1).offset(-70);
-		WheeledChassis chasis = new WheeledChassis(wheels, WheeledChassis.TYPE_DIFFERENTIAL);
-		pilot = new MovePilot(chasis); 
+		WheeledChassis chassis = new WheeledChassis(wheels, WheeledChassis.TYPE_DIFFERENTIAL);
 		
-		init(pilot);
+		pilot = new MovePilot(chassis);
+		pilot.setMinRadius(6);	
+		pilot.setAngularSpeed(5); // cm per second
+		pilot.setLinearSpeed(8);  //do NOT surpass a speed of 15
+		
+		sensor.enable();
 	}
 	
-	private static void init(final MovePilot pilot) 
+	private void testEyes()
 	{
 		Sound.beepSequenceUp();  // make sound when ready.
 		
-		pilot.setAngularSpeed(10); // cm per second
-		pilot.setLinearSpeed(5);
+		pilot.travel(-120, true);
 		
-		pilot.travel(-8);
-
+		System.out.print("Moving...");
+		
+		while(pilot.isMoving() == true)
+		{	
+			if(sonar.getRange() <= 10)
+			{
+				break;//break out of the loop when the range is <= the number designated
+			}
+		}
+		
 		pilot.stop();
 	}
 	
-	public static void main(String[] args) 
-	{	
-		new MovementTest();
+	public static void main(String[] args)
+	{
+		new EyeTest();
 	}
-
 }

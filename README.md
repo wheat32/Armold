@@ -3,6 +3,6 @@ LHU Robotics Team
 
 This is a respository for code dumping.
 
-Any notes go down here:
-- SPEED MUST NOT SURPASS 15
+Any notes to better the cause or guidelines should go down here:
+- Speed should NOT surpass 15
  - Reason: Robot floors it and plants itself into a wall.

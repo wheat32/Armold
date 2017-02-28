@@ -1,6 +1,8 @@
+//package [yourpackagehere];
+
 import java.util.Iterator;
 
-public class ArrayStack<Item> //implements Stack<Item>//NEEDS INTERFACE THAT I DIDN'T UPLOAD
+public class ArrayStack<Item> implements Stack<Item>
 {
 	private Item[] data;
 	private int size = 0;

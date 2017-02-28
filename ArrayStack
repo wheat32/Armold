@@ -7,9 +7,7 @@ public class ArrayStack<Item> implements Stack<Item>
 	private Item[] data;
 	private int size = 0;
 	
-	/**
-	 * @param args
-	 */
+	/*FOR DEBUGGING
 	public static void main(String[] args) 
 	{
 		Stack<String> stack = new ArrayStack<>();
@@ -26,6 +24,7 @@ public class ArrayStack<Item> implements Stack<Item>
 			System.out.println(s);
 		}
 	}
+	*/
 	
 	@SuppressWarnings("unchecked")
 	public ArrayStack()

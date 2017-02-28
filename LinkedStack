@@ -3,7 +3,7 @@ import java.util.Iterator;
 import nep8189.arrayStructures.EmptyStructureException;
 import nep8189.arrayStructures.Stack;
 
-public class LinkedStack<Item> implements Stack<Item> 
+public class LinkedStack<Item> //implements Stack<Item>//NEEDS INTERFACE I DIDN'T UPLOAD 
 {
 	private class Node
 	{
@@ -14,9 +14,6 @@ public class LinkedStack<Item> implements Stack<Item>
 	private Node top;
 	private int size;
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Iterable#iterator()
-	 */
 	@Override
 	public Iterator<Item> iterator() 
 	{

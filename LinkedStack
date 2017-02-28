@@ -94,9 +94,7 @@ public class LinkedStack<Item> implements Stack<Item>
 		return size==0;//returns true or false depending on the value
 	}
 
-	/**
-	 * @param args
-	 */
+	/*FOR DEBUGGING
 	public static void main(String[] args) 
 	{
 		Stack<String> stack = new LinkedStack<>();
@@ -113,4 +111,5 @@ public class LinkedStack<Item> implements Stack<Item>
 			System.out.println(s);
 		}
 	}
+	*/
 }

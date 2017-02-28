@@ -1,6 +1,6 @@
 import java.util.Iterator;
 
-public class ArrayStack<Item> implements Stack<Item>
+public class ArrayStack<Item> //implements Stack<Item>//NEEDS INTERFACE THAT I DIDN'T UPLOAD
 {
 	private Item[] data;
 	private int size = 0;

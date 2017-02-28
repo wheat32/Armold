@@ -3,10 +3,6 @@ import java.util.Iterator;
 import nep8189.arrayStructures.EmptyStructureException;
 import nep8189.arrayStructures.Stack;
 
-/**
- * @author nep8189
- *
- */
 public class LinkedStack<Item> implements Stack<Item> 
 {
 	private class Node

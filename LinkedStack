@@ -1,9 +1,11 @@
+//package
+
 import java.util.Iterator;
 
 import nep8189.arrayStructures.EmptyStructureException;
 import nep8189.arrayStructures.Stack;
 
-public class LinkedStack<Item> //implements Stack<Item>//NEEDS INTERFACE I DIDN'T UPLOAD 
+public class LinkedStack<Item> implements Stack<Item>
 {
 	private class Node
 	{

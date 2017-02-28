@@ -1,9 +1,5 @@
 import java.util.Iterator;
 
-/**
- * @author nep8189
- *
- */
 public class ArrayStack<Item> implements Stack<Item>
 {
 	private Item[] data;

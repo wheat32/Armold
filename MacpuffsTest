@@ -1,0 +1,17 @@
+import java.io.File;
+
+import lejos.hardware.Sound;
+
+
+public class SoundTest {
+
+	
+	public static void main(String[] args)
+	{
+		System.out.println("playing wav...");
+        final File soundFile = new File("macpuffs8c.wav");
+        Sound.playSample(soundFile, 100);
+        System.exit(0);
+	}
+	
+}

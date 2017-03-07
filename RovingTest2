@@ -38,7 +38,7 @@ public class RovingTest2
 		pilot.setAngularSpeed(5); // cm per second
 		pilot.setLinearSpeed(defaultSpeed);  //do NOT surpass a speed of 15
 		
-		defaultDistance *= -1;//the robot must travel in a negative direction (because it is techinically backwards)
+		defaultDistance = -Math.abs(defaultDistance);//the robot must travel in a negative direction (because it is techinically backwards)
 		
 		sensor.enable();
 		

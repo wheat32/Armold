@@ -16,7 +16,7 @@ public class RovingTest2
 	private EV3UltrasonicSensor sensor = new EV3UltrasonicSensor(SensorPort.S1);
 	private RangeFinderAdapter sonar = new RangeFinderAdapter(sensor);
 	
-	private int defaultDistance = 160;//enter number as a positive int
+	private int defaultDistance = 160;
 	private int numOfMovements = 4;
 	private int defaultSpeed = 10;
 	

@@ -1,0 +1,93 @@
+import lejos.hardware.Button;
+import lejos.hardware.Sound;
+import lejos.hardware.motor.Motor;
+import lejos.hardware.port.SensorPort;
+import lejos.hardware.sensor.EV3TouchSensor;
+import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.robotics.RangeFinderAdapter;
+import lejos.robotics.TouchAdapter;
+import lejos.robotics.chassis.Wheel;
+import lejos.robotics.chassis.WheeledChassis;
+import lejos.robotics.navigation.MovePilot;
+
+public class TouchTest
+{
+	private MovePilot pilot;
+	private EV3UltrasonicSensor sensor = new EV3UltrasonicSensor(SensorPort.S1);
+	private RangeFinderAdapter sonar = new RangeFinderAdapter(sensor);
+	private EV3TouchSensor sensor2 = new EV3TouchSensor(SensorPort.S2);
+	private TouchAdapter touch = new TouchAdapter(sensor2);
+	private int defaultDistance = -160;
+	private int numOfMovements = 6;
+	
+	public TouchTest()
+	{
+		Wheel[] wheels = new Wheel[2];
+		wheels[0] = WheeledChassis.modelWheel(Motor.A, 2.1).offset(70);
+		wheels[1] = WheeledChassis.modelWheel(Motor.D, 2.1).offset(-70);
+		WheeledChassis chassis = new WheeledChassis(wheels, WheeledChassis.TYPE_DIFFERENTIAL);
+		pilot = new MovePilot(chassis);
+		pilot.setMinRadius(6);	
+		pilot.setAngularSpeed(5); // cm per second
+		pilot.setLinearSpeed(8);  //do NOT surpass a speed of 15
+		setUp();
+	}
+	
+	public void setUp()
+	{
+			
+		sensor.enable();
+		
+		testEyes();
+	}
+	
+	private void testEyes()
+	{		
+		Sound.beepSequenceUp();  // make sound when ready.
+		
+		pilot.travel(defaultDistance, true);
+		
+		System.out.print("Moving...\n");
+		
+		while(numOfMovements > 0)
+		{
+			if (touch.isPressed()) {
+				timeOut();
+			}
+			if(sonar.getRange() <= 24)
+			{
+				numOfMovements--;
+				
+				if(numOfMovements > 1)
+				{
+					System.out.println("Distance traveled: " + pilot.getMovement().getDistanceTraveled());
+					pilot.stop();
+					pilot.arc(pilot.getMinRadius(), 4);
+					pilot.travel(defaultDistance, true);
+				}
+			}
+		}
+		
+		pilot.stop();
+		buttonPress();
+		
+	}
+	
+	public void timeOut() {
+		pilot.stop();
+		Sound.playTone(3500, 1000, 80);
+		System.out.println("My face hurts");
+		buttonPress();
+		
+	}
+	
+	public void buttonPress() {
+		System.out.println("Press any button to end program.");
+		Button.waitForAnyPress();
+	}
+	
+	public static void main(String[] args)
+	{
+		new TouchTest();
+	}
+}

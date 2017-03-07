@@ -12,3 +12,10 @@ Any notes to better the cause or guidelines should go down here:
  - Reason: Robot floors it and plants itself into a wall.
 - Traveling distance for the robot must be a negative number.
  - Reason: Robot is technically moving backwards.
+- Input IDs:
+ - 1 = up
+ - 2 = down
+ - 4 = center
+ - 8 = right
+ - 16 = left
+ - 32 = back

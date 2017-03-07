@@ -40,10 +40,10 @@ public class RovingTest2
 		
 		//sensor.enable();
 		
-		testEyes();
+		testRove();
 	}
 	
-	private void testEyes()
+	private void testRove()
 	{		
 		Sound.beepSequenceUp();  // make sound when ready.
 		

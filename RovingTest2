@@ -17,6 +17,7 @@ public class RovingTest2
 	private RangeFinderAdapter sonar = new RangeFinderAdapter(sensor);
 	
 	private int numOfMovements = 4;
+	
 	private int defaultSpeed = 10;
 	private int backUpSpeed = 8;
 	

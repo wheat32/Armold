@@ -10,3 +10,5 @@ ARMOLD version:
 Any notes to better the cause or guidelines should go down here:
 - Speed should NOT surpass 15
  - Reason: Robot floors it and plants itself into a wall.
+- Traveling distance for the robot must be a negative number.
+ - Reason: Robot is technically moving backwards.

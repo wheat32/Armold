@@ -19,3 +19,5 @@ Any notes to better the cause or guidelines should go down here:
  - 8 = right
  - 16 = left
  - 32 = back
+- End all programs with System.exit(0);
+ - Reason: To prevent Armold from hard crashing

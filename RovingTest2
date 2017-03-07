@@ -16,9 +16,12 @@ public class RovingTest2
 	private EV3UltrasonicSensor sensor = new EV3UltrasonicSensor(SensorPort.S1);
 	private RangeFinderAdapter sonar = new RangeFinderAdapter(sensor);
 	
-	private int defaultDistance = 160;
 	private int numOfMovements = 4;
 	private int defaultSpeed = 10;
+	private int backUpSpeed = 8;
+	
+	private int defaultDistance = 160;
+	private int backUpDistance = 16;
 	
 	public RovingTest2()
 	{
@@ -39,6 +42,7 @@ public class RovingTest2
 		pilot.setLinearSpeed(defaultSpeed);  //do NOT surpass a speed of 15
 		
 		defaultDistance = -Math.abs(defaultDistance);//the robot must travel in a negative direction (because it is techinically backwards)
+		backUpDistance = Math.abs(backUpDistance);//MUST be positive for reverse travel
 		
 		sensor.enable();
 		
@@ -84,7 +88,9 @@ public class RovingTest2
 						}
 						else
 						{
-							pilot.travel(10);
+							pilot.setLinearSpeed(backUpSpeed);//goes to back-up speed
+							pilot.travel(backUpDistance);
+							pilot.setLinearSpeed(defaultSpeed);//goes back to default speed
 							pilot.arc(pilot.getMinRadius(), 8);
 						}
 					}

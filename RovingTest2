@@ -1,4 +1,4 @@
-//package
+//package [name];
 
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
@@ -9,6 +9,7 @@ import lejos.robotics.RangeFinderAdapter;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
 import lejos.robotics.navigation.MovePilot;
+import lejos.utility.Delay;
 
 public class RovingTest2
 {
@@ -51,7 +52,39 @@ public class RovingTest2
 	}
 	
 	private void testRove()
-	{		
+	{
+		Sound.beepSequence();
+		
+		System.out.println("Number of movements: " + numOfMovements);
+		
+		while(sonar.getRange() > 3)
+		{
+			if(Button.getButtons() == 4)
+			{
+				Sound.beep();
+				numOfMovements--;
+				System.out.println("\n\n\n\n\n\n\n\nNumber of movements: " + numOfMovements);
+			}
+			else if(Button.getButtons() == 1)
+			{
+				Sound.beep();
+				numOfMovements++;
+				System.out.println("\n\n\n\n\n\n\n\nNumber of movements: " + numOfMovements);
+			}
+			else if(Button.getButtons() == 2)
+			{
+				Sound.beep();
+				break;
+			}
+			else if(Button.getButtons() == 32)
+			{
+				Sound.twoBeeps();
+				System.exit(0);
+			}
+		}
+		
+		Delay.msDelay(3000);
+		
 		Sound.beepSequenceUp();  // make sound when ready.
 		
 		pilot.travel(defaultDistance, true);
@@ -64,6 +97,12 @@ public class RovingTest2
 		
 		while(numOfMovements > 0)
 		{
+			if(Button.getButtons() == 32)//exit
+			{
+				Sound.twoBeeps();
+				break;
+			}
+			
 			if(sonar.getRange() <= 20)
 			{
 				numOfMovements--;
@@ -90,7 +129,7 @@ public class RovingTest2
 						else
 						{
 							pilot.setLinearSpeed(backUpSpeed);//goes to back-up speed
-							pilot.travel(backUpDistance);
+							pilot.travel(backUpDistance, false);
 							pilot.setLinearSpeed(defaultSpeed);//goes back to default speed
 							pilot.arc(pilot.getMinRadius(), 8);
 						}
@@ -101,12 +140,15 @@ public class RovingTest2
 					pilot.travel(defaultDistance, true);
 				}
 			}
-			else if(pilot.getMovement().getDistanceTraveled() >= defaultDistance)
+			
+			if(pilot.getMovement().getDistanceTraveled() <= -Math.abs(defaultDistance) && numOfMovements > 0)
 			{
+				//Sound.beep();
 				Motor.B.rotateTo(-90);
 				Motor.B.rotateTo(90);
 				Motor.B.rotateTo(0);
 				Motor.B.close();
+				
 				if(sonar.getRange() > 20)
 				{
 					pilot.travel(defaultDistance, true);
@@ -124,6 +166,7 @@ public class RovingTest2
 		
 		System.out.println("Press any button to end.");
 		Button.waitForAnyPress();
+		System.exit(0);
 	}
 	
 	public static void main(String[] args)

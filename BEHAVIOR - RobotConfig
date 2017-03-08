@@ -12,11 +12,10 @@ public class RobotConfig
 {
 	private EV3UltrasonicSensor sensor;
 	
-	private EV3TouchSensor touch;
+	private EV3TouchSensor[] touch;
 	
 	private Wheel[] wheels;
 	private WheeledChassis chassis;
-	
 	private MovePilot pilot;
 	
 	public void configurePilot(NXTRegulatedMotor[] motors, float[] diameters, int[] offsets)
@@ -38,9 +37,12 @@ public class RobotConfig
 		sensor = new EV3UltrasonicSensor(port);
 	}	
 	
-	public void configureTouchSensor(Port port)
+	public void configureTouchSensor(Port[] ports)
 	{
-		touch = new EV3TouchSensor(port);
+		for(int i = 0; i < ports.length; i++)
+		{
+			touch[i] = new EV3TouchSensor(ports[i]);
+		}
 	}
 	
 	public EV3UltrasonicSensor getSensor() 
@@ -48,7 +50,7 @@ public class RobotConfig
 		return sensor;
 	}
 
-	public EV3TouchSensor getTouch() 
+	public EV3TouchSensor[] getTouch() 
 	{
 		return touch;
 	}

@@ -1,12 +1,9 @@
 package behaviorControl;
 
 import lejos.hardware.motor.NXTRegulatedMotor;
-import lejos.hardware.port.SensorPort;
-import lejos.hardware.sensor.BaseSensor;
+import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.robotics.RangeFinderAdapter;
-import lejos.robotics.TouchAdapter;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
 import lejos.robotics.navigation.MovePilot;
@@ -14,17 +11,14 @@ import lejos.robotics.navigation.MovePilot;
 public class RobotConfig 
 {
 	private EV3UltrasonicSensor sensor;
-	private RangeFinderAdapter sonar;
 	
-	private EV3TouchSensor[] ev3Touch = new EV3TouchSensor[2];
-	private TouchAdapter[] touch;
-	private short indexOfTouchAdapter = 0;
+	private EV3TouchSensor touch;
 	
 	private Wheel[] wheels;
 	private WheeledChassis chassis;
 	private MovePilot pilot;
 	
-	public void configureWheels(NXTRegulatedMotor[] motors, float[] diameters, int[] offsets)
+	public void configurePilot(NXTRegulatedMotor[] motors, float[] diameters, int[] offsets)
 	{
 		wheels = new Wheel[motors.length];
 		
@@ -37,77 +31,25 @@ public class RobotConfig
 		pilot = new MovePilot(chassis);
 	}
 	
-	public void configureSensors(short[] ports, BaseSensor[] sensor)
+	
+	public void confugureUltraSonicSensor(Port port)
 	{
-		for(int i = 0; i < sensor.length; i++)//run through how many sensors there are
-		{
-			if(sensor[i] instanceof EV3UltrasonicSensor)//check if it's EV3UltrasonicSensor
-			{
-				switch(ports[i])
-				{
-					case 1:
-						this.sensor = new EV3UltrasonicSensor(SensorPort.S1);
-						break;
-					case 2:
-						this.sensor = new EV3UltrasonicSensor(SensorPort.S2);
-						break;
-					case 3:
-						this.sensor = new EV3UltrasonicSensor(SensorPort.S3);
-						break;
-					case 4:
-						this.sensor = new EV3UltrasonicSensor(SensorPort.S4);
-						break;
-					default:
-						try 
-						{
-							throw new Exception("Invalid number for sensor port.");
-						} 
-						catch (Exception e) 
-						{
-							e.printStackTrace();
-						}
-				}
-				sonar = new RangeFinderAdapter(this.sensor);
-			}
-			else if(sensor[i] instanceof EV3TouchSensor)//check if it's EV3TouchSensor
-			{
-				switch(ports[i])
-				{
-					case 1:
-						ev3Touch[indexOfTouchAdapter] = new EV3TouchSensor(SensorPort.S1);
-						break;
-					case 2:
-						ev3Touch[indexOfTouchAdapter] = new EV3TouchSensor(SensorPort.S2);
-						break;
-					case 3:
-						ev3Touch[indexOfTouchAdapter] = new EV3TouchSensor(SensorPort.S3);
-						break;
-					case 4:
-						ev3Touch[indexOfTouchAdapter] = new EV3TouchSensor(SensorPort.S4);
-						break;
-					default:
-						try 
-						{
-							throw new Exception("Invalid number for sensor port.");
-						} 
-						catch (Exception e) 
-						{
-							e.printStackTrace();
-						}
-				}
-				touch[indexOfTouchAdapter] = new TouchAdapter(ev3Touch[indexOfTouchAdapter]);
-				indexOfTouchAdapter++;
-			}
-			else
-			{
-				throw new ClassCastException();
-			}
-		}
+		sensor = new EV3UltrasonicSensor(port);
+	}	
+	
+	public void configureTouchSensor(Port port)
+	{
+		touch = new EV3TouchSensor(port);
+	}
+	
+	public EV3UltrasonicSensor getSensor() 
+	{
+		return sensor;
 	}
 
-	public RangeFinderAdapter getSonar() 
+	public EV3TouchSensor getTouch() 
 	{
-		return sonar;
+		return touch;
 	}
 
 	public MovePilot getPilot() 

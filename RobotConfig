@@ -1,7 +1,6 @@
 package behaviorControl;
 
 import lejos.hardware.motor.NXTRegulatedMotor;
-import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.BaseSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
@@ -14,14 +13,14 @@ import lejos.robotics.navigation.MovePilot;
 
 public class RobotConfig 
 {
-	private BaseSensor[] sensorArray;// = new EV3UltrasonicSensor(SensorPort.S1);
+	private EV3UltrasonicSensor sensor;
 	private RangeFinderAdapter sonar;
-	private TouchAdapter[] touch;
 	
+	private EV3TouchSensor[] ev3Touch = new EV3TouchSensor[2];
+	private TouchAdapter[] touch;
 	private short indexOfTouchAdapter = 0;
 	
 	private Wheel[] wheels;
-	
 	private WheeledChassis chassis;
 	private MovePilot pilot;
 	
@@ -47,20 +46,16 @@ public class RobotConfig
 				switch(ports[i])
 				{
 					case 1:
-						sensorArray[i] = new EV3UltrasonicSensor(SensorPort.S1);
-						sonar = new RangeFinderAdapter(sensorArray[i]);
+						this.sensor = new EV3UltrasonicSensor(SensorPort.S1);
 						break;
 					case 2:
-						sensorArray[i] = new EV3UltrasonicSensor(SensorPort.S2);
-						sonar = new RangeFinderAdapter(sensorArray[i]);
+						this.sensor = new EV3UltrasonicSensor(SensorPort.S2);
 						break;
 					case 3:
-						sensorArray[i] = new EV3UltrasonicSensor(SensorPort.S3);
-						sonar = new RangeFinderAdapter(sensorArray[i]);
+						this.sensor = new EV3UltrasonicSensor(SensorPort.S3);
 						break;
 					case 4:
-						sensorArray[i] = new EV3UltrasonicSensor(SensorPort.S4);
-						sonar = new RangeFinderAdapter(sensorArray[i]);
+						this.sensor = new EV3UltrasonicSensor(SensorPort.S4);
 						break;
 					default:
 						try 
@@ -72,26 +67,23 @@ public class RobotConfig
 							e.printStackTrace();
 						}
 				}
+				sonar = new RangeFinderAdapter(this.sensor);
 			}
 			else if(sensor[i] instanceof EV3TouchSensor)//check if it's EV3TouchSensor
 			{
 				switch(ports[i])
 				{
 					case 1:
-						sensorArray[i] = new EV3TouchSensor(SensorPort.S1);
-						touch[indexOfTouchAdapter++] = new TouchAdapter(sensorArray[i]);
+						ev3Touch[indexOfTouchAdapter] = new EV3TouchSensor(SensorPort.S1);
 						break;
 					case 2:
-						sensorArray[i] = new EV3TouchSensor(SensorPort.S2);
-						touch[indexOfTouchAdapter++] = new TouchAdapter(sensorArray[i]);
+						ev3Touch[indexOfTouchAdapter] = new EV3TouchSensor(SensorPort.S2);
 						break;
 					case 3:
-						sensorArray[i] = new EV3TouchSensor(SensorPort.S3);
-						touch[indexOfTouchAdapter++] = new TouchAdapter(sensorArray[i]);
+						ev3Touch[indexOfTouchAdapter] = new EV3TouchSensor(SensorPort.S3);
 						break;
 					case 4:
-						sensorArray[i] = new EV3TouchSensor(SensorPort.S4);
-						touch[indexOfTouchAdapter++] = new TouchAdapter(sensorArray[i]);
+						ev3Touch[indexOfTouchAdapter] = new EV3TouchSensor(SensorPort.S4);
 						break;
 					default:
 						try 
@@ -103,6 +95,7 @@ public class RobotConfig
 							e.printStackTrace();
 						}
 				}
+				touch[indexOfTouchAdapter++] = new TouchAdapter(ev3Touch[indexOfTouchAdapter]);
 			}
 			else
 			{

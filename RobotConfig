@@ -16,6 +16,7 @@ public class RobotConfig
 	
 	private Wheel[] wheels;
 	private WheeledChassis chassis;
+	
 	private MovePilot pilot;
 	
 	public void configurePilot(NXTRegulatedMotor[] motors, float[] diameters, int[] offsets)

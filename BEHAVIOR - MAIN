@@ -1,0 +1,29 @@
+package behaviorControl;
+
+import lejos.hardware.motor.Motor;
+import lejos.hardware.motor.NXTRegulatedMotor;
+import lejos.hardware.port.Port;
+import lejos.hardware.port.SensorPort;
+
+public class Main 
+{
+	private static NXTRegulatedMotor[] motors = {Motor.A, Motor.B};
+	private static float[] wheelDiameters = {2.1f, 2.1f};
+	private static int[] offsets = {-70, 70};
+	
+	private static Port ultraSonicSensorPort = SensorPort.S1;
+	
+	private static Port[] touchSensorPorts = {SensorPort.S2, SensorPort.S3};
+	
+	public static void main(String[] args) 
+	{
+		RobotConfig config = new RobotConfig();
+		config.configurePilot(motors, wheelDiameters, offsets);
+		config.configureTouchSensor(touchSensorPorts);
+		config.confugureUltraSonicSensor(ultraSonicSensorPort);
+		
+		Navigator nav = Navigator.getInstance(config);
+		nav.run();
+	}
+
+}

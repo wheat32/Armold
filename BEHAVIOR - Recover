@@ -1,0 +1,109 @@
+package behaviorControl;
+
+import lejos.hardware.motor.Motor;
+import lejos.hardware.motor.NXTRegulatedMotor;
+import lejos.hardware.sensor.EV3TouchSensor;
+import lejos.robotics.RangeFinderAdapter;
+import lejos.robotics.TouchAdapter;
+import lejos.robotics.navigation.MovePilot;
+import lejos.robotics.subsumption.Behavior;
+
+public class Recover implements Behavior 
+{
+	private boolean suppressed = false;
+	private final MovePilot pilot;
+	private final TouchAdapter[] touchAdapter = new TouchAdapter[2];
+	private final RangeFinderAdapter sonarAdapter;
+
+	private NXTRegulatedMotor servo = Motor.B;
+	
+	public Recover(RobotConfig rc)
+	{
+		pilot = rc.getPilot();
+		
+		EV3TouchSensor[] ev3Touch = rc.getTouch();
+		for(int i = 0; i < touchAdapter.length; i++)
+		{
+			touchAdapter[i] = new TouchAdapter(ev3Touch[i]);
+		}
+		
+		sonarAdapter = new RangeFinderAdapter(rc.getSensor());
+	}
+	
+	@Override
+	public boolean takeControl() 
+	{
+		if(sonarAdapter.getRange() <= 12)
+		{
+			return true;
+		}
+		
+		if(touchAdapter[0].isPressed() == true)//0 is the front bumper
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private void turnAction(final short num)
+	{
+		Runnable runnable = new Runnable() 
+		{
+			@Override
+			public void run() 
+			{
+				if(num == 1)
+				{
+					pilot.travel(2, true);//move backwards 10
+					servo.rotateTo(-90);
+				}
+				else if(num == 2)
+				{
+					servo.rotateTo(90);
+				}
+				else if(num == 3)
+				{
+					servo.rotateTo(0, true);
+					pilot.rotate(180);
+				}
+			}
+		};
+		Thread turnThread = new Thread(runnable);
+		turnThread.start();
+	}
+
+	@Override
+	public void action() 
+	{
+		suppressed = false;
+		
+		turnAction((short)1);
+		
+		if(!suppressed)
+		{
+			turnAction((short)2);
+		}
+		
+		if(!suppressed)
+		{
+			turnAction((short)3);
+		}
+		
+		pilot.stop();
+		servo.rotateTo(0);
+		servo.stop();
+	}
+
+	@Override
+	public void suppress() 
+	{
+		suppressed = true;
+	}
+	
+	public void setServo(NXTRegulatedMotor servo) 
+	{
+		this.servo = servo;//for later implementation
+	}
+
+}

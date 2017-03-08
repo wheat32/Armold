@@ -1,0 +1,33 @@
+package behaviorControl;
+
+import lejos.robotics.subsumption.Arbitrator;
+import lejos.robotics.subsumption.Behavior;
+
+public class Navigator 
+{
+	private static Navigator instance;
+	private RobotConfig config;
+	
+	private Navigator(RobotConfig config)
+	{
+		this.config = config;
+	}
+	
+	public static Navigator getInstance(RobotConfig config)
+	{
+		if (instance == null)
+			instance = new Navigator(config);
+		return instance;
+	}
+	
+	public void run()
+	{
+		Behavior b1 = new DriveForward(config);
+		Behavior b2 = new Recover(config);
+		Behavior b3 = new UserInput();
+		
+		Behavior[] arr = {b1,b2,b3};
+		Arbitrator arby = new Arbitrator(arr);
+		arby.go();
+	}
+}

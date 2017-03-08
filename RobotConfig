@@ -95,7 +95,8 @@ public class RobotConfig
 							e.printStackTrace();
 						}
 				}
-				touch[indexOfTouchAdapter++] = new TouchAdapter(ev3Touch[indexOfTouchAdapter]);
+				touch[indexOfTouchAdapter] = new TouchAdapter(ev3Touch[indexOfTouchAdapter]);
+				indexOfTouchAdapter++;
 			}
 			else
 			{

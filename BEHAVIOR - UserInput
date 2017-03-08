@@ -1,0 +1,32 @@
+package behaviorControl;
+
+import lejos.hardware.Button;
+import lejos.hardware.Sound;
+import lejos.robotics.subsumption.Behavior;
+
+public class UserInput implements Behavior
+{
+	@Override
+	public boolean takeControl() 
+	{
+		if(Button.getButtons() == 32)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void action() 
+	{
+		Sound.twoBeeps();
+		System.exit(0);
+	}
+
+	@Override
+	public void suppress() 
+	{
+		return;
+	}
+
+}

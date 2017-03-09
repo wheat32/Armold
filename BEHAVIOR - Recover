@@ -11,6 +11,8 @@ import lejos.robotics.subsumption.Behavior;
 public class Recover implements Behavior 
 {
 	private boolean suppressed = false;
+	private boolean keepControl = false;
+	
 	private final MovePilot pilot;
 	private final TouchAdapter[] touchAdapter = new TouchAdapter[2];
 	private final RangeFinderAdapter sonarAdapter;
@@ -43,6 +45,11 @@ public class Recover implements Behavior
 			return true;
 		}
 		
+		if(keepControl == true)
+		{
+			return true;
+		}
+		
 		return false;
 	}
 	
@@ -57,15 +64,32 @@ public class Recover implements Behavior
 				{
 					pilot.travel(2, true);//move backwards 10
 					servo.rotateTo(-90);
+					
+					if(sonarAdapter.getRange() >= 14)
+					{
+						pilot.rotate(-90);
+						pilot.stop();
+						servo.rotateTo(0);
+						keepControl = false;;
+					}
 				}
 				else if(num == 2)
 				{
 					servo.rotateTo(90);
+					
+					if(sonarAdapter.getRange() >= 14)
+					{
+						pilot.rotate(90);
+						pilot.stop();
+						servo.rotateTo(0);
+						keepControl = false;;
+					}
 				}
 				else if(num == 3)
 				{
 					servo.rotateTo(0, true);
 					pilot.rotate(180);
+					keepControl = false;
 				}
 			}
 		};
@@ -80,24 +104,23 @@ public class Recover implements Behavior
 		
 		turnAction((short)1);
 		
-		if(!suppressed)
+		if(keepControl)
 		{
 			turnAction((short)2);
 		}
 		
-		if(!suppressed)
+		if(keepControl)
 		{
 			turnAction((short)3);
 		}
 		
-		pilot.stop();
-		servo.rotateTo(0);
-		servo.stop();
+		throw new RuntimeException();
 	}
 
 	@Override
 	public void suppress() 
 	{
+		servo.stop();
 		suppressed = true;
 	}
 	

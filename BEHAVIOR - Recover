@@ -14,6 +14,7 @@ public class Recover implements Behavior
 	private boolean suppressed = false;
 	private boolean keepControl = false;
 	
+	
 	private final MovePilot pilot;
 	private final TouchAdapter[] touchAdapter = new TouchAdapter[2];
 	private final RangeFinderAdapter sonarAdapter;
@@ -36,13 +37,16 @@ public class Recover implements Behavior
 	@Override
 	public boolean takeControl() 
 	{
-		if(sonarAdapter.getRange() <= 12)
+		
+		if(sonarAdapter.getRange() <= 14)
 		{
+			keepControl = true;
 			return true;
 		}
 		
 		if(touchAdapter[0].isPressed() == true)//0 is the front bumper
 		{
+			keepControl = true;
 			return true;
 		}
 		
@@ -56,38 +60,36 @@ public class Recover implements Behavior
 	
 	private void turnAction(short num)
 	{
+		if(num == 1)
 		{
-			if(num == 1)
+			pilot.travel(3, true);//move backwards 10
+			servo.rotateTo(-90);
+			
+			if(sonarAdapter.getRange() >= 20)
 			{
-				pilot.travel(2, true);//move backwards 10
-				servo.rotateTo(-90);
-				
-				if(sonarAdapter.getRange() >= 14)
-				{
-					pilot.rotate(-90);
-					pilot.stop();
-					servo.rotateTo(0);
-					keepControl = false;
-				}
-			}
-			else if(num == 2)
-			{
-				servo.rotateTo(90);
-				
-				if(sonarAdapter.getRange() >= 14)
-				{
-					pilot.rotate(90);
-					pilot.stop();
-					servo.rotateTo(0);
-					keepControl = false;;
-				}
-			}
-			else if(num == 3)
-			{
-				servo.rotateTo(0, true);
-				pilot.rotate(180);
+				pilot.rotate(90);
+				pilot.stop();
+				servo.rotateTo(0);
 				keepControl = false;
 			}
+		}
+		else if(num == 2)
+		{
+			servo.rotateTo(90);
+			
+			if(sonarAdapter.getRange() >= 20)
+			{
+				pilot.rotate(-90);
+				pilot.stop();
+				servo.rotateTo(0);
+				keepControl = false;
+			}
+		}
+		else if(num == 3)
+		{
+			servo.rotateTo(0, true);
+			pilot.rotate(180);
+			keepControl = false;
 		}
 	}
 
@@ -119,7 +121,6 @@ public class Recover implements Behavior
 	@Override
 	public void suppress() 
 	{
-		servo.stop();
 		suppressed = true;
 	}
 	

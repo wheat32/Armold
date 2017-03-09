@@ -9,7 +9,7 @@ public class Main
 {
 	private static NXTRegulatedMotor[] motors = {Motor.A, Motor.D};
 	private static float[] wheelDiameters = {2.1f, 2.1f};
-	private static int[] offsets = {-70, 70};
+	private static int[] offsets = {-3, 3};
 	
 	private static Port ultraSonicSensorPort = SensorPort.S1;
 	

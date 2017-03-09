@@ -7,7 +7,7 @@ import lejos.hardware.port.SensorPort;
 
 public class Main 
 {
-	private static NXTRegulatedMotor[] motors = {Motor.A, Motor.B};
+	private static NXTRegulatedMotor[] motors = {Motor.A, Motor.D};
 	private static float[] wheelDiameters = {2.1f, 2.1f};
 	private static int[] offsets = {-70, 70};
 	

@@ -1,5 +1,6 @@
 package behaviorControl;
 
+import lejos.hardware.Button;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.motor.NXTRegulatedMotor;
 import lejos.hardware.sensor.EV3TouchSensor;
@@ -53,54 +54,49 @@ public class Recover implements Behavior
 		return false;
 	}
 	
-	private void turnAction(final short num)
+	private void turnAction(short num)
 	{
-		Runnable runnable = new Runnable() 
 		{
-			@Override
-			public void run() 
+			if(num == 1)
 			{
-				if(num == 1)
+				pilot.travel(2, true);//move backwards 10
+				servo.rotateTo(-90);
+				
+				if(sonarAdapter.getRange() >= 14)
 				{
-					pilot.travel(2, true);//move backwards 10
-					servo.rotateTo(-90);
-					
-					if(sonarAdapter.getRange() >= 14)
-					{
-						pilot.rotate(-90);
-						pilot.stop();
-						servo.rotateTo(0);
-						keepControl = false;;
-					}
-				}
-				else if(num == 2)
-				{
-					servo.rotateTo(90);
-					
-					if(sonarAdapter.getRange() >= 14)
-					{
-						pilot.rotate(90);
-						pilot.stop();
-						servo.rotateTo(0);
-						keepControl = false;;
-					}
-				}
-				else if(num == 3)
-				{
-					servo.rotateTo(0, true);
-					pilot.rotate(180);
+					pilot.rotate(-90);
+					pilot.stop();
+					servo.rotateTo(0);
 					keepControl = false;
 				}
 			}
-		};
-		Thread turnThread = new Thread(runnable);
-		turnThread.start();
+			else if(num == 2)
+			{
+				servo.rotateTo(90);
+				
+				if(sonarAdapter.getRange() >= 14)
+				{
+					pilot.rotate(90);
+					pilot.stop();
+					servo.rotateTo(0);
+					keepControl = false;;
+				}
+			}
+			else if(num == 3)
+			{
+				servo.rotateTo(0, true);
+				pilot.rotate(180);
+				keepControl = false;
+			}
+		}
 	}
 
 	@Override
 	public void action() 
 	{
+		Button.LEDPattern(2);
 		suppressed = false;
+		keepControl = true;
 		
 		turnAction((short)1);
 		
@@ -114,7 +110,10 @@ public class Recover implements Behavior
 			turnAction((short)3);
 		}
 		
-		throw new RuntimeException();
+		if(keepControl)
+		{
+			throw new RuntimeException();
+		}
 	}
 
 	@Override
@@ -127,6 +126,11 @@ public class Recover implements Behavior
 	public void setServo(NXTRegulatedMotor servo) 
 	{
 		this.servo = servo;//for later implementation
+	}
+	
+	public static void main(String[] args)
+	{
+		
 	}
 
 }

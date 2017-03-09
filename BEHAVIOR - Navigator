@@ -30,4 +30,9 @@ public class Navigator
 		Arbitrator arby = new Arbitrator(arr);
 		arby.go();
 	}
+	
+	public static void main(String[] args)
+	{
+		
+	}
 }

@@ -25,6 +25,8 @@ public class DriveForward implements Behavior
 	@Override
 	public void action() 
 	{
+		suppressed = false;
+		pilot.setLinearSpeed(10);
 		Button.LEDPattern(1);
 		Runnable runnable = new Runnable() 
 		{
@@ -36,7 +38,7 @@ public class DriveForward implements Behavior
 		};
 		Thread thread = new Thread(runnable);
 		thread.start();
-		//pilot.travel(240, true);
+		
 		while(!suppressed)
 		{
 			Thread.yield();

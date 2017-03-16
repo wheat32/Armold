@@ -134,7 +134,8 @@ public class Recover implements Behavior
 	private void colorAction()
 	{
 		//TODO path correction
-		//keepControl = false//IMPORTANT
+		//keepControl = false;//IMPORTANT
+		//colorRecover = false;//IMPORTANT
 	}
 	
 	@Override

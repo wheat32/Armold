@@ -2,7 +2,7 @@ package behaviorControl;
 
 import lejos.hardware.motor.NXTRegulatedMotor;
 import lejos.hardware.port.Port;
-import lejos.hardware.port.SensorPort;
+import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.chassis.Wheel;
@@ -14,6 +14,8 @@ public class RobotConfig
 	private EV3UltrasonicSensor sensor;
 	
 	private EV3TouchSensor[] touch = new EV3TouchSensor[2];
+	
+	private EV3ColorSensor colorSensor;
 	
 	private Wheel[] wheels;
 	private WheeledChassis chassis;
@@ -46,6 +48,11 @@ public class RobotConfig
 		}
 	}
 	
+	public void configureColorSensor(Port port)
+	{
+		colorSensor = new EV3ColorSensor(port);
+	}
+	
 	public EV3UltrasonicSensor getSensor() 
 	{
 		return sensor;
@@ -54,6 +61,11 @@ public class RobotConfig
 	public EV3TouchSensor[] getTouch() 
 	{
 		return touch;
+	}
+	
+	public EV3ColorSensor getColor()
+	{
+		return colorSensor;
 	}
 
 	public MovePilot getPilot() 

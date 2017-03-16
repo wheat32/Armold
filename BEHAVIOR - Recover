@@ -4,6 +4,7 @@ import lejos.hardware.Button;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.motor.NXTRegulatedMotor;
 import lejos.hardware.sensor.EV3TouchSensor;
+import lejos.robotics.ColorAdapter;
 import lejos.robotics.RangeFinderAdapter;
 import lejos.robotics.TouchAdapter;
 import lejos.robotics.navigation.MovePilot;
@@ -13,11 +14,13 @@ public class Recover implements Behavior
 {
 	private boolean suppressed = false;
 	private boolean keepControl = false;
+	private boolean colorRecover = false;
 	
 	
 	private final MovePilot pilot;
 	private TouchAdapter[] touchAdapter = new TouchAdapter[2];
 	private RangeFinderAdapter sonarAdapter = null;
+	private ColorAdapter colorAdapter = null;
 
 	private NXTRegulatedMotor servo = Motor.B;
 	
@@ -37,6 +40,11 @@ public class Recover implements Behavior
 		if(rc.getSensor() != null)
 		{
 			sonarAdapter = new RangeFinderAdapter(rc.getSensor());
+		}
+		
+		if(rc.getColor() != null)
+		{
+			colorAdapter = new ColorAdapter(rc.getColor());
 		}
 	}
 	
@@ -60,8 +68,25 @@ public class Recover implements Behavior
 				return true;
 			}
 		}
-		//TODO implement back bumper.
-		//Must have its own if condition
+		if(touchAdapter[1] != null)
+		{
+			if(touchAdapter[1].isPressed() == true)//1 is the back bumper
+			{
+				keepControl = true;
+				return true;
+			}
+		}
+		
+		if(colorAdapter != null)
+		{
+			//TODO implement the color adapter
+			//if(colorAdapter.getColor() == )
+			/*{
+			    colorRecover = true;
+				keepControl = true;
+				return true;
+			}*/
+		}
 		
 		if(keepControl == true)
 		{
@@ -106,6 +131,12 @@ public class Recover implements Behavior
 		}
 	}
 
+	private void colorAction()
+	{
+		//TODO path correction
+		//keepControl = false//IMPORTANT
+	}
+	
 	@Override
 	public void action() 
 	{
@@ -113,21 +144,28 @@ public class Recover implements Behavior
 		suppressed = false;
 		keepControl = true;
 		
-		turnAction((short)1);
-		
-		if(keepControl)
+		if(colorRecover == false)
 		{
-			turnAction((short)2);
+			turnAction((short)1);
+			
+			if(keepControl)
+			{
+				turnAction((short)2);
+			}
+			
+			if(keepControl)
+			{
+				turnAction((short)3);
+			}
+			
+			if(keepControl)
+			{
+				throw new RuntimeException();
+			}
 		}
-		
-		if(keepControl)
+		else
 		{
-			turnAction((short)3);
-		}
-		
-		if(keepControl)
-		{
-			throw new RuntimeException();
+			colorAction();
 		}
 	}
 

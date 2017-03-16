@@ -11,6 +11,8 @@ public class Main
 	private static float[] wheelDiameters = {2.1f, 2.1f};
 	private static int[] offsets = {-3, 3};
 	
+	private static Port colorSensorPort = SensorPort.S1;//CHANGE THIS TO THE RIGHT PORT
+	
 	private static Port ultraSonicSensorPort = SensorPort.S1;
 	
 	private static Port[] touchSensorPorts = {SensorPort.S2, SensorPort.S3};
@@ -21,6 +23,7 @@ public class Main
 		config.configurePilot(motors, wheelDiameters, offsets);
 		config.configureTouchSensor(touchSensorPorts);
 		config.confugureUltraSonicSensor(ultraSonicSensorPort);
+		config.configureColorSensor(colorSensorPort);
 		
 		Navigator nav = Navigator.getInstance(config);
 		nav.run();

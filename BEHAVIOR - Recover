@@ -16,8 +16,8 @@ public class Recover implements Behavior
 	
 	
 	private final MovePilot pilot;
-	private final TouchAdapter[] touchAdapter = new TouchAdapter[2];
-	private final RangeFinderAdapter sonarAdapter;
+	private TouchAdapter[] touchAdapter = new TouchAdapter[2];
+	private RangeFinderAdapter sonarAdapter = null;
 
 	private NXTRegulatedMotor servo = Motor.B;
 	
@@ -25,30 +25,43 @@ public class Recover implements Behavior
 	{
 		pilot = rc.getPilot();
 		
-		EV3TouchSensor[] ev3Touch = rc.getTouch();
-		for(int i = 0; i < touchAdapter.length; i++)
+		if(rc.getTouch() != null)
 		{
-			touchAdapter[i] = new TouchAdapter(ev3Touch[i]);
+			EV3TouchSensor[] ev3Touch = rc.getTouch();
+			for(int i = 0; i < touchAdapter.length; i++)
+			{
+				touchAdapter[i] = new TouchAdapter(ev3Touch[i]);
+			}
 		}
 		
-		sonarAdapter = new RangeFinderAdapter(rc.getSensor());
+		if(rc.getSensor() != null)
+		{
+			sonarAdapter = new RangeFinderAdapter(rc.getSensor());
+		}
 	}
 	
 	@Override
 	public boolean takeControl() 
 	{
-		
-		if(sonarAdapter.getRange() <= 14)
+		if(sonarAdapter != null)
 		{
-			keepControl = true;
-			return true;
+			if(sonarAdapter.getRange() <= 14)
+			{
+				keepControl = true;
+				return true;
+			}
 		}
 		
-		if(touchAdapter[0].isPressed() == true)//0 is the front bumper
+		if(touchAdapter[0] != null)
 		{
-			keepControl = true;
-			return true;
+			if(touchAdapter[0].isPressed() == true)//0 is the front bumper
+			{
+				keepControl = true;
+				return true;
+			}
 		}
+		//TODO implement back bumper.
+		//Must have its own if condition
 		
 		if(keepControl == true)
 		{
@@ -131,7 +144,7 @@ public class Recover implements Behavior
 	
 	public static void main(String[] args)
 	{
-		
+		//NOTHING GOES IN THE MAIN
+		//It exists to make exporting jars to the robot easier.
 	}
-
 }

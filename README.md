@@ -1,13 +1,13 @@
-# Armold
-LHU Robotics Team
+# LHU Robotics Team
 
-This is a respository for code dumping.
+This is a respository for code dumping intended for use only by the LHU Robotics Team.
 
-ARMOLD version:
-- Prototype: 3
+<b>Armold physical build version:</b>
+- Build: 3
  - Revision: 1
 
-Any notes to better the cause or guidelines should go down here:
+<b>Any notes to better the cause or guidelines should go down here:</b>
+
 - Speed should NOT surpass 15
  - Reason: Robot floors it and plants itself into a wall.
 - Traveling distance for the robot must be a negative number.

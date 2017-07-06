@@ -4,7 +4,7 @@ This is a respository for code dumping intended for use only by the LHU Robotics
 
 <b>Armold physical build version:</b>
 - Build: 3
- - Revision: 1
+  - Revision: 1
 
 <b>Any notes to better the cause or guidelines should go down here:</b>
 

@@ -21,3 +21,5 @@ This is a respository for code dumping intended for use only by the LHU Robotics
   - 32 = back
 - End all programs with System.exit(0);
   - Reason: To prevent Armold from hard crashing
+- A Netgear WNA1100 WiFi dongle is currently the only WiFi dongle that is supported by the EV3’s firmware.
+  - Source: https://github.com/mindboards/ev3sources

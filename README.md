@@ -1,6 +1,6 @@
 # LHU Robotics Team
 
-This is a respository for code dumping intended for use only by the LHU Robotics Team.
+This is a respository for code dumping, issue tracking, and various documentation storing intended for use by the LHU Robotics Team.
 
 <b><i>Armold</i> physical build version:</b>
 - Build: 3

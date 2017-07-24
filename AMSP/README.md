@@ -1,1 +1,1 @@
-Anything related to the AMSP (Armold Maze-Solving Program) goes in here.
+Anything related to the AMSP (Armold Maze-Solving Protocol) goes in here.

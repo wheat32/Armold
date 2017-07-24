@@ -1,1 +1,1 @@
-Backup versions for AMSP (Armold Maze-Solving Program) go here.
+Backup versions for AMSP (Armold Maze-Solving Protocol) go here.

@@ -331,7 +331,7 @@ public class CenterlineDetector implements IntersectionType
 	 * @author Caroline, Nick
 	 * @param None
 	 * @return Nothing
-	 * @since 2.0.0 </br>
+	 * @since 1.0.0 </br>
 	 *        Last modified: 2.1.1
 	 */
 	public void calibrate()

@@ -1,0 +1,84 @@
+
+lejos.hardware
+Class BrickFinder
+
+    java.lang.Object
+        lejos.hardware.BrickFinder 
+
+
+    public class BrickFinder
+    extends java.lang.Object
+
+        Constructor Summary
+        Constructors Constructor and Description
+        BrickFinder() 
+        Method Summary
+        All MethodsStatic MethodsConcrete Methods Modifier and Type 	Method and Description
+        static BrickInfo[] 	discover()
+        Search for available EV3s and populate table with results.
+        static BrickInfo[] 	discoverNXT() 
+        static BrickInfo[] 	find(java.lang.String name)
+        Search for a named EV3.
+        static Brick 	getDefault() 
+        static Brick 	getLocal() 
+        static void 	setDefault(Brick brick) 
+        static void 	startDiscoveryServer(boolean forward)
+        Start the discovery server running.
+        static void 	stopDiscoveryServer()
+        Stop the discovery server
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Constructor Detail
+            BrickFinder
+
+            public BrickFinder()
+
+        Method Detail
+            getLocal
+
+            public static Brick getLocal()
+
+            getDefault
+
+            public static Brick getDefault()
+
+            find
+
+            public static BrickInfo[] find(java.lang.String name)
+
+            Search for a named EV3. Return a table of the addresses that can be used to contact the device. An empty table is returned if no EV3s are found.
+
+            Parameters:
+                name - 
+            Returns:
+                A table of matching devices
+
+            discover
+
+            public static BrickInfo[] discover()
+
+            Search for available EV3s and populate table with results.
+            discoverNXT
+
+            public static BrickInfo[] discoverNXT()
+
+            setDefault
+
+            public static void setDefault(Brick brick)
+
+            startDiscoveryServer
+
+            public static void startDiscoveryServer(boolean forward)
+
+            Start the discovery server running. There should be a single discovery server running on each EV3. This provides responses to remote discover and find requests. Normally this server will be run by the leJOS menu and so user code does not need to start a copy.
+
+            Parameters:
+                forward - true if requests should be forwarded to other devices
+
+            stopDiscoveryServer
+
+            public static void stopDiscoveryServer()
+
+            Stop the discovery server
+

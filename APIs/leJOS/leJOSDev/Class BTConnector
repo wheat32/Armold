@@ -1,0 +1,76 @@
+
+lejos.remote.nxt
+Class BTConnector
+
+    java.lang.Object
+        lejos.remote.nxt.NXTCommConnector
+            lejos.remote.nxt.BTConnector 
+
+
+    public class BTConnector
+    extends NXTCommConnector
+
+        Constructor Summary
+        Constructors Constructor and Description
+        BTConnector() 
+        Method Summary
+        All MethodsInstance MethodsConcrete Methods Modifier and Type 	Method and Description
+        boolean 	cancel()
+        Cancel a connection attempt.
+        BTConnection 	connect(java.lang.String target, int mode)
+        Open a connection to the specified name/address using the given I/O mode
+        BTConnection 	waitForConnection(int timeout, int mode)
+        Wait for an incoming connection, or for the request to timeout.
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Constructor Detail
+            BTConnector
+
+            public BTConnector()
+
+        Method Detail
+            connect
+
+            public BTConnection connect(java.lang.String target,
+                                        int mode)
+
+            Description copied from class: NXTCommConnector
+            Open a connection to the specified name/address using the given I/O mode
+
+            Specified by:
+                connect in class NXTCommConnector
+            Parameters:
+                target - The name or address of the device/host to connect to.
+                mode - The I/O mode to use for this connection
+            Returns:
+                A NXTConnection object for the new connection or null if error.
+
+            waitForConnection
+
+            public BTConnection waitForConnection(int timeout,
+                                                  int mode)
+
+            Description copied from class: NXTCommConnector
+            Wait for an incoming connection, or for the request to timeout.
+
+            Specified by:
+                waitForConnection in class NXTCommConnector
+            Parameters:
+                timeout - Time in ms to wait for the connection to be made
+                mode - I/O mode to be used for the accepted connection.
+            Returns:
+                A NXTConnection object for the new connection or null if error.
+
+            cancel
+
+            public boolean cancel()
+
+            Description copied from class: NXTCommConnector
+            Cancel a connection attempt.
+
+            Specified by:
+                cancel in class NXTCommConnector
+            Returns:
+                true if the connection attempt has been aborted.
+

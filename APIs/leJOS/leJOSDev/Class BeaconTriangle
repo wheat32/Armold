@@ -1,0 +1,55 @@
+
+lejos.robotics.localization
+Class BeaconTriangle
+
+    java.lang.Object
+        lejos.robotics.localization.BeaconTriangle 
+
+
+    public class BeaconTriangle
+    extends java.lang.Object
+
+    This class represents three beacons in a triangle. Uses triangulation to calculate the position of the robot.
+
+    Note: The algorithm in calcPose() is taken from "Generalized Geometric Triangulation Algorithm for Mobile Robot Absolute Self-Localization" from University of Minho, Portugal, 2003.
+    http://repositorium.sdum.uminho.pt/bitstream/1822/2023/1/BF-003328.pdf
+
+    Improved version from 2006 (not implemented by this class):
+    http://repositorium.sdum.uminho.pt/bitstream/1822/6057/1/An Improved Version of the Generalized Geometric Triangulation Algorithm.pdf
+
+    Author:
+        Andy Shaw and BB
+
+        Constructor Summary
+        Constructors Constructor and Description
+        BeaconTriangle(Point beacon1, Point beacon2, Point beacon3) 
+        Method Summary
+        All MethodsInstance MethodsConcrete Methods Modifier and Type 	Method and Description
+        Pose 	calcPose(double a1, double a2, double a3)
+        Triangulates the pose of a robot given three angles to the three beacons.
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Constructor Detail
+            BeaconTriangle
+
+            public BeaconTriangle(Point beacon1,
+                                  Point beacon2,
+                                  Point beacon3)
+
+        Method Detail
+            calcPose
+
+            public Pose calcPose(double a1,
+                                 double a2,
+                                 double a3)
+
+            Triangulates the pose of a robot given three angles to the three beacons. The angle to a beacon must correspond to the proper beacon as given in the BeaconTriangle constructor. For example, the angle a1 in the method calcPose() must be the angle to beacon1, as given in the constructor.
+
+            Parameters:
+                a1 - Angle from robot current heading to beacon 1 (in degrees)
+                a2 - Angle from robot current heading to beacon 2 (in degrees)
+                a3 - Angle from robot current heading to beacon 3 (in degrees)
+            Returns:
+                the pose of the robot (x, y, heading)
+

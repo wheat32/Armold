@@ -1,0 +1,209 @@
+
+lejos.hardware.sensor
+Class BaseSensor
+
+    java.lang.Object
+        lejos.hardware.Device
+            lejos.hardware.sensor.BaseSensor 
+
+    All Implemented Interfaces:
+        java.io.Closeable, java.lang.AutoCloseable, SensorMode, SensorModes, SampleProvider
+
+    Direct Known Subclasses:
+        AnalogSensor, DexterIMUSensor, I2CSensor, UARTSensor
+
+
+    public class BaseSensor
+    extends Device
+    implements SensorModes
+
+        Field Summary
+        Fields Modifier and Type 	Field and Description
+        protected int 	currentMode 
+        protected SensorMode[] 	modes 
+            Fields inherited from class lejos.hardware.Device
+            closeList
+        Constructor Summary
+        Constructors Constructor and Description
+        BaseSensor() 
+        Method Summary
+        All MethodsInstance MethodsConcrete Methods Modifier and Type 	Method and Description
+        void 	fetchSample(float[] sample, int offset)
+        Fetches a sample from a sensor or filter.
+        java.util.ArrayList<java.lang.String> 	getAvailableModes()
+        Return a list of string descriptions for the sensors available modes.
+        int 	getCurrentMode()
+        Gets the index number of the current mode.
+        SensorMode 	getMode(int mode)
+        Return the sample provider interface for the requested mode
+        SensorMode 	getMode(java.lang.String modeName)
+        Return the sample provider for the request mode
+        int 	getModeCount()
+        Gets the number of supported modes
+        java.lang.String 	getName()
+        return a string description of this sensor mode
+        int 	sampleSize()
+        Returns the number of elements in a sample.
+        The number of elements does not change during runtime.
+        void 	setCurrentMode(int mode)
+        Sets the current mode for fetching samples
+        void 	setCurrentMode(java.lang.String modeName)
+        Sets the current mode for fetching samples
+        protected void 	setModes(SensorMode[] m)
+        Define the set of modes to be made available for this sensor.
+            Methods inherited from class lejos.hardware.Device
+            close, releaseOnClose
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Field Detail
+            currentMode
+
+            protected int currentMode
+
+            modes
+
+            protected SensorMode[] modes
+
+        Constructor Detail
+            BaseSensor
+
+            public BaseSensor()
+
+        Method Detail
+            setModes
+
+            protected void setModes(SensorMode[] m)
+
+            Define the set of modes to be made available for this sensor.
+
+            Parameters:
+                m - An array containing a list of modes
+
+            getAvailableModes
+
+            public java.util.ArrayList<java.lang.String> getAvailableModes()
+
+            Description copied from interface: SensorModes
+            Return a list of string descriptions for the sensors available modes.
+
+            Specified by:
+                getAvailableModes in interface SensorModes
+            Returns:
+                list of string descriptions
+
+            getMode
+
+            public SensorMode getMode(int mode)
+
+            Description copied from interface: SensorModes
+            Return the sample provider interface for the requested mode
+
+            Specified by:
+                getMode in interface SensorModes
+            Parameters:
+                mode - the mode number
+            Returns:
+                the sample provider for this mode
+
+            getMode
+
+            public SensorMode getMode(java.lang.String modeName)
+
+            Description copied from interface: SensorModes
+            Return the sample provider for the request mode
+
+            Specified by:
+                getMode in interface SensorModes
+            Parameters:
+                modeName - the name/description of the mode
+            Returns:
+                the sample provider for the requested mode.
+
+            getName
+
+            public java.lang.String getName()
+
+            Description copied from interface: SensorMode
+            return a string description of this sensor mode
+
+            Specified by:
+                getName in interface SensorMode
+            Returns:
+                The description/name of this mode
+
+            sampleSize
+
+            public int sampleSize()
+
+            Description copied from interface: SampleProvider
+            Returns the number of elements in a sample.
+            The number of elements does not change during runtime.
+
+            Specified by:
+                sampleSize in interface SampleProvider
+            Returns:
+                the number of elements in a sample
+
+            fetchSample
+
+            public void fetchSample(float[] sample,
+                                    int offset)
+
+            Description copied from interface: SampleProvider
+            Fetches a sample from a sensor or filter.
+
+            Specified by:
+                fetchSample in interface SampleProvider
+            Parameters:
+                sample - The array to store the sample in.
+                offset - The elements of the sample are stored in the array starting at the offset position.
+
+            setCurrentMode
+
+            public void setCurrentMode(int mode)
+
+            Description copied from interface: SensorModes
+            Sets the current mode for fetching samples
+
+            Specified by:
+                setCurrentMode in interface SensorModes
+            Parameters:
+                mode - the index number of the mode. Index number corresponds with the item order of the list from getAvailableModes().
+
+            setCurrentMode
+
+            public void setCurrentMode(java.lang.String modeName)
+
+            Description copied from interface: SensorModes
+            Sets the current mode for fetching samples
+
+            Specified by:
+                setCurrentMode in interface SensorModes
+            Parameters:
+                modeName - the name of the mode. name corresponds with the item value of the list from getAvailableModes().
+
+            getCurrentMode
+
+            public int getCurrentMode()
+
+            Description copied from interface: SensorModes
+            Gets the index number of the current mode.
+
+            Specified by:
+                getCurrentMode in interface SensorModes
+            Returns:
+                the index number of the mode. Index number corresponds with the item order of the list from getAvailableModes().
+
+            getModeCount
+
+            public int getModeCount()
+
+            Description copied from interface: SensorModes
+            Gets the number of supported modes
+
+            Specified by:
+                getModeCount in interface SensorModes
+            Returns:
+                the number of supported modes
+

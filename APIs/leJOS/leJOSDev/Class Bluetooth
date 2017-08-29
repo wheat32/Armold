@@ -1,0 +1,61 @@
+
+lejos.hardware
+Class Bluetooth
+
+    java.lang.Object
+        lejos.hardware.Bluetooth 
+
+
+    public class Bluetooth
+    extends java.lang.Object
+
+        Constructor Summary
+        Constructors Constructor and Description
+        Bluetooth() 
+        Method Summary
+        All MethodsStatic MethodsConcrete Methods Modifier and Type 	Method and Description
+        static java.lang.String 	getAddress(byte[] address)
+        Return a String version of a Bluetooth address given a binary address
+        static byte[] 	getAddress(java.lang.String address)
+        Return a Bluetooth binary address given a String version of the address
+        static LocalBTDevice 	getLocalDevice() 
+        static NXTCommConnector 	getNXTCommConnector() 
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Constructor Detail
+            Bluetooth
+
+            public Bluetooth()
+
+        Method Detail
+            getNXTCommConnector
+
+            public static NXTCommConnector getNXTCommConnector()
+
+            getLocalDevice
+
+            public static LocalBTDevice getLocalDevice()
+
+            getAddress
+
+            public static byte[] getAddress(java.lang.String address)
+
+            Return a Bluetooth binary address given a String version of the address
+
+            Parameters:
+                address - String address
+            Returns:
+                Binary address
+
+            getAddress
+
+            public static java.lang.String getAddress(byte[] address)
+
+            Return a String version of a Bluetooth address given a binary address
+
+            Parameters:
+                address - 
+            Returns:
+                the Bluetooth address
+

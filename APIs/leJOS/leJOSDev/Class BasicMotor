@@ -1,0 +1,161 @@
+
+lejos.hardware.motor
+Class BasicMotor
+
+    java.lang.Object
+        lejos.hardware.Device
+            lejos.hardware.motor.BasicMotor 
+
+    All Implemented Interfaces:
+        java.io.Closeable, java.lang.AutoCloseable, BaseMotor, DCMotor
+
+    Direct Known Subclasses:
+        RCXMotor, UnregulatedMotor
+
+
+    public abstract class BasicMotor
+    extends Device
+    implements DCMotor
+
+    Abstraction for basic motor operations.
+
+    Author:
+        Lawrie Griffiths.
+
+        Field Summary
+        Fields Modifier and Type 	Field and Description
+        protected static int 	INVALID_MODE 
+        protected int 	mode 
+        protected BasicMotorPort 	port 
+        protected int 	power 
+            Fields inherited from class lejos.hardware.Device
+            closeList
+        Constructor Summary
+        Constructors Constructor and Description
+        BasicMotor() 
+        Method Summary
+        All MethodsInstance MethodsConcrete Methods Modifier and Type 	Method and Description
+        void 	backward()
+        Causes motor to rotate backwards.
+        void 	flt()
+        Causes motor to float.
+        void 	forward()
+        Causes motor to rotate forward.
+        int 	getPower()
+        Returns the current motor power setting.
+        boolean 	isMoving()
+        Returns true iff the motor is in motion.
+        void 	setPower(int power)
+        Set the power level 0%-100% to be applied to the motor
+        void 	stop()
+        Causes motor to stop, pretty much instantaneously.
+        protected void 	updateState(int newMode)
+        Update the internal state tracking the motor direction
+            Methods inherited from class lejos.hardware.Device
+            close, releaseOnClose
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Field Detail
+            INVALID_MODE
+
+            protected static int INVALID_MODE
+
+            mode
+
+            protected int mode
+
+            port
+
+            protected BasicMotorPort port
+
+            power
+
+            protected int power
+
+        Constructor Detail
+            BasicMotor
+
+            public BasicMotor()
+
+        Method Detail
+            setPower
+
+            public void setPower(int power)
+
+            Description copied from interface: DCMotor
+            Set the power level 0%-100% to be applied to the motor
+
+            Specified by:
+                setPower in interface DCMotor
+            Parameters:
+                power - new motor power 0-100
+
+            getPower
+
+            public int getPower()
+
+            Description copied from interface: DCMotor
+            Returns the current motor power setting.
+
+            Specified by:
+                getPower in interface DCMotor
+            Returns:
+                current power 0-100
+
+            updateState
+
+            protected void updateState(int newMode)
+
+            Update the internal state tracking the motor direction
+
+            Parameters:
+                newMode - 
+
+            forward
+
+            public void forward()
+
+            Causes motor to rotate forward.
+
+            Specified by:
+                forward in interface BaseMotor
+
+            backward
+
+            public void backward()
+
+            Causes motor to rotate backwards.
+
+            Specified by:
+                backward in interface BaseMotor
+
+            isMoving
+
+            public boolean isMoving()
+
+            Returns true iff the motor is in motion.
+
+            Specified by:
+                isMoving in interface BaseMotor
+            Returns:
+                true iff the motor is currently in motion.
+
+            flt
+
+            public void flt()
+
+            Causes motor to float. The motor will lose all power, but this is not the same as stopping. Use this method if you don't want your robot to trip in abrupt turns.
+
+            Specified by:
+                flt in interface BaseMotor
+
+            stop
+
+            public void stop()
+
+            Causes motor to stop, pretty much instantaneously. In other words, the motor doesn't just stop; it will resist any further motion. Cancels any rotate() orders in progress
+
+            Specified by:
+                stop in interface BaseMotor
+

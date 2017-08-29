@@ -1,0 +1,311 @@
+
+lejos.hardware
+Class Button
+
+    java.lang.Object
+        lejos.hardware.Button 
+
+
+    public class Button
+    extends java.lang.Object
+
+    Abstraction for an NXT button. Example:
+
+     Button.ENTER.waitForPressAndRelease();
+     Sound.playTone(1000, 1);
+     
+
+    Notions: The API is designed around two notions: states (up / down) and events (press / release). It is said that a button is pressed (press event), if its state changes from up to down. Similarly, it is said that a button is released (release event), if its states changed from down to up. Thread Safety: All methods that return buttons states can be used safely from multiple threads, even while a call to one of the waitFor* methods active. However, it is not safe to invoke waitFor* methods in parallel from different threads. This includes the waitFor* methods of different buttons. For example Button.ENTER.waitForPress() must not be invoked in parallel to Button.ESCAPE.waitForPress() or the static Button.waitForAnyEvent(). In case this is needed, it is strongly recommended that you write your own Thread, which waits for button events and dispatches the events to anyone who's interested.
+
+        Field Summary
+        Fields Modifier and Type 	Field and Description
+        static Key 	DOWN
+        The Down button.
+        static Key 	ENTER
+        The Enter button.
+        static Key 	ESCAPE
+        The Escape button.
+        static java.lang.String 	FREQ_SETTING 
+        static int 	ID_ALL 
+        static int 	ID_DOWN 
+        static int 	ID_ENTER 
+        static int 	ID_ESCAPE 
+        static int 	ID_LEFT 
+        static int 	ID_RIGHT 
+        static int 	ID_UP 
+        static Keys 	keys 
+        static Key 	LEFT
+        The Left button.
+        static java.lang.String 	LEN_SETTING 
+        static Key 	RIGHT
+        The Right button.
+        static Key 	UP
+        The Up button.
+        static java.lang.String 	VOL_SETTING 
+        Method Summary
+        All MethodsStatic MethodsConcrete Methods Modifier and Type 	Method and Description
+        static void 	discardEvents()
+        This method discards any events.
+        static int 	getButtons()
+        Low-level API that reads status of buttons.
+        static int 	getKeyClickLength()
+        Return the current key click length.
+        static int 	getKeyClickTone(int key)
+        Return the click freq for a particular key.
+        static int 	getKeyClickVolume()
+        Return the current key click volume.
+        static void 	LEDPattern(int pattern) 
+        static int 	readButtons()
+        Low-level API that reads status of buttons.
+        static void 	setKeyClickLength(int len)
+        Set the len used for key clicks
+        static void 	setKeyClickTone(int key, int freq)
+        Set the frequency used for a particular key.
+        static void 	setKeyClickVolume(int vol)
+        Set the volume used for key clicks
+        static int 	waitForAnyEvent()
+        Waits for some button to be pressed or released.
+        static int 	waitForAnyEvent(int timeout)
+        Waits for some button to be pressed or released.
+        static int 	waitForAnyPress()
+        Waits for some button to be pressed.
+        static int 	waitForAnyPress(int timeout)
+        Waits for some button to be pressed.
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Field Detail
+            ID_UP
+
+            public static final int ID_UP
+
+            See Also:
+                Constant Field Values
+
+            ID_ENTER
+
+            public static final int ID_ENTER
+
+            See Also:
+                Constant Field Values
+
+            ID_DOWN
+
+            public static final int ID_DOWN
+
+            See Also:
+                Constant Field Values
+
+            ID_RIGHT
+
+            public static final int ID_RIGHT
+
+            See Also:
+                Constant Field Values
+
+            ID_LEFT
+
+            public static final int ID_LEFT
+
+            See Also:
+                Constant Field Values
+
+            ID_ESCAPE
+
+            public static final int ID_ESCAPE
+
+            See Also:
+                Constant Field Values
+
+            ID_ALL
+
+            public static final int ID_ALL
+
+            See Also:
+                Constant Field Values
+
+            VOL_SETTING
+
+            public static final java.lang.String VOL_SETTING
+
+            See Also:
+                Constant Field Values
+
+            LEN_SETTING
+
+            public static final java.lang.String LEN_SETTING
+
+            See Also:
+                Constant Field Values
+
+            FREQ_SETTING
+
+            public static final java.lang.String FREQ_SETTING
+
+            See Also:
+                Constant Field Values
+
+            ENTER
+
+            public static final Key ENTER
+
+            The Enter button.
+            LEFT
+
+            public static final Key LEFT
+
+            The Left button.
+            RIGHT
+
+            public static final Key RIGHT
+
+            The Right button.
+            ESCAPE
+
+            public static final Key ESCAPE
+
+            The Escape button.
+            UP
+
+            public static final Key UP
+
+            The Up button.
+            DOWN
+
+            public static final Key DOWN
+
+            The Down button.
+            keys
+
+            public static final Keys keys
+
+        Method Detail
+            discardEvents
+
+            public static void discardEvents()
+
+            This method discards any events. In contrast to readButtons(), this method doesn't beep if a button is pressed.
+            waitForAnyEvent
+
+            public static int waitForAnyEvent()
+
+            Waits for some button to be pressed or released. Which buttons have been released or pressed is returned as a bitmask. The lower eight bits (bits 0 to 7) indicate, which buttons have been pressed. Bits 8 to 15 indicate which buttons have been released.
+
+            Returns:
+                the bitmask
+            See Also:
+                ID_ENTER, ID_LEFT, ID_RIGHT, ID_ESCAPE
+
+            waitForAnyEvent
+
+            public static int waitForAnyEvent(int timeout)
+
+            Waits for some button to be pressed or released. Which buttons have been released or pressed is returned as a bitmask. The lower eight bits (bits 0 to 7) indicate, which buttons have been pressed. Bits 8 to 15 indicate which buttons have been released.
+
+            Parameters:
+                timeout - The maximum number of milliseconds to wait
+            Returns:
+                the bitmask
+            See Also:
+                ID_ENTER, ID_LEFT, ID_RIGHT, ID_ESCAPE
+
+            waitForAnyPress
+
+            public static int waitForAnyPress(int timeout)
+
+            Waits for some button to be pressed. If a button is already pressed, it must be released and pressed again.
+
+            Parameters:
+                timeout - The maximum number of milliseconds to wait
+            Returns:
+                the ID of the button that has been pressed or in rare cases a bitmask of button IDs, 0 if the given timeout is reached
+
+            waitForAnyPress
+
+            public static int waitForAnyPress()
+
+            Waits for some button to be pressed. If a button is already pressed, it must be released and pressed again.
+
+            Returns:
+                the ID of the button that has been pressed or in rare cases a bitmask of button IDs
+
+            getButtons
+
+            public static int getButtons()
+
+            Low-level API that reads status of buttons.
+
+            Returns:
+                An integer with possibly some bits set: ID_ENTER (ENTER button pressed) ID_LEFT (LEFT button pressed), ID_RIGHT (RIGHT button pressed), ID_ESCAPE (ESCAPE button pressed). If all buttons are released, this method returns 0.
+
+            readButtons
+
+            public static int readButtons()
+
+            Low-level API that reads status of buttons.
+
+            Returns:
+                An integer with possibly some bits set: ID_ENTER (ENTER button pressed) ID_LEFT (LEFT button pressed), ID_RIGHT (RIGHT button pressed), ID_ESCAPE (ESCAPE button pressed). If all buttons are released, this method returns 0.
+
+            setKeyClickVolume
+
+            public static void setKeyClickVolume(int vol)
+
+            Set the volume used for key clicks
+
+            Parameters:
+                vol - 
+
+            getKeyClickVolume
+
+            public static int getKeyClickVolume()
+
+            Return the current key click volume.
+
+            Returns:
+                current click volume
+
+            setKeyClickLength
+
+            public static void setKeyClickLength(int len)
+
+            Set the len used for key clicks
+
+            Parameters:
+                len - the click duration
+
+            getKeyClickLength
+
+            public static int getKeyClickLength()
+
+            Return the current key click length.
+
+            Returns:
+                key click duration
+
+            setKeyClickTone
+
+            public static void setKeyClickTone(int key,
+                                               int freq)
+
+            Set the frequency used for a particular key. Setting this to 0 disables the click. Note that key may also be a corded set of keys.
+
+            Parameters:
+                key - the NXT key
+                freq - the frequency
+
+            getKeyClickTone
+
+            public static int getKeyClickTone(int key)
+
+            Return the click freq for a particular key.
+
+            Parameters:
+                key - The key to obtain the tone for
+            Returns:
+                key click duration
+
+            LEDPattern
+
+            public static void LEDPattern(int pattern)
+

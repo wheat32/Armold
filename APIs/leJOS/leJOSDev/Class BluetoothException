@@ -1,0 +1,54 @@
+
+lejos.hardware
+Class BluetoothException
+
+    java.lang.Object
+        java.lang.Throwable
+            java.lang.Exception
+                java.lang.RuntimeException
+                    lejos.hardware.BluetoothException 
+
+    All Implemented Interfaces:
+        java.io.Serializable
+
+
+    public class BluetoothException
+    extends java.lang.RuntimeException
+
+    Exception thrown when errors are detected in the Bluetooth classes.
+
+    Author:
+        andy
+    See Also:
+        Serialized Form
+
+        Constructor Summary
+        Constructors Constructor and Description
+        BluetoothException() 
+        BluetoothException(java.lang.String message) 
+        BluetoothException(java.lang.String message, java.lang.Throwable cause) 
+        BluetoothException(java.lang.Throwable cause) 
+        Method Summary
+            Methods inherited from class java.lang.Throwable
+            addSuppressed, fillInStackTrace, getCause, getLocalizedMessage, getMessage, getStackTrace, getSuppressed, initCause, printStackTrace, printStackTrace, printStackTrace, setStackTrace, toString
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, wait, wait, wait
+
+        Constructor Detail
+            BluetoothException
+
+            public BluetoothException()
+
+            BluetoothException
+
+            public BluetoothException(java.lang.String message)
+
+            BluetoothException
+
+            public BluetoothException(java.lang.Throwable cause)
+
+            BluetoothException
+
+            public BluetoothException(java.lang.String message,
+                                      java.lang.Throwable cause)
+

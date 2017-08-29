@@ -1,0 +1,95 @@
+
+lejos.robotics.navigation
+Class Ballbot
+
+    java.lang.Object
+        java.lang.Thread
+            lejos.robotics.navigation.Ballbot 
+
+    All Implemented Interfaces:
+        java.lang.Runnable
+
+
+    public class Ballbot
+    extends java.lang.Thread
+
+    This class dynamically stabilizes a ballbot type of robot. The ballbot robot uses two motors to drive a ball with a similar configuration to a mechanical mouse.
+
+    A ballbot needs good motors, sensors, a grippy ball/rollers (wheels) and should be as symmetrical as possible in all directions (like a circle) to optimize stability. If using a billiard ball or LEGO ball, it is recommended to apply a layer of rubber glue to the tires to add grip.
+
+    To start the robot balancing:
+    1. Run the program. You will be prompted to lay it down.
+    2. Lay it down (orientation doesn't matter). When it detects it is not moving it will automatically calibrate the gyro sensors.
+    3. When the beeping begins, stand it up on the ball so it is vertically balanced.
+    4. When the beeping stops, let go and it will begin balancing on its own.
+
+    This code is based on the Segoway class.
+
+Author:
+    BB
+
+        Nested Class Summary
+            Nested classes/interfaces inherited from class java.lang.Thread
+            java.lang.Thread.State, java.lang.Thread.UncaughtExceptionHandler
+        Field Summary
+        Fields Modifier and Type 	Field and Description
+        protected EncoderMotor 	my_motor 
+            Fields inherited from class java.lang.Thread
+            MAX_PRIORITY, MIN_PRIORITY, NORM_PRIORITY
+        Constructor Summary
+        Constructors Constructor and Description
+        Ballbot(EncoderMotor xMotor, Gyroscope xGyro, EncoderMotor yMotor, Gyroscope yGyro, double rollerDiameter) 
+        Method Summary
+        All MethodsInstance MethodsConcrete Methods Modifier and Type 	Method and Description
+        void 	impulseMove(int x_axisPower, int y_axisPower)
+        Causes movement along either the xaxis or y axis.
+        void 	run() 
+            Methods inherited from class java.lang.Thread
+            activeCount, checkAccess, clone, countStackFrames, currentThread, destroy, dumpStack, enumerate, getAllStackTraces, getContextClassLoader, getDefaultUncaughtExceptionHandler, getId, getName, getPriority, getStackTrace, getState, getThreadGroup, getUncaughtExceptionHandler, holdsLock, interrupt, interrupted, isAlive, isDaemon, isInterrupted, join, join, join, resume, setContextClassLoader, setDaemon, setDefaultUncaughtExceptionHandler, setName, setPriority, setUncaughtExceptionHandler, sleep, sleep, start, stop, stop, suspend, toString, yield
+            Methods inherited from class java.lang.Object
+            equals, finalize, getClass, hashCode, notify, notifyAll, wait, wait, wait
+
+        Field Detail
+            my_motor
+
+            protected EncoderMotor my_motor
+
+        Constructor Detail
+            Ballbot
+
+            public Ballbot(EncoderMotor xMotor,
+                           Gyroscope xGyro,
+                           EncoderMotor yMotor,
+                           Gyroscope yGyro,
+                           double rollerDiameter)
+
+            Parameters:
+                xMotor - The first motor, such as an NXTMotor.
+                xGyro - The gyro accompanying xMotor. Monitors the x-axis
+                yMotor - The second motor, such as an NXTMotor.
+                yGyro - The gyro accompanying xMotor. Monitors the y-axis
+                rollerDiameter - The diameter of the motorized rollers. Usually NXT 2.0 wheels (4.32 cm)
+
+        Method Detail
+            run
+
+            public void run()
+
+            Specified by:
+                run in interface java.lang.Runnable
+            Overrides:
+                run in class java.lang.Thread
+
+            impulseMove
+
+            public void impulseMove(int x_axisPower,
+                                    int y_axisPower)
+
+            Causes movement along either the xaxis or y axis. Normally power for each of these values is zero in order to keep the ballbot roughly stationary.
+
+            This method does not actually apply direct power to the roller wheels. Control is filtered through to each wheel, allowing the robot to move. Higher values are faster. Negative values cause movement in the opposite direction. Values between -200 and 200 are acceptable. If values are too high it can make the robot balance unstable. Try starting with values around 10 or so. A ballbot needs good motors, sensors, a grippy ball/roller and be extremely symmetrical if you want to use higher values.
+
+            Parameters:
+                x_axisPower - 
+                y_axisPower - 
+

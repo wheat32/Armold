@@ -1,0 +1,70 @@
+
+lejos.hardware.port
+Interface AnalogPort
+
+    All Superinterfaces:
+        java.lang.AutoCloseable, BasicSensorPort, java.io.Closeable, IOPort, SensorConstants
+
+    All Known Subinterfaces:
+        LegacySensorPort
+
+    All Known Implementing Classes:
+        RemoteAnalogPort, RemoteNXTAnalogPort, RemoteRequestAnalogPort
+
+
+    public interface AnalogPort
+    extends IOPort, BasicSensorPort
+
+    An abstraction for a port that supports Analog/Digital sensors.
+
+    Author:
+        Lawrie Griffiths/Andy.
+
+        Field Summary
+            Fields inherited from interface lejos.hardware.sensor.SensorConstants
+            BLACK, BLANK_INDEX, BLUE, BLUE_INDEX, BROWN, GREEN, GREEN_INDEX, MAX_TYPE, MIN_TYPE, MODE_RAW, NXT_ADC_RES, RED, RED_INDEX, TYPE_ANGLE, TYPE_COLORBLUE, TYPE_COLORFULL, TYPE_COLORGREEN, TYPE_COLORNONE, TYPE_COLORRED, TYPE_CUSTOM, TYPE_HIGHSPEED, TYPE_HIGHSPEED_9V, TYPE_HISPEED, TYPE_LIGHT_ACTIVE, TYPE_LIGHT_INACTIVE, TYPE_LOWSPEED, TYPE_LOWSPEED_9V, TYPE_NO_SENSOR, TYPE_REFLECTION, TYPE_SOUND_DB, TYPE_SOUND_DBA, TYPE_SWITCH, TYPE_TEMPERATURE, WHITE, YELLOW
+        Method Summary
+        All MethodsInstance MethodsAbstract Methods Modifier and Type 	Method and Description
+        void 	getFloats(float[] vals, int offset, int length)
+        Return a series of results obtained from the sensor.
+        float 	getPin1()
+        return the voltage present on pin 1 of the sensor port
+        float 	getPin6()
+        return the voltage present on pin 6 of the sensor port
+            Methods inherited from interface lejos.hardware.port.IOPort
+            close, getName, setPinMode
+            Methods inherited from interface lejos.hardware.port.BasicSensorPort
+            getMode, getType, setMode, setType, setTypeAndMode
+
+        Method Detail
+            getPin6
+
+            float getPin6()
+
+            return the voltage present on pin 6 of the sensor port
+
+            Returns:
+                voltage reading
+
+            getPin1
+
+            float getPin1()
+
+            return the voltage present on pin 1 of the sensor port
+
+            Returns:
+                voltage reading
+
+            getFloats
+
+            void getFloats(float[] vals,
+                           int offset,
+                           int length)
+
+            Return a series of results obtained from the sensor. This is currently only used for the NXT color sensor
+
+            Parameters:
+                vals - Place to store the values
+                offset - Offset into the above array to start storing
+                length - number of values to read
+

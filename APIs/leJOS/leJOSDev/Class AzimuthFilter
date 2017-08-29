@@ -1,0 +1,28 @@
+
+lejos.robotics.filter
+Class AzimuthFilter
+
+    java.lang.Object
+        lejos.robotics.filter.AzimuthFilter 
+
+
+    public class AzimuthFilter
+    extends java.lang.Object
+
+    This class fails to build at the moment (because there is no code. The following dummy class allows it to build while we decide what to do wuth it!
+
+    Author:
+        andy
+
+        Constructor Summary
+        Constructors Constructor and Description
+        AzimuthFilter() 
+        Method Summary
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Constructor Detail
+            AzimuthFilter
+
+            public AzimuthFilter()
+

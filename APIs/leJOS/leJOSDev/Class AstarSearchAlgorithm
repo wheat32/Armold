@@ -1,0 +1,59 @@
+
+lejos.robotics.pathfinding
+Class AstarSearchAlgorithm
+
+    java.lang.Object
+        lejos.robotics.pathfinding.AstarSearchAlgorithm 
+
+    All Implemented Interfaces:
+        SearchAlgorithm
+
+
+    public class AstarSearchAlgorithm
+    extends java.lang.Object
+    implements SearchAlgorithm
+
+    This is an implementation of the A* search algorithm. Typically this object would be instantiated and then used in a NodePathFinder constructor, along with a set of connected nodes.
+
+    Author:
+        BB
+    See Also:
+        NodePathFinder
+
+        Constructor Summary
+        Constructors Constructor and Description
+        AstarSearchAlgorithm() 
+        Method Summary
+        All MethodsInstance MethodsConcrete Methods Modifier and Type 	Method and Description
+        Path 	findPath(Node start, Node goal)
+        Method accepts a start node and a goal node, and returns a path consisting of a collection of waypoints which includes the startNode coordinates as the first waypoint, and the goal node coordinates as the final waypoint.
+        java.lang.String 	toString() 
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, wait, wait, wait
+
+        Constructor Detail
+            AstarSearchAlgorithm
+
+            public AstarSearchAlgorithm()
+
+        Method Detail
+            findPath
+
+            public Path findPath(Node start,
+                                 Node goal)
+
+            Description copied from interface: SearchAlgorithm
+            Method accepts a start node and a goal node, and returns a path consisting of a collection of waypoints which includes the startNode coordinates as the first waypoint, and the goal node coordinates as the final waypoint. Note: The startNode must be connected with other nodes (neighbors) that eventually connect to the goalNode.
+
+            Specified by:
+                findPath in interface SearchAlgorithm
+            Returns:
+                A collection of waypoints. Returns null if it fails to find a path.
+
+            toString
+
+            public java.lang.String toString()
+
+            Overrides:
+                toString in class java.lang.Object
+

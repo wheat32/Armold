@@ -1,0 +1,82 @@
+
+lejos.robotics.filter
+Class AbstractFilter
+
+    java.lang.Object
+        lejos.robotics.filter.AbstractFilter 
+
+    All Implemented Interfaces:
+        SampleProvider
+
+    Direct Known Subclasses:
+        AbstractCalibrationFilter, AccelerometerAdapter, Dump, IntegrationFilter, LowPassFilter, ModulusFilter, OffsetCorrectionFilter, PublishFilter, RangeFinderAdapter, SampleBuffer, SampleThread, SliceFilter, SumFilter, ZeroFilter
+
+
+    public abstract class AbstractFilter
+    extends java.lang.Object
+    implements SampleProvider
+
+    Base class for Sample filters
+
+    Author:
+        Kirk, Aswin
+
+        Field Summary
+        Fields Modifier and Type 	Field and Description
+        protected int 	sampleSize 
+        protected SampleProvider 	source 
+        Constructor Summary
+        Constructors Constructor and Description
+        AbstractFilter(SampleProvider source) 
+        Method Summary
+        All MethodsInstance MethodsConcrete Methods Modifier and Type 	Method and Description
+        void 	fetchSample(float[] sample, int offset)
+        Fetches a sample from a sensor or filter.
+        int 	sampleSize()
+        Returns the number of elements in a sample.
+        The number of elements does not change during runtime.
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Field Detail
+            source
+
+            protected final SampleProvider source
+
+            sampleSize
+
+            protected int sampleSize
+
+        Constructor Detail
+            AbstractFilter
+
+            public AbstractFilter(SampleProvider source)
+
+        Method Detail
+            sampleSize
+
+            public int sampleSize()
+
+            Description copied from interface: SampleProvider
+            Returns the number of elements in a sample.
+            The number of elements does not change during runtime.
+
+            Specified by:
+                sampleSize in interface SampleProvider
+            Returns:
+                the number of elements in a sample
+
+            fetchSample
+
+            public void fetchSample(float[] sample,
+                                    int offset)
+
+            Description copied from interface: SampleProvider
+            Fetches a sample from a sensor or filter.
+
+            Specified by:
+                fetchSample in interface SampleProvider
+            Parameters:
+                sample - The array to store the sample in.
+                offset - The elements of the sample are stored in the array starting at the offset position.
+

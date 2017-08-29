@@ -1,0 +1,51 @@
+
+lejos.remote.nxt
+Class AsciizCodec
+
+    java.lang.Object
+        lejos.remote.nxt.AsciizCodec 
+
+
+    public class AsciizCodec
+    extends java.lang.Object
+
+    Methods to encode and decode ASCIIZ. ASCIIZ is ASCII terminated by Zero.
+
+        Method Summary
+        All MethodsStatic MethodsConcrete Methods Modifier and Type 	Method and Description
+        static java.lang.String 	decode(byte[] bytes)
+        Convert an ASCIIZ byte array to a string
+        static byte[] 	encode(java.lang.String str)
+        Encode a string as ASCIIZ
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Method Detail
+            encode
+
+            public static byte[] encode(java.lang.String str)
+                                 throws java.io.UnsupportedEncodingException
+
+            Encode a string as ASCIIZ
+
+            Parameters:
+                str - the string
+            Returns:
+                the ASCIIZ-encoded byte array
+            Throws:
+                java.io.UnsupportedEncodingException
+
+            decode
+
+            public static java.lang.String decode(byte[] bytes)
+                                           throws java.io.UnsupportedEncodingException
+
+            Convert an ASCIIZ byte array to a string
+
+            Parameters:
+                bytes - the byte array
+            Returns:
+                the String
+            Throws:
+                java.io.UnsupportedEncodingException
+

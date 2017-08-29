@@ -1,0 +1,127 @@
+
+lejos.hardware.sensor
+Class AnalogSensor
+
+    java.lang.Object
+        lejos.hardware.Device
+            lejos.hardware.sensor.BaseSensor
+                lejos.hardware.sensor.AnalogSensor 
+
+    All Implemented Interfaces:
+        java.io.Closeable, java.lang.AutoCloseable, SensorConstants, SensorMode, SensorModes, SampleProvider
+
+    Direct Known Subclasses:
+        DexterLaserSensor, DexterPressureSensor250, DexterPressureSensor500, EV3TouchSensor, HiTechnicEOPD, HiTechnicGyro, HiTechnicMagneticSensor, NXTColorSensor, NXTLightSensor, NXTSoundSensor, NXTTouchSensor, RCXLightSensor, RCXRotationSensor, RCXThermometer, SumoEyesSensor, TouchMUX
+
+
+    public class AnalogSensor
+    extends BaseSensor
+    implements SensorConstants
+
+    Base class for analog sensor drivers
+
+    Author:
+        andy
+
+        Field Summary
+        Fields Modifier and Type 	Field and Description
+        protected int 	currentType 
+        protected AnalogPort 	port 
+            Fields inherited from class lejos.hardware.sensor.BaseSensor
+            currentMode, modes
+            Fields inherited from class lejos.hardware.Device
+            closeList
+            Fields inherited from interface lejos.hardware.sensor.SensorConstants
+            BLACK, BLANK_INDEX, BLUE, BLUE_INDEX, BROWN, GREEN, GREEN_INDEX, MAX_TYPE, MIN_TYPE, MODE_RAW, NXT_ADC_RES, RED, RED_INDEX, TYPE_ANGLE, TYPE_COLORBLUE, TYPE_COLORFULL, TYPE_COLORGREEN, TYPE_COLORNONE, TYPE_COLORRED, TYPE_CUSTOM, TYPE_HIGHSPEED, TYPE_HIGHSPEED_9V, TYPE_HISPEED, TYPE_LIGHT_ACTIVE, TYPE_LIGHT_INACTIVE, TYPE_LOWSPEED, TYPE_LOWSPEED_9V, TYPE_NO_SENSOR, TYPE_REFLECTION, TYPE_SOUND_DB, TYPE_SOUND_DBA, TYPE_SWITCH, TYPE_TEMPERATURE, WHITE, YELLOW
+        Constructor Summary
+        Constructors Constructor and Description
+        AnalogSensor(AnalogPort p) 
+        AnalogSensor(Port p) 
+        AnalogSensor(Port p, int type, int mode) 
+        Method Summary
+        All MethodsInstance MethodsConcrete Methods Modifier and Type 	Method and Description
+        protected float 	normalize(float val)
+        Helper method.
+        protected int 	NXTRawIntValue(float val)
+        Return the equivalent NXT RAW sensor reading to the given voltage
+        protected float 	NXTRawValue(float val)
+        Return the equivalent NXT RAW sensor reading to the given voltage
+        protected void 	switchType(int newType, long switchDelay)
+        Switch to the selected type (if not already in that type) and delay for the specified period to allow the sensor to settle in the new state.
+            Methods inherited from class lejos.hardware.sensor.BaseSensor
+            fetchSample, getAvailableModes, getCurrentMode, getMode, getMode, getModeCount, getName, sampleSize, setCurrentMode, setCurrentMode, setModes
+            Methods inherited from class lejos.hardware.Device
+            close, releaseOnClose
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Field Detail
+            port
+
+            protected AnalogPort port
+
+            currentType
+
+            protected int currentType
+
+        Constructor Detail
+            AnalogSensor
+
+            public AnalogSensor(AnalogPort p)
+
+            AnalogSensor
+
+            public AnalogSensor(Port p,
+                                int type,
+                                int mode)
+
+            AnalogSensor
+
+            public AnalogSensor(Port p)
+
+        Method Detail
+            normalize
+
+            protected float normalize(float val)
+
+            Helper method. Take a voltage and return it as a normalized value in the range 0.0-1.0
+
+            Parameters:
+                val - input value
+            Returns:
+                normalized value
+
+            NXTRawValue
+
+            protected float NXTRawValue(float val)
+
+            Return the equivalent NXT RAW sensor reading to the given voltage
+
+            Parameters:
+                val - ADC voltage
+            Returns:
+                The reading that would be returned on the NXT
+
+            NXTRawIntValue
+
+            protected int NXTRawIntValue(float val)
+
+            Return the equivalent NXT RAW sensor reading to the given voltage
+
+            Parameters:
+                val - ADC voltage
+            Returns:
+                The reading that would be returned on the NXT
+
+            switchType
+
+            protected void switchType(int newType,
+                                      long switchDelay)
+
+            Switch to the selected type (if not already in that type) and delay for the specified period to allow the sensor to settle in the new state.
+            NOTE: This method is intended for use with NXT sensor drivers that use a sensor type to specify the operating mode.
+
+            Parameters:
+                newType - The type to switch to.
+                switchDelay - Time in mS to delay after the switch.
+

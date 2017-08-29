@@ -1,0 +1,203 @@
+
+lejos.robotics.navigation
+Interface ArcMoveController
+
+    All Superinterfaces:
+        MoveController, MoveProvider
+
+    All Known Subinterfaces:
+        ArcRotateMoveController, LineFollowingMoveController
+
+    All Known Implementing Classes:
+        CompassPilot, DifferentialPilot, MovePilot, OmniPilot, RemoteRequestPilot, SteeringPilot
+
+
+    public interface ArcMoveController
+    extends MoveController
+
+    An enhanced MoveController that is capable of traveling in arcs.
+
+    Author:
+        NXJ Team
+
+        Field Summary
+            Fields inherited from interface lejos.robotics.navigation.MoveController
+            WHEEL_SIZE_EV3, WHEEL_SIZE_NXT1, WHEEL_SIZE_NXT2, WHEEL_SIZE_RCX
+        Method Summary
+        All MethodsInstance MethodsAbstract Methods Modifier and Type 	Method and Description
+        void 	arc(double radius, double angle)
+        Moves the NXT robot along an arc with a specified radius and angle, after which the robot stops moving.
+        void 	arc(double radius, double angle, boolean immediateReturn)
+        Moves the NXT robot along an arc with a specified radius and angle, after which the robot stops moving.
+        void 	arcBackward(double radius)
+        Starts the NXT robot moving backward along an arc with a specified radius.
+        void 	arcForward(double radius)
+        Starts the NXT robot moving forward along an arc with a specified radius.
+        double 	getMinRadius()
+        The minimum steering radius this vehicle is capable of when traveling in an arc.
+        void 	setMinRadius(double radius)
+        Set the radius of the minimum turning circle.
+        void 	travelArc(double radius, double distance)
+        Moves the NXT robot a specified distance along an arc of specified radius, after which the robot stops moving.
+        void 	travelArc(double radius, double distance, boolean immediateReturn)
+        Moves the NXT robot a specified distance along an arc of specified radius, after which the robot stops moving.
+            Methods inherited from interface lejos.robotics.navigation.MoveController
+            backward, forward, getLinearAcceleration, getLinearSpeed, getMaxLinearSpeed, isMoving, setLinearAcceleration, setLinearSpeed, stop, travel, travel
+            Methods inherited from interface lejos.robotics.navigation.MoveProvider
+            addMoveListener, getMovement
+
+        Method Detail
+            getMinRadius
+
+            double getMinRadius()
+
+            The minimum steering radius this vehicle is capable of when traveling in an arc. Theoretically this should be identical for both forward and reverse travel. In practice?
+
+            Returns:
+                the radius in degrees
+
+            setMinRadius
+
+            void setMinRadius(double radius)
+
+            Set the radius of the minimum turning circle.
+
+            Parameters:
+                radius - the radius in degrees
+
+            arcForward
+
+            void arcForward(double radius)
+
+            Starts the NXT robot moving forward along an arc with a specified radius.
+
+            If radius is positive, the robot arcs left, and the center of the turning circle is on the left side of the robot.
+            If radius is negative, the robot arcs right, and the center of the turning circle is on the right side of the robot.
+            If radius is zero, the robot rotates in place.
+
+            Postcondition: Motor speeds are unpredictable.
+
+            Note: If you have specified a drift correction in the constructor it will not be applied in this method.
+
+            Parameters:
+                radius - of the arc path. If positive, the left side of the robot is on the inside of the turn. If negative, the left side of the robot is on the outside of the turn.
+
+            arcBackward
+
+            void arcBackward(double radius)
+
+            Starts the NXT robot moving backward along an arc with a specified radius.
+
+            If radius is positive, the robot arcs left, and the center of the turning circle is on the left side of the robot.
+            If radius is negative, the robot arcs right, and the center of the turning circle is on the right side of the robot.
+            If radius is zero, the robot rotates in place.
+
+            Postcondition: Motor speeds are unpredictable.
+
+            Note: If you have specified a drift correction in the constructor it will not be applied in this method.
+
+            Parameters:
+                radius - of the arc path. If positive, the left side of the robot is on the inside of the turn. If negative, the left side of the robot is on the outside of the turn.
+
+            arc
+
+            void arc(double radius,
+                     double angle)
+
+            Moves the NXT robot along an arc with a specified radius and angle, after which the robot stops moving. This method does not return until the robot has completed moving angle degrees along the arc.
+
+            If radius is positive, the robot arcs left, and the center of the turning circle is on the left side of the robot.
+            If radius is negative, the robot arcs right, and the center of the turning circle is on the right side of the robot.
+            If radius is zero, is zero, the robot rotates in place.
+
+            Robot will stop when the degrees it has moved along the arc equals angle.
+            If angle is positive, the robot will turn to the left (anti-clockwise).
+            If angle is negative, the robot will turn to the right (clockwise). If angle is zero, the robot will not move and the method returns immediately.
+
+            Postcondition: Motor speeds are unpredictable.
+
+            Note: If you have specified a drift correction in the constructor it will not be applied in this method.
+
+            Parameters:
+                radius - of the arc path. If positive, the left side of the robot is on the inside of the turn. If negative, the left side of the robot is on the outside of the turn.
+                angle - The sign of the angle determines the direction of the robot turns: Positive is anti-clockwise, negative is clockwise.
+            See Also:
+                travelArc(double, double)
+
+            arc
+
+            void arc(double radius,
+                     double angle,
+                     boolean immediateReturn)
+
+            Moves the NXT robot along an arc with a specified radius and angle, after which the robot stops moving. This method has the ability to return immediately by using the immediateReturn parameter.
+
+            If radius is positive, the robot arcs left, and the center of the turning circle is on the left side of the robot.
+            If radius is negative, the robot arcs right, and the center of the turning circle is on the right side of the robot.
+            If radius is zero, is zero, the robot rotates in place.
+
+            The robot will stop when the degrees it has moved along the arc equals angle.
+            If angle is positive, the robot will turn to the left (anti-clockwise).
+            If angle is negative, the robot will turn to the right (clockwise). If angle is zero, the robot will not move and the method returns immediately.
+
+            Postcondition: Motor speeds are unpredictable.
+
+            Note: If you have specified a drift correction in the constructor it will not be applied in this method.
+
+            Parameters:
+                radius - of the arc path. If positive, the left side of the robot is on the inside of the turn. If negative, the left side of the robot is on the outside of the turn.
+                angle - The sign of the angle determines the direction of the robot turns: Positive is anti-clockwise, negative is clockwise.
+                immediateReturn - If immediateReturn is true then the method returns immediately.
+            See Also:
+                travelArc(double, double, boolean)
+
+            travelArc
+
+            void travelArc(double radius,
+                           double distance)
+
+            Moves the NXT robot a specified distance along an arc of specified radius, after which the robot stops moving. This method does not return until the robot has completed moving distance along the arc. The units (inches, cm) for distance must be the same as the units used for radius.
+
+            If radius is positive, the robot arcs left, and the center of the turning circle is on the left side of the robot.
+            If radius is negative, the robot arcs right, and the center of the turning circle is on the right side of the robot.
+            If radius is zero, the robot rotates in place
+
+            The robot will stop when it has moved along the arc distance units.
+            If distance is positive, the robot will move travel forwards.
+            If distance is negative, the robot will move travel backwards.
+            If distance is zero, the robot will not move and the method returns immediately.
+
+            Postcondition: Motor speeds are unpredictable.
+
+            Parameters:
+                radius - of the arc path. If positive, the left side of the robot is on the inside of the turn. If negative, the left side of the robot is on the outside of the turn.
+                distance - to travel, in same units as radius. The sign of the distance determines the direction of robot motion. Positive drives the robot forward, negative drives it backward.
+            See Also:
+                arc(double, double)
+
+            travelArc
+
+            void travelArc(double radius,
+                           double distance,
+                           boolean immediateReturn)
+
+            Moves the NXT robot a specified distance along an arc of specified radius, after which the robot stops moving. This method has the ability to return immediately by using the immediateReturn parameter. The units (inches, cm) for distance should be the same as the units used for radius.
+
+            If radius is positive, the robot arcs left, and the center of the turning circle is on the left side of the robot.
+            If radius is negative, the robot arcs right, and the center of the turning circle is on the right side of the robot.
+            If radius is zero, the robot rotates in place.
+
+            The robot will stop when it has moved along the arc distance units.
+            If distance is positive, the robot will move travel forwards.
+            If distance is negative, the robot will move travel backwards.
+            If distance is zero, the robot will not move and the method returns immediately.
+
+            Postcondition: Motor speeds are unpredictable.
+
+            Parameters:
+                radius - of the arc path. If positive, the left side of the robot is on the inside of the turn. If negative, the left side of the robot is on the outside of the turn.
+                distance - to travel, in same units as radius. The sign of the distance determines the direction of robot motion. Positive drives the robot forward, negative drives it backward.
+                immediateReturn - If immediateReturn is true then the method returns immediately.
+            See Also:
+                arc(double, double, boolean)
+

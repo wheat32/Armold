@@ -1,0 +1,32 @@
+
+lejos.robotics.navigation
+Interface ArcRotateMoveController
+
+    All Superinterfaces:
+        ArcMoveController, MoveController, MoveProvider, RotateMoveController
+
+    All Known Subinterfaces:
+        LineFollowingMoveController
+
+    All Known Implementing Classes:
+        CompassPilot, DifferentialPilot, MovePilot, OmniPilot, RemoteRequestPilot
+
+
+    public interface ArcRotateMoveController
+    extends ArcMoveController, RotateMoveController
+
+    A MoveController for robots that can perform arcs and rotate on the spot.
+
+        Field Summary
+            Fields inherited from interface lejos.robotics.navigation.MoveController
+            WHEEL_SIZE_EV3, WHEEL_SIZE_NXT1, WHEEL_SIZE_NXT2, WHEEL_SIZE_RCX
+        Method Summary
+            Methods inherited from interface lejos.robotics.navigation.ArcMoveController
+            arc, arc, arcBackward, arcForward, getMinRadius, setMinRadius, travelArc, travelArc
+            Methods inherited from interface lejos.robotics.navigation.RotateMoveController
+            getAngularAcceleration, getAngularSpeed, getMaxAngularSpeed, rotate, rotate, rotateLeft, rotateRight, setAngularAcceleration, setAngularSpeed
+            Methods inherited from interface lejos.robotics.navigation.MoveController
+            backward, forward, getLinearAcceleration, getLinearSpeed, getMaxLinearSpeed, isMoving, setLinearAcceleration, setLinearSpeed, stop, travel, travel
+            Methods inherited from interface lejos.robotics.navigation.MoveProvider
+            addMoveListener, getMovement
+

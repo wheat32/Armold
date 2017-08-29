@@ -1,0 +1,153 @@
+
+lejos.hardware
+Interface Audio
+
+    All Superinterfaces:
+        Sounds
+
+    All Known Implementing Classes:
+        RemoteAudio, RemoteNXTAudio, RemoteRequestAudio
+
+
+    public interface Audio
+    extends Sounds
+
+        Field Summary
+            Fields inherited from interface lejos.hardware.Sounds
+            ASCENDING, BEEP, BUZZ, DESCENDING, DOUBLE_BEEP, FLUTE, PIANO, VOL_MAX, XYLOPHONE
+        Method Summary
+        All MethodsInstance MethodsAbstract Methods Modifier and Type 	Method and Description
+        int 	getVolume()
+        Get the current master volume level
+        void 	loadSettings()
+        Load the current system settings associated with this class.
+        void 	playNote(int[] inst, int freq, int len)
+        Play a note with attack, decay, sustain and release shape.
+        int 	playSample(byte[] data, int offset, int len, int freq, int vol)
+        Queue a series of PCM samples to play at the specified volume and sample rate.
+        int 	playSample(java.io.File file)
+        Play a wav file
+        int 	playSample(java.io.File file, int vol)
+        Play a wav file
+        void 	playTone(int freq, int duration) 
+        void 	playTone(int aFrequency, int aDuration, int aVolume)
+        Plays a tone, given its frequency and duration.
+        void 	setVolume(int vol)
+        Set the master volume level
+        void 	systemSound(int aCode)
+        Play a system sound.
+
+        Method Detail
+            systemSound
+
+            void systemSound(int aCode)
+
+            Play a system sound.
+            aCode	Resulting Sound
+            0	short beep
+            1	double beep
+            2	descending arpeggio
+            3	ascending arpeggio
+            4	long, low buzz
+            playTone
+
+            void playTone(int aFrequency,
+                          int aDuration,
+                          int aVolume)
+
+            Plays a tone, given its frequency and duration.
+
+            Parameters:
+                aFrequency - The frequency of the tone in Hertz (Hz).
+                aDuration - The duration of the tone, in milliseconds.
+                aVolume - The volume of the playback 100 corresponds to 100%
+
+            playTone
+
+            void playTone(int freq,
+                          int duration)
+
+            playSample
+
+            int playSample(java.io.File file,
+                           int vol)
+
+            Play a wav file
+
+            Parameters:
+                file - the 8-bit PWM (WAV) sample file
+                vol - the volume percentage 0 - 100
+            Returns:
+                The number of milliseconds the sample will play for or < 0 if there is an error.
+            Throws:
+                FileNotFoundException
+
+            playSample
+
+            int playSample(java.io.File file)
+
+            Play a wav file
+
+            Parameters:
+                file - the 8-bit PWM (WAV) sample file
+            Returns:
+                The number of milliseconds the sample will play for or < 0 if there is an error.
+            Throws:
+                FileNotFoundException
+
+            playSample
+
+            int playSample(byte[] data,
+                           int offset,
+                           int len,
+                           int freq,
+                           int vol)
+
+            Queue a series of PCM samples to play at the specified volume and sample rate.
+
+            Parameters:
+                data - Buffer containing the samples
+                offset - Offset of the first sample in the buffer
+                len - Number of samples to queue
+                freq - Sample rate
+                vol - playback volume
+            Returns:
+                Number of samples actually queued
+
+            playNote
+
+            void playNote(int[] inst,
+                          int freq,
+                          int len)
+
+            Play a note with attack, decay, sustain and release shape. This function allows the playing of a more musical sounding note. It uses a set of supplied "instrument" parameters to define the shape of the notes envelope.
+
+            Parameters:
+                inst - Instrument definition
+                freq - The note to play (in Hz)
+                len - The duration of the note (in ms)
+
+            setVolume
+
+            void setVolume(int vol)
+
+            Set the master volume level
+
+            Parameters:
+                vol - 0-100
+
+            getVolume
+
+            int getVolume()
+
+            Get the current master volume level
+
+            Returns:
+                the current master volume 0-100
+
+            loadSettings
+
+            void loadSettings()
+
+            Load the current system settings associated with this class. Called automatically to initialize the class. May be called if it is required to reload any settings.
+

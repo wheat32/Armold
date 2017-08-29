@@ -1,0 +1,87 @@
+
+lejos.hardware.port
+Interface BasicSensorPort
+
+    All Superinterfaces:
+        SensorConstants
+
+    All Known Subinterfaces:
+        AnalogPort, I2CPort, LegacySensorPort, UARTPort
+
+    All Known Implementing Classes:
+        RemoteAnalogPort, RemoteI2CPort, RemoteIOPort, RemoteMotorPort, RemoteNXTAnalogPort, RemoteNXTI2CPort, RemoteNXTIOPort, RemoteNXTMotorPort, RemoteRequestAnalogPort, RemoteRequestI2CPort, RemoteRequestIOPort, RemoteRequestMotorPort, RemoteRequestUARTPort, RemoteUARTPort
+
+
+    public interface BasicSensorPort
+    extends SensorConstants
+
+    An abstraction for a sensor port that supports setting and retrieving types and modes of sensors.
+
+    Author:
+        Lawrie Griffiths.
+
+        Field Summary
+            Fields inherited from interface lejos.hardware.sensor.SensorConstants
+            BLACK, BLANK_INDEX, BLUE, BLUE_INDEX, BROWN, GREEN, GREEN_INDEX, MAX_TYPE, MIN_TYPE, MODE_RAW, NXT_ADC_RES, RED, RED_INDEX, TYPE_ANGLE, TYPE_COLORBLUE, TYPE_COLORFULL, TYPE_COLORGREEN, TYPE_COLORNONE, TYPE_COLORRED, TYPE_CUSTOM, TYPE_HIGHSPEED, TYPE_HIGHSPEED_9V, TYPE_HISPEED, TYPE_LIGHT_ACTIVE, TYPE_LIGHT_INACTIVE, TYPE_LOWSPEED, TYPE_LOWSPEED_9V, TYPE_NO_SENSOR, TYPE_REFLECTION, TYPE_SOUND_DB, TYPE_SOUND_DBA, TYPE_SWITCH, TYPE_TEMPERATURE, WHITE, YELLOW
+        Method Summary
+        All MethodsInstance MethodsAbstract MethodsDeprecated Methods Modifier and Type 	Method and Description
+        int 	getMode()
+        Get the current operating mode of the sensor
+        int 	getType()
+        Get the current type setting.
+        boolean 	setMode(int mode)
+        Set the current operating mode for the sensor attached to the port.
+        boolean 	setType(int type)
+        Set the operating type for the attached sensor.
+        boolean 	setTypeAndMode(int type, int mode)
+        Deprecated. 
+
+        Method Detail
+            getMode
+
+            int getMode()
+
+            Get the current operating mode of the sensor
+
+            Returns:
+                the current mode
+
+            getType
+
+            int getType()
+
+            Get the current type setting. Note that types are typically used to control the operation of Legacy and i2c sensors. They are normally not used for EV3 sensors.
+
+            Returns:
+                the current sensor type
+
+            setMode
+
+            boolean setMode(int mode)
+
+            Set the current operating mode for the sensor attached to the port.
+
+            Parameters:
+                mode - the new mode
+            Returns:
+                true if the mode has been accepted
+
+            setType
+
+            boolean setType(int type)
+
+            Set the operating type for the attached sensor. Normally type setting is only used with legacy sensors and for i2c devices (to set the speed and operating voltage). It is not normally used with EV3 sensors.
+
+            Parameters:
+                type - 
+            Returns:
+                true if type accepted
+
+            setTypeAndMode
+
+            @Deprecated
+            boolean setTypeAndMode(int type,
+                                                int mode)
+
+            Deprecated. 
+

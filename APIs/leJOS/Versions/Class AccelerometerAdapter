@@ -1,0 +1,82 @@
+
+lejos.robotics
+Class AccelerometerAdapter
+
+    java.lang.Object
+        lejos.robotics.filter.AbstractFilter
+            lejos.robotics.AccelerometerAdapter 
+
+    All Implemented Interfaces:
+        Accelerometer, SampleProvider
+
+
+    public class AccelerometerAdapter
+    extends AbstractFilter
+    implements Accelerometer
+
+        Field Summary
+            Fields inherited from class lejos.robotics.filter.AbstractFilter
+            sampleSize, source
+        Constructor Summary
+        Constructors Constructor and Description
+        AccelerometerAdapter(SampleProvider source) 
+        Method Summary
+        All MethodsInstance MethodsConcrete Methods Modifier and Type 	Method and Description
+        protected int 	getElement(int index) 
+        int 	getXAccel()
+        Measures the x-axis of the accelerometer, in meters/second^2.
+        int 	getYAccel()
+        Measures the y-axis of the accelerometer, in meters/second^2.
+        int 	getZAccel()
+        Measures the z-axis of the accelerometer, in meters/second^2.
+            Methods inherited from class lejos.robotics.filter.AbstractFilter
+            fetchSample, sampleSize
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Constructor Detail
+            AccelerometerAdapter
+
+            public AccelerometerAdapter(SampleProvider source)
+
+        Method Detail
+            getElement
+
+            protected int getElement(int index)
+
+            getXAccel
+
+            public int getXAccel()
+
+            Description copied from interface: Accelerometer
+            Measures the x-axis of the accelerometer, in meters/second^2.
+
+            Specified by:
+                getXAccel in interface Accelerometer
+            Returns:
+                acceleration in m/s^2
+
+            getYAccel
+
+            public int getYAccel()
+
+            Description copied from interface: Accelerometer
+            Measures the y-axis of the accelerometer, in meters/second^2.
+
+            Specified by:
+                getYAccel in interface Accelerometer
+            Returns:
+                acceleration in m/s^2
+
+            getZAccel
+
+            public int getZAccel()
+
+            Description copied from interface: Accelerometer
+            Measures the z-axis of the accelerometer, in meters/second^2.
+
+            Specified by:
+                getZAccel in interface Accelerometer
+            Returns:
+                acceleration in m/s^2
+

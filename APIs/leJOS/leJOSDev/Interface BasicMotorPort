@@ -1,0 +1,119 @@
+
+lejos.hardware.port
+Interface BasicMotorPort
+
+    All Superinterfaces:
+        java.lang.AutoCloseable, java.io.Closeable, IOPort
+
+    All Known Subinterfaces:
+        TachoMotorPort
+
+    All Known Implementing Classes:
+        PFMotorPort, RCXPlexedMotorPort, RCXRemoteMotorPort, RemoteMotorPort, RemoteNXTMotorPort, RemoteRequestMotorPort
+
+
+    public interface BasicMotorPort
+    extends IOPort
+
+    An abstraction for a motor port that supports RCX type motors, but not NXT motors with tachometers.
+
+    Author:
+        Lawrie Griffiths.
+
+        Field Summary
+        Fields Modifier and Type 	Field and Description
+        static int 	BACKWARD
+        Motor is running backwards
+        static int 	FLOAT
+        Motor is floating (no PWM drive)
+        static int 	FORWARD
+        Motor is running forward
+        static int 	MAX_POWER
+        Maximum power setting = 100%
+        static int 	PWM_BRAKE
+        PWM Mode.
+        static int 	PWM_FLOAT
+        PWM Mode.
+        static int 	STOP
+        Motor is stopped (PWM drive still applied)
+        Method Summary
+        All MethodsInstance MethodsAbstract Methods Modifier and Type 	Method and Description
+        void 	controlMotor(int power, int mode) 
+        void 	setPWMMode(int mode) 
+            Methods inherited from interface lejos.hardware.port.IOPort
+            close, getName, setPinMode
+
+        Field Detail
+            PWM_FLOAT
+
+            static final int PWM_FLOAT
+
+            PWM Mode. Motor is not driven during off phase of PWM
+
+            See Also:
+                Constant Field Values
+
+            PWM_BRAKE
+
+            static final int PWM_BRAKE
+
+            PWM Mode. Motor is driven during off phase of PWM
+
+            See Also:
+                Constant Field Values
+
+            FORWARD
+
+            static final int FORWARD
+
+            Motor is running forward
+
+            See Also:
+                Constant Field Values
+
+            BACKWARD
+
+            static final int BACKWARD
+
+            Motor is running backwards
+
+            See Also:
+                Constant Field Values
+
+            STOP
+
+            static final int STOP
+
+            Motor is stopped (PWM drive still applied)
+
+            See Also:
+                Constant Field Values
+
+            FLOAT
+
+            static final int FLOAT
+
+            Motor is floating (no PWM drive)
+
+            See Also:
+                Constant Field Values
+
+            MAX_POWER
+
+            static final int MAX_POWER
+
+            Maximum power setting = 100%
+
+            See Also:
+                Constant Field Values
+
+        Method Detail
+            controlMotor
+
+            void controlMotor(int power,
+                              int mode)
+
+            setPWMMode
+
+            void setPWMMode(int mode)
+

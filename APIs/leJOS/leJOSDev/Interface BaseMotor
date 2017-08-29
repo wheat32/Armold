@@ -1,0 +1,58 @@
+
+lejos.robotics
+Interface BaseMotor
+
+    All Known Subinterfaces:
+        DCMotor, EncoderMotor, RegulatedMotor
+
+    All Known Implementing Classes:
+        BaseRegulatedMotor, BasicMotor, EV3LargeRegulatedMotor, EV3MediumRegulatedMotor, MindsensorsGlideWheelMRegulatedMotor, MindsensorsGlideWheelXLRegulatedMotor, MirrorMotor, MMXMotor, MMXRegulatedMotor, NXTRegulatedMotor, PFMateMotor, RCXMotor, RemoteRequestRegulatedMotor, TetrixEncoderMotor, TetrixMotor, TetrixRegulatedMotor, UnregulatedMotor
+
+
+    public interface BaseMotor
+
+    Base motor interface. Contains basic movement commands.
+
+        Method Summary
+        All MethodsInstance MethodsAbstract Methods Modifier and Type 	Method and Description
+        void 	backward()
+        Causes motor to rotate backwards until stop() or flt() is called.
+        void 	flt()
+        Motor loses all power, causing the rotor to float freely to a stop.
+        void 	forward()
+        Causes motor to rotate forward until stop() or flt() is called.
+        boolean 	isMoving()
+        Return true if the motor is moving.
+        void 	stop()
+        Causes motor to stop immediately.
+
+        Method Detail
+            forward
+
+            void forward()
+
+            Causes motor to rotate forward until stop() or flt() is called.
+            backward
+
+            void backward()
+
+            Causes motor to rotate backwards until stop() or flt() is called.
+            stop
+
+            void stop()
+
+            Causes motor to stop immediately. It will resist any further motion. Cancels any rotate() orders in progress.
+            flt
+
+            void flt()
+
+            Motor loses all power, causing the rotor to float freely to a stop. This is not the same as stopping, which locks the rotor.
+            isMoving
+
+            boolean isMoving()
+
+            Return true if the motor is moving.
+
+            Returns:
+                true if the motor is currently in motion, false if stopped.
+

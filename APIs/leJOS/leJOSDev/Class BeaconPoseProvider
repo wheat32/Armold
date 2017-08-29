@@ -1,0 +1,125 @@
+
+lejos.robotics.localization
+Class BeaconPoseProvider
+
+    java.lang.Object
+        lejos.robotics.localization.BeaconPoseProvider 
+
+    All Implemented Interfaces:
+        PoseProvider, MoveListener
+
+
+    public class BeaconPoseProvider
+    extends java.lang.Object
+    implements PoseProvider, MoveListener
+
+    A PoseProvider that uses beacon triangulation to pinpoint the pose (x, y, heading) of a robot. The starting position of the robot must be such that it roughly points in the direction of beacon 2, with beacon 1 to the right of the robot, and beacon 3 to the left. This ensures that when it performs the first scan, the beacons are scanned in order 1, 2, 3. After the first scan, the robot can move about on its own and will be able to scan them in any order.
+
+    After it does a scan, you will either hear a beep or a buzz. A beep means the calculation worked. A buzz means something went wrong with the calculation. This could be the beacon ordering is wrong, or it didn't scan three beacons in, or the calculated beacon pose deviated significantly from the estimated odometry pose. In this case, the results are thrown out, the odometry pose is used, and it will try another scan after the next move. If you hear a lot of buzzes in a row, it probably means it will not recover.
+
+    The class uses an OdometryPoseProvider internally for three reasons:
+    1. To serve as a backup pose provider if the BeaconLocator detects less than 3 beacons, or greater than 3 (meaning a false reflection occurred).
+    2. It is time consuming to scan beacons after every move. Instead, this will scan about every 5 moves. In between these scans, it uses the OdometryPoseProvider to navigate.
+    3. It is essential to scan the beacons in order. This allows it to determine the identity of each beacon so they are properly fed to the equations. The OdometryPoseProvider keeps track of heading so it knows which beacons were scanned.
+
+    The downside of using an OdometryPoseProvider to assist with detecting pose is that the robot needs to be placed with an approximate heading prior to first scan. Also, if the robot is moved at any time (lifted and placed with a different heading), it probably will no longer be able to identify the beacons and become hopelessly lost. As long as the wheels are always on the ground, this should not happen.
+
+Author:
+    BB
+
+        Constructor Summary
+        Constructors Constructor and Description
+        BeaconPoseProvider(BeaconLocator bl, BeaconTriangle bt, MoveProvider mp)
+        Creates a PoseProvider using beacons.
+        BeaconPoseProvider(BeaconLocator bl, BeaconTriangle bt, MoveProvider mp, int scanInterval)
+        Creates a PoseProvider using beacons.
+        Method Summary
+        All MethodsStatic MethodsInstance MethodsConcrete Methods Modifier and Type 	Method and Description
+        static int 	getLargestIndex(java.util.ArrayList<java.lang.Double> angles) 
+        Pose 	getPose() 
+        void 	moveStarted(Move move, MoveProvider mp)
+        Called when a Move Provider starts a move
+        void 	moveStopped(Move move, MoveProvider mp)
+        Called by the movement provider when a move stops
+        void 	setPose(Pose aPose) 
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Constructor Detail
+            BeaconPoseProvider
+
+            public BeaconPoseProvider(BeaconLocator bl,
+                                      BeaconTriangle bt,
+                                      MoveProvider mp)
+
+            Creates a PoseProvider using beacons. The BeaconLocator must be capable of scanning the angles to 3 beacons. The BeaconTriangle contains the coordinates of the three beacons. The MoveProvider is simply a Pilot, such as DifferentialPilot, which is used to keep track of odometry.
+
+            By default, this class takes a scan every 5 moves of the robot.
+
+            Parameters:
+                bl - a BeaconLocator
+                bt - a BeaconTriangle containing the three beacon coordinates
+                mp - a MoveProvider (Pilot) such as DifferentialPilot. Used for odometry.
+
+            BeaconPoseProvider
+
+            public BeaconPoseProvider(BeaconLocator bl,
+                                      BeaconTriangle bt,
+                                      MoveProvider mp,
+                                      int scanInterval)
+
+            Creates a PoseProvider using beacons. The BeaconLocator must be capable of scanning the angles to 3 beacons. The BeaconTriangle contains the coordinates of the three beacons. The MoveProvider is simply a Pilot, such as DifferentialPilot, which is used to keep track of odometry.
+
+            Parameters:
+                bl - a BeaconLocator
+                bt - a BeaconTriangle containing the three beacon coordinates
+                mp - a MoveProvider (Pilot) such as DifferentialPilot. Used for odometry.
+                scanInterval - The number of moves to make between each physical scan.
+
+        Method Detail
+            getPose
+
+            public Pose getPose()
+
+            Specified by:
+                getPose in interface PoseProvider
+
+            getLargestIndex
+
+            public static int getLargestIndex(java.util.ArrayList<java.lang.Double> angles)
+
+            setPose
+
+            public void setPose(Pose aPose)
+
+            Specified by:
+                setPose in interface PoseProvider
+
+            moveStarted
+
+            public void moveStarted(Move move,
+                                    MoveProvider mp)
+
+            Description copied from interface: MoveListener
+            Called when a Move Provider starts a move
+
+            Specified by:
+                moveStarted in interface MoveListener
+            Parameters:
+                move - the movement
+                mp - the movement provider
+
+            moveStopped
+
+            public void moveStopped(Move move,
+                                    MoveProvider mp)
+
+            Description copied from interface: MoveListener
+            Called by the movement provider when a move stops
+
+            Specified by:
+                moveStopped in interface MoveListener
+            Parameters:
+                move - the movement
+                mp - movement provider
+

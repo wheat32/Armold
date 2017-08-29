@@ -1,0 +1,189 @@
+
+lejos.hardware
+Interface Brick
+
+    All Known Subinterfaces:
+        EV3, NXT
+
+    All Known Implementing Classes:
+        LocalEV3, RemoteEV3, RemoteNXT, RemoteRequestEV3
+
+
+    public interface Brick
+
+        Method Summary
+        All MethodsInstance MethodsAbstract Methods Modifier and Type 	Method and Description
+        Audio 	getAudio()
+        return a Audio object which can be used to access the device's audio playback
+        LocalBTDevice 	getBluetoothDevice()
+        Get the local Bluetooth device
+        GraphicsLCD 	getGraphicsLCD()
+        Get graphics access to the LCD
+        Key 	getKey(java.lang.String name)
+        Get access to a specific Key (aka Button)
+        Keys 	getKeys()
+        Get access to the keys (buttons)
+        LED 	getLED()
+        Get access to the LED
+        java.lang.String 	getName()
+        Get he name of the brick
+        Port 	getPort(java.lang.String portName)
+        Return a port object for the request port name.
+        Power 	getPower()
+        return a battery object which can be used to obtain battery voltage etc.
+        TextLCD 	getTextLCD()
+        Get text access to the LCD using the default font
+        TextLCD 	getTextLCD(Font f)
+        Get text access to the LCD using a specified font
+        java.lang.String 	getType()
+        Get the type of brick, e.g.
+        Video 	getVideo() 
+        LocalWifiDevice 	getWifiDevice()
+        Get the local Wifi device
+        boolean 	isLocal()
+        Test whether the brick is a local one
+        void 	setDefault()
+        Set this brick as the default one for static methods
+
+        Method Detail
+            getPort
+
+            Port getPort(java.lang.String portName)
+
+            Return a port object for the request port name. This allows access to the hardware associated with the specified port.
+
+            Parameters:
+                portName - The name of port
+            Returns:
+                the request port
+
+            getPower
+
+            Power getPower()
+
+            return a battery object which can be used to obtain battery voltage etc.
+
+            Returns:
+                A battery object
+
+            getAudio
+
+            Audio getAudio()
+
+            return a Audio object which can be used to access the device's audio playback
+
+            Returns:
+                A Audio device
+
+            getVideo
+
+            Video getVideo()
+
+            getTextLCD
+
+            TextLCD getTextLCD()
+
+            Get text access to the LCD using the default font
+
+            Returns:
+                the text LCD
+
+            getTextLCD
+
+            TextLCD getTextLCD(Font f)
+
+            Get text access to the LCD using a specified font
+
+            Parameters:
+                f - the font
+            Returns:
+                the text LCD
+
+            getGraphicsLCD
+
+            GraphicsLCD getGraphicsLCD()
+
+            Get graphics access to the LCD
+
+            Returns:
+                the graphics LCD
+
+            isLocal
+
+            boolean isLocal()
+
+            Test whether the brick is a local one
+
+            Returns:
+                true iff brick is local
+
+            getType
+
+            java.lang.String getType()
+
+            Get the type of brick, e.g. "EV3", "NXT", "BrickPi"
+
+            Returns:
+                the brick type
+
+            getName
+
+            java.lang.String getName()
+
+            Get he name of the brick
+
+            Returns:
+                the name
+
+            getBluetoothDevice
+
+            LocalBTDevice getBluetoothDevice()
+
+            Get the local Bluetooth device
+
+            Returns:
+                the local Bluetooth device
+
+            getWifiDevice
+
+            LocalWifiDevice getWifiDevice()
+
+            Get the local Wifi device
+
+            Returns:
+                the local Wifi device
+
+            setDefault
+
+            void setDefault()
+
+            Set this brick as the default one for static methods
+            getKeys
+
+            Keys getKeys()
+
+            Get access to the keys (buttons)
+
+            Returns:
+                an implementation of the Keys interface
+
+            getKey
+
+            Key getKey(java.lang.String name)
+
+            Get access to a specific Key (aka Button)
+
+            Parameters:
+                name - the key name
+            Returns:
+                an implementation of the Key interface
+
+            getLED
+
+            LED getLED()
+
+            Get access to the LED
+
+            Returns:
+                an implementation of the LED interface
+

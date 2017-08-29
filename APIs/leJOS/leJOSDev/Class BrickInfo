@@ -1,0 +1,42 @@
+
+lejos.hardware
+Class BrickInfo
+
+    java.lang.Object
+        lejos.hardware.BrickInfo 
+
+
+    public class BrickInfo
+    extends java.lang.Object
+
+        Constructor Summary
+        Constructors Constructor and Description
+        BrickInfo(java.lang.String name, java.lang.String ipAddress, java.lang.String type) 
+        Method Summary
+        All MethodsInstance MethodsConcrete Methods Modifier and Type 	Method and Description
+        java.lang.String 	getIPAddress() 
+        java.lang.String 	getName() 
+        java.lang.String 	getType() 
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Constructor Detail
+            BrickInfo
+
+            public BrickInfo(java.lang.String name,
+                             java.lang.String ipAddress,
+                             java.lang.String type)
+
+        Method Detail
+            getName
+
+            public java.lang.String getName()
+
+            getIPAddress
+
+            public java.lang.String getIPAddress()
+
+            getType
+
+            public java.lang.String getType()
+

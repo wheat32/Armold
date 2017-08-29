@@ -1,0 +1,45 @@
+
+lejos.hardware
+Class Battery
+
+    java.lang.Object
+        lejos.hardware.Battery 
+
+
+    public class Battery
+    extends java.lang.Object
+
+        Constructor Summary
+        Constructors Constructor and Description
+        Battery() 
+        Method Summary
+        All MethodsStatic MethodsConcrete Methods Modifier and Type 	Method and Description
+        static float 	getBatteryCurrent() 
+        static float 	getMotorCurrent() 
+        static float 	getVoltage() 
+        static int 	getVoltageMilliVolt() 
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Constructor Detail
+            Battery
+
+            public Battery()
+
+        Method Detail
+            getVoltageMilliVolt
+
+            public static int getVoltageMilliVolt()
+
+            getVoltage
+
+            public static float getVoltage()
+
+            getBatteryCurrent
+
+            public static float getBatteryCurrent()
+
+            getMotorCurrent
+
+            public static float getMotorCurrent()
+

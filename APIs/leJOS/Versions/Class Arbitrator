@@ -1,0 +1,92 @@
+
+lejos.robotics.subsumption
+Class Arbitrator
+
+    java.lang.Object
+        lejos.robotics.subsumption.Arbitrator 
+
+
+    public class Arbitrator
+    extends java.lang.Object
+
+    An Arbitrator object manages a behavior control system by starting and stopping individual behaviors
+    by the calling the action() and suppress() methods on them.
+    These Behavior objects are stored in an array, in order of increasing priority.
+    Arbitrator has three major responsibilities:
+    1. Determine the highest priority behavior among those that returns true to takeControl() .
+    2. Suppress the active behavior if its priority is less than highest priority. These two taska are performed the Arbitrator's internal Monitor thread.
+    3. When the action() method exits, call action() on the Behavior of highest priority.
+    This task is performed by the Arbitrator main thread.
+    The Arbitrator assumes that a Behavior is no longer active when action() exits,
+    therefore it will only call suppress() on the active Behavior i.e. whose action() method is running.
+    It can make consecutive calls of action() on the same Behavior.
+    Requirements for a Behavior:
+    When suppress() is called, terminate action() immediately.
+    When action() exits, the robot is in a safe state (e.g. motors stopped)
+    When the behavior should take control, the takeControl() should continue to return true
+    until its action starts.
+    After your code instantiates the Arbitrator, it should call go() to start it running.
+
+    Author:
+        Roger Glassey
+    See Also:
+        Behavior
+
+        Field Summary
+        Fields Modifier and Type 	Field and Description
+        boolean 	keepRunning 
+        Constructor Summary
+        Constructors Constructor and Description
+        Arbitrator(Behavior[] behaviorList)
+        Same as Arbitrator(behaviorList, false) Arbitrator start() never exits
+        Arbitrator(Behavior[] behaviorList, boolean returnWhenInactive)
+        Allocates an Arbitrator object and initializes it with an array of Behavior objects.
+        Method Summary
+        All MethodsInstance MethodsConcrete Methods Modifier and Type 	Method and Description
+        void 	go()
+        This method starts the arbitration of Behaviors and runs an endless loop.
+        void 	stop() 
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Field Detail
+            keepRunning
+
+            public boolean keepRunning
+
+        Constructor Detail
+            Arbitrator
+
+            public Arbitrator(Behavior[] behaviorList,
+                              boolean returnWhenInactive)
+
+            Allocates an Arbitrator object and initializes it with an array of Behavior objects. The index of a behavior in this array is its priority level, so the behavior of the largest index has the highest the priority level. The behaviors in an Arbitrator can not be changed once the arbitrator is initialized.
+            NOTE: Once the Arbitrator is initialized, the method go() must be called to begin the arbitration.
+
+            Parameters:
+                behaviorList - an array of Behavior objects.
+                returnWhenInactive - if true, the go() method returns when no Behavior is active.
+
+            Arbitrator
+
+            public Arbitrator(Behavior[] behaviorList)
+
+            Same as Arbitrator(behaviorList, false) Arbitrator start() never exits
+
+            Parameters:
+                behaviorList - An array of Behavior objects.
+
+        Method Detail
+            go
+
+            public void go()
+
+            This method starts the arbitration of Behaviors and runs an endless loop.
+            Note: Arbitrator does not run in a separate thread. The go() method will not return unless
+            1. no action() method is running and
+            2. no behavior takeControl() returns true and
+            3. the returnWhenInacative flag is true,
+            stop
+
+            public void stop()
+

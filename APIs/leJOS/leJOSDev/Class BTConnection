@@ -1,0 +1,67 @@
+
+lejos.remote.nxt
+Class BTConnection
+
+    java.lang.Object
+        lejos.remote.nxt.NXTConnection
+            lejos.remote.nxt.BTConnection 
+
+    All Implemented Interfaces:
+        Connection, InputConnection, OutputConnection, StreamConnection
+
+
+    public class BTConnection
+    extends NXTConnection
+
+        Field Summary
+            Fields inherited from class lejos.remote.nxt.NXTConnection
+            LCP, PACKET, RAW
+        Method Summary
+        All MethodsInstance MethodsConcrete Methods Modifier and Type 	Method and Description
+        void 	close() 
+        int 	read(byte[] buf, int length) 
+        int 	read(byte[] buf, int length, boolean b) 
+        int 	write(byte[] buffer, int numBytes) 
+            Methods inherited from class lejos.remote.nxt.NXTConnection
+            openDataInputStream, openDataOutputStream, openInputStream, openOutputStream
+            Methods inherited from class java.lang.Object
+            clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+
+        Method Detail
+            close
+
+            public void close()
+                       throws java.io.IOException
+
+            Specified by:
+                close in interface Connection
+            Specified by:
+                close in class NXTConnection
+            Throws:
+                java.io.IOException
+
+            read
+
+            public int read(byte[] buf,
+                            int length)
+
+            Specified by:
+                read in class NXTConnection
+
+            write
+
+            public int write(byte[] buffer,
+                             int numBytes)
+
+            Specified by:
+                write in class NXTConnection
+
+            read
+
+            public int read(byte[] buf,
+                            int length,
+                            boolean b)
+
+            Specified by:
+                read in class NXTConnection
+

@@ -1,0 +1,52 @@
+
+lejos.robotics
+Interface Accelerometer
+
+    All Known Implementing Classes:
+        AccelerometerAdapter
+
+
+    public interface Accelerometer
+
+    Interface for Acceleration sensors
+
+    Author:
+        Lawrie Griffiths
+
+        Method Summary
+        All MethodsInstance MethodsAbstract Methods Modifier and Type 	Method and Description
+        int 	getXAccel()
+        Measures the x-axis of the accelerometer, in meters/second^2.
+        int 	getYAccel()
+        Measures the y-axis of the accelerometer, in meters/second^2.
+        int 	getZAccel()
+        Measures the z-axis of the accelerometer, in meters/second^2.
+
+        Method Detail
+            getXAccel
+
+            int getXAccel()
+
+            Measures the x-axis of the accelerometer, in meters/second^2.
+
+            Returns:
+                acceleration in m/s^2
+
+            getYAccel
+
+            int getYAccel()
+
+            Measures the y-axis of the accelerometer, in meters/second^2.
+
+            Returns:
+                acceleration in m/s^2
+
+            getZAccel
+
+            int getZAccel()
+
+            Measures the z-axis of the accelerometer, in meters/second^2.
+
+            Returns:
+                acceleration in m/s^2
+

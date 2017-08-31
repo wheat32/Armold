@@ -16,15 +16,9 @@ public class Main
 {	
 	public static void main(String[] args) 
 	{
-		//Object declarators
-		RobotConfig config = new RobotConfig();
-		CenterlineDetector det = new CenterlineDetector(config, 1400, 50);
-		UserInput userInput = new UserInput(64);
-		Arbitrator arby;
-		Port[] touchPorts = {SensorPort.S1, SensorPort.S4};
-		Behavior[] behaviors;
-		
 		//RobotConfig setup
+		RobotConfig config = new RobotConfig();
+		Port[] touchPorts = {SensorPort.S1, SensorPort.S4};//Required to be here
 		config.configureDifferentialPilot(Motor.A, Motor.D, 2.1f, 3);
 		config.configureColorScannerMotor(Motor.B);
 		config.configureColorSensorPort(SensorPort.S3);
@@ -32,6 +26,12 @@ public class Main
 		config.setLinearSpeed(4);
 		config.setLinearAcceleration(3);
 		config.setAngularSpeed(24);
+		
+		//Object declarators
+		CenterlineDetector det = new CenterlineDetector(config, 1400, 50);
+		UserInput userInput = new UserInput(64);
+		Arbitrator arby;
+		Behavior[] behaviors;
 		
 		//Behavior setups and object instantiations
 		Behavior b1 = new ForwardBehavior(config);
@@ -44,7 +44,6 @@ public class Main
 		//Create Listeners
 		((CenterlineListener)b2).becomeListener(det);
 		((CenterlineListener)b3).becomeListener(det);
-		((CenterlineListener)b4).becomeListener(det);
 		
 		userInput.start();
 		

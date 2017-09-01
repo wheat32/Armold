@@ -1,0 +1,145 @@
+lejos.robotics.filter
+  Class AbstractCalibrationFilter
+
+    java.lang.Object
+    lejos.robotics.filter.AbstractFilter
+    lejos.robotics.filter.AbstractCalibrationFilter
+    All Implemented Interfaces:
+    Calibrate, SampleProvider
+    Direct Known Subclasses:
+    LinearCalibrationFilter
+
+public abstract class AbstractCalibrationFilter
+extends AbstractFilter
+implements Calibrate
+Nested Class Summary
+
+Nested Classes
+Modifier and Type	Class and Description
+class 	AbstractCalibrationFilter.CalibrationFileException 
+Field Summary
+
+Fields
+Modifier and Type	Field and Description
+protected boolean	calibrating 
+protected LowPassFilter	lowPassFilter 
+protected float[]	max 
+protected float[]	min 
+protected int	numberOfSamplesInCalibration 
+protected float[]	sum 
+Fields inherited from class lejos.robotics.filter.AbstractFilter
+sampleSize, source
+Constructor Summary
+
+Constructors
+Constructor and Description
+AbstractCalibrationFilter(SampleProvider source) 
+Method Summary
+
+All MethodsInstance MethodsConcrete Methods
+Modifier and Type	Method and Description
+void	fetchSample(float[] dst, int off)
+Fetches a sample from the sensor and updates array with minimum and maximum values when the calibration process is running.
+protected float	getProperty(java.lang.String key) 
+protected float[]	getPropertyArray(java.lang.String key) 
+protected void	load(java.lang.String filename)
+Loads calibration parameters from the file system.
+void	resumeCalibration()
+Resumes the process of updating calibration parameters after a stop.
+protected void	setProperty(java.lang.String key, float value) 
+protected void	setPropertyArray(java.lang.String key, float[] values) 
+void	setTimeConstant(float timeConstant)
+Sets the time constant for the lowpass filter that is used when calibrating.
+void	startCalibration()
+Starts a calibration proces.
+void	stopCalibration()
+Halts the process of updating calibration parameters.
+protected void	store(java.lang.String filename)
+Saves the current set of calibration parameters to the file system.
+void	suspendCalibration()
+Halts the process of updating calibration parameters.
+Methods inherited from class lejos.robotics.filter.AbstractFilter
+sampleSize
+Methods inherited from class java.lang.Object
+clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait
+Field Detail
+
+lowPassFilter
+protected LowPassFilter lowPassFilter
+min
+protected float[] min
+max
+protected float[] max
+sum
+protected float[] sum
+calibrating
+protected boolean calibrating
+numberOfSamplesInCalibration
+protected int numberOfSamplesInCalibration
+Constructor Detail
+
+AbstractCalibrationFilter
+public AbstractCalibrationFilter(SampleProvider source)
+Method Detail
+
+fetchSample
+public void fetchSample(float[] dst,
+                        int off)
+Fetches a sample from the sensor and updates array with minimum and maximum values when the calibration process is running.
+Specified by:
+fetchSample in interface SampleProvider
+Overrides:
+fetchSample in class AbstractFilter
+Parameters:
+dst - The array to store the sample in.
+off - The elements of the sample are stored in the array starting at the offset position.
+setTimeConstant
+public void setTimeConstant(float timeConstant)
+Sets the time constant for the lowpass filter that is used when calibrating. 
+A value of zero will effectivly disable the lowpass filter. Higher values will remove more noise from the signal and give better results, especially when calibraating for scale. The downside of higher timeConstants is that calibrating takes more time.
+Parameters:
+timeConstant - between 0 and 1
+startCalibration
+public void startCalibration()
+Starts a calibration proces. Resets collected minimum and maximum values. After starting calibration new minimum and maximum values are calculated on each fetched sample. From this calibration parameters can be calculated.
+Specified by:
+startCalibration in interface Calibrate
+stopCalibration
+public void stopCalibration()
+Halts the process of updating calibration parameters.
+Specified by:
+stopCalibration in interface Calibrate
+suspendCalibration
+public void suspendCalibration()
+Halts the process of updating calibration parameters.
+resumeCalibration
+public void resumeCalibration()
+Resumes the process of updating calibration parameters after a stop.
+load
+protected void load(java.lang.String filename)
+             throws java.io.FileNotFoundException,
+                    java.io.IOException
+Loads calibration parameters from the file system. 
+This method raises an exception when the stored calibration parameters do not match the sensor or the calibration class.
+Parameters:
+filename - filename of the stored calibration parameters
+Throws:
+java.io.FileNotFoundException
+java.io.IOException
+store
+protected void store(java.lang.String filename)
+Saves the current set of calibration parameters to the file system.
+Calibration files are stored in /home/root/sensorCalibration/filename
+
+Parameters:
+filename - Name of the file to store calibration parameters in.
+getPropertyArray
+protected float[] getPropertyArray(java.lang.String key)
+setPropertyArray
+protected void setPropertyArray(java.lang.String key,
+                                float[] values)
+setProperty
+protected void setProperty(java.lang.String key,
+                           float value)
+getProperty
+protected float getProperty(java.lang.String key)

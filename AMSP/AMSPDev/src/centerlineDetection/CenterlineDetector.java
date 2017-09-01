@@ -149,12 +149,12 @@ public class CenterlineDetector implements IntersectionType
 	/**
 	 * <b>This method adds an object to the list of listeners.</b>
 	 * <p>
-	 * Any object which extends CenterlineListener must become a listener. Being
+	 * Any object which extends <code>CenterlineListener</code> must become a listener. Being
 	 * a listener allows the object to get reports made every scan.
 	 * 
 	 * @author Krish
 	 * @param listener
-	 *            - any object which extends CenterlineListener
+	 *            - any object which extends <code>CenterlineListener</code>
 	 * @return Nothing
 	 * @since 1.0.0 </br>
 	 *        Last modified: Never
@@ -165,7 +165,7 @@ public class CenterlineDetector implements IntersectionType
 	}
 
 	/**
-	 * <b>This method runs a short scan upon special request to see if the robot
+	 * <b>This method runs a short scan upon a request to see if the robot
 	 * has reached the finish line.</b>
 	 * <p>
 	 * This method sets <code>isScanning</code> to <code>true</code> and stops
@@ -226,8 +226,7 @@ public class CenterlineDetector implements IntersectionType
 	}
 
 	/**
-	 * <b>This method scans for the line to make sure it is still following the
-	 * line.</b>
+	 * <b>This method scans to make sure it is still following the line.</b>
 	 * <p>
 	 * &nbsp This method starts with setting <code>isScanning</code> to
 	 * <code>true</code> and stopping the movement of the robot. Before it
@@ -235,19 +234,19 @@ public class CenterlineDetector implements IntersectionType
 	 * <code>seesFinish</code> gets set to 3 <i>(this gets counted down later as
 	 * an assurance it sees the finish line and is not mistaken)</i>. </br>
 	 * &nbsp The color sensor will now begin rotating right n degrees towards
-	 * the line (which is presumably centered in front of the robot) while
+	 * the line (which is presumably in front of the robot) while
 	 * scanning for the color of the line. While scanning for the line, it will
 	 * continue checking if the finish line is in sight. If the finish line is
-	 * not in sight, <code>seesFinish</code> will decrement until it reaches 0.
+	 * not in sight, <code>seesFinish</code> will continuously decrease until it reaches 0.
 	 * </br>
 	 * &nbsp If it never sees the middle line after rotating right the n degrees
 	 * (and does not see the finish line color), <code>isScanning</code> will be
 	 * set to <code>false</code> and it will return
 	 * <code>Direction.DeadEnd</code>. </br>
-	 * &nbsp Else if it sees the finish line color, then <code>isScanning</code>
-	 * will be set to <code>false</code> and it will return
+	 * &nbsp Else if it saw the finish line color during the whole rotation, then 
+	 * <code>isScanning</code> will be set to <code>false</code> and it will return
 	 * <code>Direction.Finish</code>. </br>
-	 * &nbsp If it sees none of the above, then it will assume it saw the middle
+	 * &nbsp If none of the above occur, then it will assume it saw the middle
 	 * line at some point, set <code>isScanning</code> to <code>false</code> and
 	 * it will return <code>Direction.Straight</code>.
 	 * 

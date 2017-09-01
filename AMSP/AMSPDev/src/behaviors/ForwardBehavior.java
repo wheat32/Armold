@@ -19,18 +19,20 @@ public class ForwardBehavior implements Behavior
 
 	/**
 	 * <b>This <code>takeControl()</code> method returns true whenever no scan is happening inside the 
-	 * <code>CenterlineDetector</code> and if the color sensor does <i>not</i> see the foreground line color.</b>
+	 * <code>CenterlineDetector</code> and if the color sensor does <i>not</i> see the foreground, 
+	 * border, or finish color.</b>
 	 * 
 	 * @author Krish, Caroline, Nick
 	 * @param None
 	 * @return boolean
 	 * @since 1.0.0 </br>
-	 *        Last modified: 2.1.1
+	 *        Last modified: 2.1.2
 	 */
 	@Override
 	public boolean takeControl() 
 	{
-		if(det.getIsScanning() == false && colorAdapter.getColorID() != config.getForegroundColor())
+		if(det.getIsScanning() == false && colorAdapter.getColorID() != config.getForegroundColor()
+				&& colorAdapter.getColorID() != config.getBorderColor() && colorAdapter.getColorID() != config.getFinishColor())
 		{
 			return true;
 		}
@@ -42,7 +44,7 @@ public class ForwardBehavior implements Behavior
 	 * <b>When this <code>action()</code> method gets called, the robot will either begin to drive forward or
 	 * stop depending on whether the <code>CenterlineDetector</code> is scanning or not.</b>
 	 * <p>
-	 * If the <code>CenterlineDetector</code> <i>is not</i> scanning and the robot <i>is not</i> currently 
+	 * If the <code>CenterlineDetector</code> is <i>not</i> scanning and the robot is <i>not</i> currently 
 	 * moving, then it will tell the <code>config</code> to start moving the robot.
 	 * </br>
 	 * If the <code>CenterlineDetector</code> <i>is</i> scanning and the robot <i>is</i> currently moving,

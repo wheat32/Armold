@@ -14,6 +14,17 @@ import lejos.robotics.subsumption.Behavior;
 
 public class Main 
 {	
+	/**
+	 * <b>The <code>main()</code> method is the starting point for the program. It will construct the objects and initialize
+	 * them before starting the arbitrator.</b>
+	 * <p>
+	 * 
+	 * @author Krish, Shaun, Caroline, Nick
+	 * @param None
+	 * @return Nothing.
+	 * @since 1.0.0 </br>
+	 *        Last modified: 2.1.2
+	 */
 	public static void main(String[] args) 
 	{
 		//RobotConfig setup

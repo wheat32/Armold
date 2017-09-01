@@ -38,6 +38,17 @@ public class TurnBehavior implements Behavior, CenterlineListener
 		}
 	}
 	
+	/**
+	 * <b>This <code>takeControl()</code> method returns true whenever the color sensor sees the foreground color or the
+	 * <code>Direction</code> is either <code>LeftTurn</code>, <code>RightTurn</code>, or <code>DeadEnd</code>.</b>
+	 * <p>
+	 * 
+	 * @author Krish, Caroline, Nick
+	 * @param None
+	 * @return boolean
+	 * @since 1.0.0 </br>
+	 *        Last modified: 2.1.1
+	 */
 	@Override
 	public boolean takeControl() 
 	{
@@ -67,29 +78,31 @@ public class TurnBehavior implements Behavior, CenterlineListener
 	 * <b>When this <code>action()</code> method gets called, it will make the robot react differently 
 	 * depending on the current <code>Direction</code>.</b>
 	 * <p>
-	 * The first thing that happens in this method, is if the <code>CenterlineDetector</code> has a scan 
+	 * The first thing that will happen is if the <code>CenterlineDetector</code> has a scan 
 	 * running, it will wait on it to complete and then call the <code>CenterlineDetector</code> to stop the
 	 * scans. It will then rotate the color sensor to <code>0</code> <i>(which, if the calibration was 
 	 * performed correctly, should be in the front and center of the robot)</i>. It will then proceed into a 
 	 * case statement whose condition is the <code>Direction</code>.
 	 * </br>
-	 * - <code>Direction.DeadEnd</code> - The robot will rotate right until it finds a line. If it finds a
-	 * line within the first 120 degrees, it assumes it found a right turn. If it doesn't, it will continue
-	 * rotating. If it never finds the line, it will begin rotating left until it is facing approximately
+	 * - <code>Direction.DeadEnd</code> - There are two parts to this turn. The robot will rotate right 
+	 * until it finds a line. If it finds a
+	 * line within the first part of the turn, it assumes it found a right turn. If it doesn't, it will start
+	 * the second part of the rotation, rotating until it finds the line it traveled on previously. If it 
+	 * never finds the line, it will begin rotating left until it is facing approximately
 	 * the direction it came from.
 	 * </br>
 	 * - <code>Direction.RightTurn</code> - If it goes into this case, a {@link RuntimeException} will get
 	 * thrown.
 	 * </br>
-	 * - <code>Direction.LeftTurn</code> - The robot will begin to rotate to the left, assuming it see the 
-	 * foreground line when it begins rotating. If it does, it will rotate over it, and continue until it
+	 * - <code>Direction.LeftTurn</code> - The robot will begin to rotate to the left, assuming it might see the 
+	 * foreground line when it begins rotating. If it does, it will rotate over it and continue until it
 	 * sees the next line. If it doesn't see a line in those initial few degrees, it will continue rotating 
-	 * anyways until it sees a line. If it never sees a line, it will rotate back towards where it started 
+	 * anyways until it sees a line. If it never sees a line, it will rotate back to where it started initially 
 	 * and report a <code>Direction.DeadEnd</code> and return out of the method <i>(the method will get 
-	 * called again but it will go into the <code>Direction.DeadEnd</code> case)</i>.
+	 * called again but it will go into the</i> <code>Direction.DeadEnd</code><i> case)</i>.
 	 * <p>
-	 * When it reaches the end of the method, it will rotate the color sensor to its moving position, send a 
-	 * <code>Direction.Straight</code> report, and resume the scans in the <code>CenterlineDetector</code>
+	 * When it reaches the end of the method, it will rotate the color sensor to its standard, offset to the left, position, 
+	 * send a <code>Direction.Straight</code> report, and resume the scans in the <code>CenterlineDetector</code>
 	 * class.
 	 * 
 	 * @author Caroline, Nick

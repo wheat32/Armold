@@ -43,7 +43,7 @@ public class EmergencyBehavior implements Behavior, IntersectionType
 
 	/**
 	 * <b>When this <code>action()</code> method gets called, it will make the robot reverse slightly, and 
-	 * manually make a report with the <code>Direction.DeadEnd</code> enum.</b>
+	 * manually send the direction <code>Direction.DeadEnd</code> in a report.</b>
 	 * 
 	 * @author Caroline, Nick
 	 * @param None

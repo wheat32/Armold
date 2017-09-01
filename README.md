@@ -14,8 +14,8 @@ This is a respository for code dumping, issue tracking, and various documentatio
   - Reason: Robot is technically moving backwards.
 - Input IDs:
   - 1 = up
-  - 2 = down
-  - 4 = center
+  - 2 = center
+  - 4 = down
   - 8 = right
   - 16 = left
   - 32 = back

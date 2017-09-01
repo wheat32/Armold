@@ -5,6 +5,7 @@ import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.robotics.Color;
+import lejos.robotics.ColorAdapter;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
@@ -25,6 +26,7 @@ public class RobotConfig
 
 	private EV3TouchSensor[] touchSensors = new EV3TouchSensor[2];
 	private EV3ColorSensor colorSensor;
+	private ColorAdapter colorAdapter;
 
 	private Port colorSensorPort;
 	private Port[] touchSensorPorts = new Port[2];
@@ -125,6 +127,16 @@ public class RobotConfig
 			}
 		}
 		return touchSensors;
+	}
+	
+	public ColorAdapter getColorAdapter()
+	{
+	
+		if (colorAdapter == null)
+		{
+			colorAdapter = new ColorAdapter(colorSensor);
+		}
+		return colorAdapter;
 	}
 
 	public EV3ColorSensor getColorSensor()

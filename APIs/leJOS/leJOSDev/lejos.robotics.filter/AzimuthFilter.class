@@ -1,7 +1,7 @@
 package lejos.robotics.filter;
 /**
  * This class fails to build at the moment (because there is no code. The following dummy class allows it to build
- * while we decide what to do wuth it!
+ * while we decide what to do with it!
  * @author andy
  *
  */

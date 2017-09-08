@@ -30,7 +30,7 @@ public class DebugMessages {
 	}
 
 	/**
-	 * Constructor which the user establish in what line start showing messages
+	 * Constructor which the user establishes what line to start showing messages in
 	 * 
 	 * @param init
 	 */

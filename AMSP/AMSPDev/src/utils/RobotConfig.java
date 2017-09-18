@@ -109,12 +109,6 @@ public class RobotConfig
 		colorScannerMotor = motor;
 	}
 
-	/*
-	 * public void configureCenterlineDetector(int delay, int scanSpeed){
-	 * this.centerlineDetector = new CenterlineDetector(this, delay, scanSpeed);
-	 * }
-	 */
-
 	public EV3TouchSensor[] getTouchSensors()
 	{
 		if(touchSensors[0] == null)

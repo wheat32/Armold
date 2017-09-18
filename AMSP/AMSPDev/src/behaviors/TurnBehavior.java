@@ -116,7 +116,7 @@ public class TurnBehavior implements Behavior, CenterlineListener
 	 * @throws RuntimeException if it enters the <code>RightTurn</code> case or <code>default</code> case.
 	 */
 	@Override
-	public void action() 
+	public void action()
 	{
 		debugger.printToScreen("TurnBehavior: Action for direction " + direction);
 		

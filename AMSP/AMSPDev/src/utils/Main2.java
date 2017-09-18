@@ -70,13 +70,13 @@ public class Main2
 		config.resetTimeStamp();
 		
 		int[] dumbArray = new int[2];
-		dumbArray[2] = 0;/*
+		dumbArray[2] = 0;
 		
 		//Calibrate
 		det.calibrate();
 		//Start the scan timer
 		det.start();
 		//Start the arbitrator
-		arby.go();*/
+		arby.go();
 	}
 }

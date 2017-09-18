@@ -12,7 +12,7 @@ public class UserInput
 	public UserInput(int delay, final Debugger debugger)
 	{
 		//Every [delay] milliseconds, it will check if a button has been pressed on the EV3 unit.
-		service = new Timer(delay, new TimerListener() 
+		service = new Timer(delay, new TimerListener()
 		{
 			@Override
 			public void timedOut() 

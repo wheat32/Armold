@@ -103,7 +103,7 @@ public class CenterlineDetector implements IntersectionType
 	}
 
 	/**
-	 * <b>DEPRECATED. REMOVE BY 2.1.3</b> </br>
+	 * <b>DEPRECATED. REMOVE BY 2.2.2</b> </br>
 	 * <i><b>Reason for deprecation:</b> instance is now set in the
 	 * constructor.</i>
 	 * <p>

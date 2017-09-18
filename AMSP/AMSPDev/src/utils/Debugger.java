@@ -174,7 +174,7 @@ public class Debugger implements Thread.UncaughtExceptionHandler
 			outputColl.append(e.getMessage() + "\n");
 		}
 		
-		if (e.getCause() != null) 
+		if (e.getCause() != null)
 		{
 			System.out.println("Caused by:");
 			System.out.println(e.getCause().toString());

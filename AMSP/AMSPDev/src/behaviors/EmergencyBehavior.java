@@ -34,7 +34,7 @@ public class EmergencyBehavior implements Behavior, IntersectionType
 	 *        Last modified: 2.1.0
 	 */
 	@Override
-	public boolean takeControl() 
+	public boolean takeControl()
 	{		
 		if(colorAdapter.getColorID() == config.getBorderColor())
 		{

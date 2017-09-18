@@ -32,7 +32,7 @@ public class ForwardBehavior implements Behavior
 	 *        Last modified: 2.1.2
 	 */
 	@Override
-	public boolean takeControl() 
+	public boolean takeControl()
 	{
 		if(det.getIsScanning() == false && colorAdapter.getColorID() != config.getForegroundColor()
 				&& colorAdapter.getColorID() != config.getBorderColor() && colorAdapter.getColorID() != config.getFinishColor())

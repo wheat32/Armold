@@ -49,7 +49,7 @@ public class MazeCompletionBehavior implements Behavior, CenterlineListener
 	 *        Last modified: 2.1.2
 	 */
 	@Override
-	public boolean takeControl() 
+	public boolean takeControl()
 	{
 		if(direction == Direction.Finish)
 		{

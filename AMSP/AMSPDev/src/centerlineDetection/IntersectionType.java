@@ -1,6 +1,6 @@
 package centerlineDetection;
 
-public interface IntersectionType 
+public interface IntersectionType
 {
 	enum Direction {LeftTurn, RightTurn, DeadEnd, Straight, Finish};
 }

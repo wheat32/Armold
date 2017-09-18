@@ -21,7 +21,7 @@ public interface CenterlineListener extends IntersectionType
 	 * 
 	 * @param det <code>CenterlineDetector</code> - provides a <code>CenterlineDetector</code>.
 	 * @author Krish
-	 * @since 1.0.0 
+	 * @since 1.0.0
 	 */
 	void becomeListener(CenterlineDetector det);
 }

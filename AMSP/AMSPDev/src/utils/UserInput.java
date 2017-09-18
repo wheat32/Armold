@@ -9,7 +9,7 @@ public class UserInput
 {
 	private Timer service;
 
-	public UserInput(int delay)
+	public UserInput(int delay, final Debugger debugger)
 	{
 		//Every [delay] milliseconds, it will check if a button has been pressed on the EV3 unit.
 		service = new Timer(delay, new TimerListener() 
@@ -20,12 +20,12 @@ public class UserInput
 				switch(Button.getButtons())
 				{
 					case 32:
-						System.out.println("UserInput: Died from back button press.");
+						debugger.printToScreen("UserInput: Died from back button press.");
+						service.stop();
 						Sound.beep();
-						System.exit(0);
-					break;
+						debugger.exit(true);
+						return;
 				}
-				
 			}
 		});
 	}

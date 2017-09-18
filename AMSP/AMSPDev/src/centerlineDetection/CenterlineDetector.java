@@ -9,6 +9,7 @@ import lejos.robotics.RegulatedMotor;
 import lejos.robotics.TouchAdapter;
 import lejos.utility.Timer;
 import lejos.utility.TimerListener;
+import utils.Debugger;
 import utils.RobotConfig;
 
 public class CenterlineDetector implements IntersectionType
@@ -17,6 +18,7 @@ public class CenterlineDetector implements IntersectionType
 	private EV3TouchSensor[] touchSensors = new EV3TouchSensor[2];
 	private TouchAdapter[] touchAdapters = new TouchAdapter[2];
 	private RobotConfig config;
+	private Debugger debugger;
 	private ColorAdapter colorAdapter;
 	/**
 	 * <b>This instance variable controls the timer.</b>
@@ -75,6 +77,7 @@ public class CenterlineDetector implements IntersectionType
 	public CenterlineDetector(RobotConfig config, int delay, int scanSpeed)
 	{
 		this.config = config;
+		debugger = config.getDebugger();
 		motor = config.getColorScannerMotor();
 		motor.setSpeed(scanSpeed);
 		colorAdapter = new ColorAdapter(config.getColorSensor());
@@ -191,12 +194,12 @@ public class CenterlineDetector implements IntersectionType
 	{
 		isScanning = true;
 		config.getMovePilotInstance().stop();
-		System.out.println("[" + config.getTime() + "] CenterlineDetector: Finish line scan requested.");
+		debugger.printToScreen("CenterlineDetector: Finish line scan requested.");
 
 		if(colorAdapter.getColorID() != finishColor)
 		{
 			isScanning = false;
-			System.out.println("[" + config.getTime() + "] CenterlineDetector: Request result: False alarm.");
+			debugger.printToScreen("CenterlineDetector: Request result: False alarm.");
 			return Direction.Straight;
 		}
 
@@ -220,7 +223,7 @@ public class CenterlineDetector implements IntersectionType
 			motor.rotate(20);
 			motor.flt();
 			isScanning = false;
-			System.out.println("[" + config.getTime() + "] CenterlineDetector: Request result: False alarm.");
+			debugger.printToScreen("CenterlineDetector: Request result: False alarm.");
 			return Direction.Straight;
 		}
 	}
@@ -261,7 +264,7 @@ public class CenterlineDetector implements IntersectionType
 		isScanning = true;
 		config.getMovePilotInstance().stop();
 		byte seesFinish = 0;
-		System.out.println("[" + config.getTime() + "] CenterlineDetector: Finding line");
+		debugger.printToScreen("CenterlineDetector: Finding line");
 
 		// Check for the finish line before conducting routine scan
 		if(colorAdapter.getColorID() == finishColor)
@@ -287,20 +290,20 @@ public class CenterlineDetector implements IntersectionType
 			Sound.beep();
 			motor.rotateTo(0);
 			motor.flt();
-			System.out.println("[" + config.getTime() + "] CenterlineDetector: Dead end detected.");
+			debugger.printToScreen("CenterlineDetector: Dead end detected.");
 			isScanning = false;
 			return Direction.DeadEnd;
 		}
 		else if(colorAdapter.getColorID() == finishColor && seesFinish > 0)
 		{
-			System.out.println("[" + config.getTime() + "] CenterlineDetector: Found finish.");
+			debugger.printToScreen("CenterlineDetector: Found finish.");
 			isScanning = false;
 			return Direction.Finish;
 		}
 		else
 		{
-			System.out.println("[" + config.getTime() + "] CenterlineDetector: Found path. Color is: "
-					+ colorAdapter.getColorID() + ". (" + foregroundColor + ") is black.");
+			debugger.printToScreen("CenterlineDetector: Found path. Color is: "+ colorAdapter.getColorID()
+			+ ". (" + foregroundColor + ") is black.");
 			motor.rotateTo(20);
 			motor.flt();
 			isScanning = false;
@@ -401,7 +404,7 @@ public class CenterlineDetector implements IntersectionType
 		if(accCounter < maxChecks / 2)
 		{
 			Sound.buzz();
-			System.err.println("WARNING: CALIBRATION FAILED. Did not find line. " + "accCounter stopped at: "
+			debugger.printToScreen("WARNING: CALIBRATION FAILED. Did not find line. " + "accCounter stopped at: "
 					+ accCounter + "/" + maxChecks);
 		}
 		// end added accuracy check
@@ -418,8 +421,7 @@ public class CenterlineDetector implements IntersectionType
 
 		Sound.beepSequenceUp();
 
-		System.out.println("Finished Calibrating");
-		config.resetTimeStamp();
+		debugger.printToScreen("Finished Calibrating");
 
 		makeReport(Direction.Straight);
 	}
@@ -464,7 +466,7 @@ public class CenterlineDetector implements IntersectionType
 	 */
 	public void makeReport(Direction dir)
 	{
-		System.out.println("[" + config.getTime() + "]" + "CenterlineDetector: Making report - Direction is " + dir);
+		debugger.printToScreen("CenterlineDetector: Making report - Direction is " + dir);
 		for(CenterlineListener listener : listeners)
 		{
 			listener.report(dir);

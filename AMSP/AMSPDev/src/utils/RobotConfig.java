@@ -23,6 +23,8 @@ public class RobotConfig
 	private int foreground = Color.BLACK;
 	private int finish = Color.BLUE;
 	private int border = Color.RED;
+	
+	private Debugger debugger;
 
 	private EV3TouchSensor[] touchSensors = new EV3TouchSensor[2];
 	private EV3ColorSensor colorSensor;
@@ -243,6 +245,16 @@ public class RobotConfig
 	public int getBorderColor()
 	{
 		return border;
+	}
+	
+	public Debugger getDebugger()
+	{
+		return debugger;
+	}
+	
+	public void setDebugger(Debugger debugger)
+	{
+		this.debugger = debugger;
 	}
 
 	public void resetTimeStamp()

@@ -1,5 +1,7 @@
 package utils;
 
+import javax.management.RuntimeErrorException;
+
 import behaviors.EmergencyBehavior;
 import behaviors.ForwardBehavior;
 import behaviors.MazeCompletionBehavior;
@@ -12,7 +14,7 @@ import lejos.hardware.port.SensorPort;
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 
-public class Main 
+public class Main2 
 {	
 	/**
 	 * <b>The <code>main()</code> method is the starting point for the program. It will construct the objects and initialize
@@ -38,9 +40,14 @@ public class Main
 		config.setLinearAcceleration(3);
 		config.setAngularSpeed(24);
 		
+		Debugger debugger = new Debugger(config);
+		Thread.setDefaultUncaughtExceptionHandler(debugger);
+		config.setDebugger(debugger);
+		debugger.debugPrompt();
+		
 		//Object declarators
 		CenterlineDetector det = new CenterlineDetector(config, 1400, 50);
-		UserInput userInput = new UserInput(64);
+		UserInput userInput = new UserInput(64, debugger);
 		Arbitrator arby;
 		Behavior[] behaviors;
 		
@@ -52,17 +59,24 @@ public class Main
 		behaviors = new Behavior[] {b1, b3, b2, b4};//Priority: Lowest Priority <--> Highest Priority
 		arby = new Arbitrator(behaviors);
 		
+		System.out.println("\n\n\n\n\n\n\n");
+		
 		//Create Listeners
 		((CenterlineListener)b2).becomeListener(det);
 		((CenterlineListener)b3).becomeListener(det);
 		
 		userInput.start();
 		
+		config.resetTimeStamp();
+		
+		int[] dumbArray = new int[2];
+		dumbArray[2] = 0;/*
+		
 		//Calibrate
 		det.calibrate();
 		//Start the scan timer
 		det.start();
 		//Start the arbitrator
-		arby.go();
+		arby.go();*/
 	}
 }

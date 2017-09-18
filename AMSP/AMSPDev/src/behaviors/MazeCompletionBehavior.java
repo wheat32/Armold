@@ -8,11 +8,13 @@ import lejos.hardware.Sound;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.robotics.ColorAdapter;
 import lejos.robotics.subsumption.Behavior;
+import utils.Debugger;
 import utils.RobotConfig;
 
 public class MazeCompletionBehavior implements Behavior, CenterlineListener
 {
 	private RobotConfig config;
+	private Debugger debugger;
 	private EV3ColorSensor sensor;
 	private ColorAdapter colorAdapter;
 	private Direction direction;
@@ -22,6 +24,7 @@ public class MazeCompletionBehavior implements Behavior, CenterlineListener
 	public MazeCompletionBehavior(RobotConfig config)
 	{
 		this.config = config;
+		debugger = config.getDebugger();
 		sensor = config.getColorSensor();
 		colorAdapter = new ColorAdapter(sensor);
 	}
@@ -94,8 +97,7 @@ public class MazeCompletionBehavior implements Behavior, CenterlineListener
 	@Override
 	public void action() 
 	{
-		System.out.println("[" + config.getTime() + "]"
-				+ "MazeCompletionBehavior: In action method.");
+		debugger.printToScreen("MazeCompletionBehavior: In action method.");
 		
 		det.stop();
 		config.getMovePilotInstance().stop();
@@ -111,8 +113,7 @@ public class MazeCompletionBehavior implements Behavior, CenterlineListener
 				Thread.yield();
 			}
 			
-			System.out.println("[" + config.getTime() + "]"
-					+ "MazeCompletionBehavior: Requesting scan for finish line.");
+			debugger.printToScreen("MazeCompletionBehavior: Requesting scan for finish line.");
 			
 			Sound.beep();
 			
@@ -122,8 +123,7 @@ public class MazeCompletionBehavior implements Behavior, CenterlineListener
 			}
 		}
 		
-		System.out.println("[" + config.getTime() + "]"
-				+ "MazeCompletionBehavior: False flag raised. TimeStamp reset.");
+		debugger.printToScreen("MazeCompletionBehavior: False flag raised. TimeStamp reset.");
 		
 		timestamp = System.currentTimeMillis();
 		config.getMovePilotInstance().travel(-0.4);
@@ -147,14 +147,13 @@ public class MazeCompletionBehavior implements Behavior, CenterlineListener
 	 */
 	private void wrapUp()
 	{
-		System.out.println("[" + config.getTime() + "]"
-				+ "MazeCompletionBehavior: Finished Maze!");
+		debugger.printToScreen("MazeCompletionBehavior: Finished Maze!");
 		
 		final File soundFile = new File("FF7Win.wav");
 		Sound.playSample(soundFile, 100);
 		
 		Sound.beepSequence();
-		System.exit(0);
+		debugger.exit(true);
 	}
 	
 	@Override

@@ -4,17 +4,20 @@ import centerlineDetection.CenterlineDetector;
 import centerlineDetection.IntersectionType;
 import lejos.robotics.ColorAdapter;
 import lejos.robotics.subsumption.Behavior;
+import utils.Debugger;
 import utils.RobotConfig;
 
 public class EmergencyBehavior implements Behavior, IntersectionType
 {
 	private RobotConfig config;
+	private Debugger debugger;
 	private ColorAdapter colorAdapter;
 	private CenterlineDetector det = CenterlineDetector.getInstance();
 	
 	public EmergencyBehavior(RobotConfig config)
 	{
 		this.config = config;
+		debugger = config.getDebugger();
 		colorAdapter = new ColorAdapter(config.getColorSensor());
 	}
 	
@@ -54,7 +57,7 @@ public class EmergencyBehavior implements Behavior, IntersectionType
 	@Override
 	public void action() 
 	{
-		System.out.println("[" + config.getTime() + "] EmergencyBehavior: Boarder recovery initialized.");
+		debugger.printToScreen("EmergencyBehavior: Boarder recovery initialized.");
 		config.getMovePilotInstance().stop();
 		config.getMovePilotInstance().travel(-3);
 		det.makeReport(Direction.DeadEnd);
@@ -64,6 +67,6 @@ public class EmergencyBehavior implements Behavior, IntersectionType
 	public void suppress() 
 	{
 		//The suppress() method in this class should never have an effect as recovering has priority.
-		System.out.println("[" + config.getTime() + "] EmergencyBehavior: Boarder recovery suppressed.");
+		debugger.printToScreen("EmergencyBehavior: Boarder recovery suppressed.");
 	}
 }

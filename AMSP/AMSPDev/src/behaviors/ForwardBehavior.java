@@ -3,17 +3,20 @@ package behaviors;
 import centerlineDetection.CenterlineDetector;
 import lejos.robotics.ColorAdapter;
 import lejos.robotics.subsumption.Behavior;
+import utils.Debugger;
 import utils.RobotConfig;
 
 public class ForwardBehavior implements Behavior 
 {
 	private RobotConfig config;
+	private Debugger debugger;
 	private CenterlineDetector det = CenterlineDetector.getInstance();
 	private ColorAdapter colorAdapter;
 
 	public ForwardBehavior(RobotConfig config)
 	{
 		this.config = config;
+		debugger = config.getDebugger();
 		colorAdapter = new ColorAdapter(config.getColorSensor());
 	}
 
@@ -61,13 +64,13 @@ public class ForwardBehavior implements Behavior
 	{
 		if(det.getIsScanning() == false && config.getMovePilotInstance().isMoving() == false)
 		{
-			System.out.println("[" + config.getTime() + "] ForwardBehavior: Driving forward...");
+			debugger.printToScreen("ForwardBehavior: Driving forward...");
 			config.getMovePilotInstance().forward();
 		}
 		else if(det.getIsScanning() == true && config.getMovePilotInstance().isMoving() == true 
 				&& colorAdapter.getColorID() == config.getForegroundColor())
 		{
-			System.out.println("[" + config.getTime() + "] ForwardBehavior: Stopping forward motion.");
+			debugger.printToScreen("ForwardBehavior: Stopping forward motion.");
 			config.getMovePilotInstance().stop();
 		}
 	}
@@ -84,7 +87,7 @@ public class ForwardBehavior implements Behavior
 	@Override
 	public void suppress() 
 	{
-		System.out.println("[" + config.getTime() + "] ForwardBehavior: Suppressing forward behavior.");
+		debugger.printToScreen("ForwardBehavior: Suppressing forward behavior.");
 		config.getMovePilotInstance().stop();
 	}
 }

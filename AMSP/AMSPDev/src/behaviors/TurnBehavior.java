@@ -8,6 +8,7 @@ import lejos.robotics.RegulatedMotor;
 import lejos.robotics.TouchAdapter;
 import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.subsumption.Behavior;
+import utils.Debugger;
 import utils.RobotConfig;
 
 public class TurnBehavior implements Behavior, CenterlineListener
@@ -19,6 +20,7 @@ public class TurnBehavior implements Behavior, CenterlineListener
 	private TouchAdapter[] touchAdapters = new TouchAdapter[2];
 	private MovePilot pilot;
 	private RobotConfig config;
+	private Debugger debugger;
 	private int foreground;
 	private CenterlineDetector det = CenterlineDetector.getInstance();
 	private Direction direction = Direction.Straight;
@@ -26,6 +28,7 @@ public class TurnBehavior implements Behavior, CenterlineListener
 	public TurnBehavior(RobotConfig config)
 	{
 		this.config = config;
+		debugger = config.getDebugger();
 		scannerMotor = config.getColorScannerMotor();
 		colorAdapter = new ColorAdapter(config.getColorSensor());
 		touchSensors = config.getTouchSensors();
@@ -57,7 +60,7 @@ public class TurnBehavior implements Behavior, CenterlineListener
 			//If while going straight and see the foreground line, go into this block
 			if(direction == Direction.Straight && colorAdapter.getColorID() == foreground)
 			{
-				System.out.println("[" + config.getTime() + "] Turn Behavior found left turn.");
+				debugger.printToScreen("Turn Behavior found left turn.");
 				det.stop();
 				det.makeReport(Direction.LeftTurn);
 				return true;
@@ -115,8 +118,7 @@ public class TurnBehavior implements Behavior, CenterlineListener
 	@Override
 	public void action() 
 	{
-		System.out.println("[" + config.getTime() + "]"
-				+ "TurnBehavior: Action for direction " + direction);
+		debugger.printToScreen("TurnBehavior: Action for direction " + direction);
 		
 		while(det.getIsScanning())//Let the scan conclude
 		{
@@ -176,7 +178,7 @@ public class TurnBehavior implements Behavior, CenterlineListener
 				//No right turn logic yet, and Direction is never set to RightTurn yet.
 				throw new RuntimeException("[" + config.getTime() + "]"
 						+ "TurnBehavior: Went into right turn case.");
-			case LeftTurn:	
+			case LeftTurn:
 				int rotation = -20;
 				
 				//Travel slightly forward to get in the middle of the intersection
@@ -241,7 +243,7 @@ public class TurnBehavior implements Behavior, CenterlineListener
 	@Override
 	public void suppress() 
 	{
-		System.out.println("[" + config.getTime() + "] TurnBehavior: Being suppressed");
+		debugger.printToScreen("TurnBehavior: Being suppressed");
 	}
 	
 	@Override

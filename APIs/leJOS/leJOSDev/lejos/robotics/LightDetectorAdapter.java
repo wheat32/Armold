@@ -13,13 +13,13 @@ import lejos.utility.Delay;
  * @author Roger Glassey
  *
  */
-public class LightDetectorAdaptor {
+public class LightDetectorAdapter {
 	/**
-	 *         allocates a LightSensorAdaptor ; sets mode to Ambient Accepts as
+	 *         allocates a LightSensorAdapter ; sets mode to Ambient Accepts as
 	 *         a parameter one of EV3ColorSensor, NXTColorSensor, or
 	 *         NXTLightSensor
 	 */
-	public LightDetectorAdaptor(SampleProvider sensor) {
+	public LightDetectorAdapter(SampleProvider sensor) {
 		this.sensor = sensor;
 
 		if (sensor instanceof EV3ColorSensor) {

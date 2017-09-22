@@ -1,7 +1,5 @@
 package utils;
 
-import javax.management.RuntimeErrorException;
-
 import behaviors.EmergencyBehavior;
 import behaviors.ForwardBehavior;
 import behaviors.MazeCompletionBehavior;
@@ -25,7 +23,7 @@ public class Main2
 	 * @param None
 	 * @return Nothing.
 	 * @since 1.0.0 </br>
-	 *        Last modified: 2.1.2
+	 *        Last modified: 2.2.2
 	 */
 	public static void main(String[] args) 
 	{
@@ -44,6 +42,9 @@ public class Main2
 		Thread.setDefaultUncaughtExceptionHandler(debugger);
 		config.setDebugger(debugger);
 		debugger.debugPrompt();
+		
+		SensorUtils sensorUtils = new SensorUtils(config);
+		config.setSensorUtils(sensorUtils);
 		
 		//Object declarators
 		CenterlineDetector det = new CenterlineDetector(config, 1400, 50);
@@ -68,9 +69,6 @@ public class Main2
 		userInput.start();
 		
 		config.resetTimeStamp();
-		
-		int[] dumbArray = new int[2];
-		dumbArray[2] = 0;
 		
 		//Calibrate
 		det.calibrate();

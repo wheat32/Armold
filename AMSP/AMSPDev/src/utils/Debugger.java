@@ -10,6 +10,8 @@ import lejos.hardware.Sound;
 
 public class Debugger implements Thread.UncaughtExceptionHandler
 {
+	//Change this variable to get live debug feed to console
+	private boolean debuggingToConsole = false;
 	private boolean debugToScreenEnabled = true;
 	private RobotConfig config;
 	private StringBuilder outputColl = new StringBuilder();
@@ -21,6 +23,11 @@ public class Debugger implements Thread.UncaughtExceptionHandler
 	
 	public void debugPrompt()
 	{
+		if(debuggingToConsole == true)
+		{
+			return;
+		}
+		
 		boolean buttonPressed = false;
 		boolean onYes = true;
 		

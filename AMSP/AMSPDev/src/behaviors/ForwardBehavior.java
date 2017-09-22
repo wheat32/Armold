@@ -1,15 +1,18 @@
 package behaviors;
 
 import centerlineDetection.CenterlineDetector;
+import lejos.robotics.Color;
 import lejos.robotics.ColorAdapter;
 import lejos.robotics.subsumption.Behavior;
 import utils.Debugger;
 import utils.RobotConfig;
+import utils.SensorUtils;
 
 public class ForwardBehavior implements Behavior 
 {
 	private RobotConfig config;
 	private Debugger debugger;
+	private SensorUtils sensorUtils;
 	private CenterlineDetector det = CenterlineDetector.getInstance();
 	private ColorAdapter colorAdapter;
 
@@ -17,6 +20,7 @@ public class ForwardBehavior implements Behavior
 	{
 		this.config = config;
 		debugger = config.getDebugger();
+		sensorUtils = config.getSensorUtils();
 		colorAdapter = new ColorAdapter(config.getColorSensor());
 	}
 
@@ -29,15 +33,21 @@ public class ForwardBehavior implements Behavior
 	 * @param None
 	 * @return boolean
 	 * @since 1.0.0 </br>
-	 *        Last modified: 2.1.2
+	 *        Last modified: 2.2.2
 	 */
 	@Override
 	public boolean takeControl()
 	{
-		if(det.getIsScanning() == false && colorAdapter.getColorID() != config.getForegroundColor()
-				&& colorAdapter.getColorID() != config.getBorderColor() && colorAdapter.getColorID() != config.getFinishColor())
+		if(det.getIsScanning() == false)
 		{
-			return true;
+			Color color = colorAdapter.getColor();
+			
+			if(sensorUtils.checkColorRange(color, config.getForegroundColor()) == false
+				&& sensorUtils.checkColorRange(color, config.getBorderColor()) == false
+				&& sensorUtils.checkColorRange(color, config.getFinishColor()) == false)
+			{
+				return true;
+			}
 		}
 		
 		return false;
@@ -57,7 +67,7 @@ public class ForwardBehavior implements Behavior
 	 * @param None
 	 * @return Nothing
 	 * @since 1.0.0 </br>
-	 *        Last modified: 2.1.1
+	 *        Last modified: 2.2.2
 	 */
 	@Override
 	public void action() 
@@ -68,7 +78,7 @@ public class ForwardBehavior implements Behavior
 			config.getMovePilotInstance().forward();
 		}
 		else if(det.getIsScanning() == true && config.getMovePilotInstance().isMoving() == true 
-				&& colorAdapter.getColorID() == config.getForegroundColor())
+				&& sensorUtils.checkColorRange(colorAdapter.getColor(), config.getForegroundColor()) == true)
 		{
 			debugger.printToScreen("ForwardBehavior: Stopping forward motion.");
 			config.getMovePilotInstance().stop();

@@ -36,7 +36,8 @@ public class EmergencyBehavior implements Behavior, IntersectionType
 	@Override
 	public boolean takeControl()
 	{		
-		if(colorAdapter.getColorID() == config.getBorderColor())
+		if(config.getSensorUtils().checkColorRange(colorAdapter.getColor(), config.getBorderColor()) == true
+				&& det.getIsScanning() == false)
 		{
 			det.stop();
 			return true;

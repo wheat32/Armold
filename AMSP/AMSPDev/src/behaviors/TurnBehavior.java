@@ -3,6 +3,7 @@ package behaviors;
 import centerlineDetection.CenterlineDetector;
 import centerlineDetection.CenterlineListener;
 import lejos.hardware.sensor.EV3TouchSensor;
+import lejos.robotics.Color;
 import lejos.robotics.ColorAdapter;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.TouchAdapter;
@@ -10,6 +11,7 @@ import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.subsumption.Behavior;
 import utils.Debugger;
 import utils.RobotConfig;
+import utils.SensorUtils;
 
 public class TurnBehavior implements Behavior, CenterlineListener
 {
@@ -21,7 +23,8 @@ public class TurnBehavior implements Behavior, CenterlineListener
 	private MovePilot pilot;
 	private RobotConfig config;
 	private Debugger debugger;
-	private int foreground;
+	private SensorUtils sensorUtils;
+	private Color foreground;
 	private CenterlineDetector det = CenterlineDetector.getInstance();
 	private Direction direction = Direction.Straight;
 	
@@ -29,6 +32,7 @@ public class TurnBehavior implements Behavior, CenterlineListener
 	{
 		this.config = config;
 		debugger = config.getDebugger();
+		sensorUtils = config.getSensorUtils();
 		scannerMotor = config.getColorScannerMotor();
 		colorAdapter = new ColorAdapter(config.getColorSensor());
 		touchSensors = config.getTouchSensors();
@@ -58,7 +62,9 @@ public class TurnBehavior implements Behavior, CenterlineListener
 		if(det.getIsScanning() == false)
 		{
 			//If while going straight and see the foreground line, go into this block
-			if(direction == Direction.Straight && colorAdapter.getColorID() == foreground)
+			if(direction == Direction.Straight 
+					&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == true
+					&& det.getIsScanning() == false)
 			{
 				debugger.printToScreen("Turn Behavior found left turn.");
 				det.stop();
@@ -66,8 +72,9 @@ public class TurnBehavior implements Behavior, CenterlineListener
 				return true;
 			}
 			//If the Direction is any intersection type, go into this block
-			else if(direction == Direction.LeftTurn || direction == Direction.RightTurn 
+			else if((direction == Direction.LeftTurn || direction == Direction.RightTurn 
 					|| direction == Direction.DeadEnd)
+					&& det.getIsScanning() == false)
 			{
 				det.stop();
 				return true;
@@ -136,7 +143,8 @@ public class TurnBehavior implements Behavior, CenterlineListener
 			case DeadEnd:
 				pilot.rotate(120, true);//positive is right
 					
-				while(pilot.isMoving() && colorAdapter.getColorID() != foreground)
+				while(pilot.isMoving() 
+						&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
 				{
 					Thread.yield();
 				}
@@ -144,7 +152,7 @@ public class TurnBehavior implements Behavior, CenterlineListener
 				pilot.stop();
 				//If the robot found the line again, break out of the switch.
 				//In this instance, it most likely found a right turn.
-				if(colorAdapter.getColorID() == foreground)
+				if(sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == true)
 				{
 					break;
 				}
@@ -153,7 +161,8 @@ public class TurnBehavior implements Behavior, CenterlineListener
 				//turn and it should rotate further to go back the way it came from
 				pilot.rotate(120, true);
 					
-				while(pilot.isMoving() && colorAdapter.getColorID() != foreground)
+				while(pilot.isMoving() 
+						&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
 				{
 					Thread.yield();
 				}
@@ -161,14 +170,15 @@ public class TurnBehavior implements Behavior, CenterlineListener
 				//If it STILL didn't see the foreground line, it more than likely rotated past 180 degrees,
 				//so it should rotate back to the left 60 degrees to approximately be facing the way it
 				//came from.
-				if(colorAdapter.getColorID() != foreground)
+				if(sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
 				{
 					pilot.rotate(-60, true);
 					
 					//Continue rotating back until it sees the foreground line color (because maybe it missed
 					//the color the first time going through). It's a "Jesus Take the Wheel" moment from
 					//here as it will blindly drive forward towards where the line might be.
-					while(pilot.isMoving() && colorAdapter.getColorID() != foreground)
+					while(pilot.isMoving() 
+							&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
 					{
 						Thread.yield();
 					}
@@ -187,19 +197,21 @@ public class TurnBehavior implements Behavior, CenterlineListener
 				pilot.rotate(rotation, true);
 					
 				//While rotating and doesn't see the foreground...
-				while(pilot.isMoving() && colorAdapter.getColorID() != foreground)
+				while(pilot.isMoving() 
+						&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
 				{
 					Thread.yield();
 				}
 				
 				//If a foreground colored line was found right after the left turn began
-				if(colorAdapter.getColorID() == foreground)
+				if(sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == true)
 				{
 					//Rotate until just past the line
 					pilot.rotate(-20, true);
 					
 					//While rotating and the color sensor sees the foreground color...
-					while(pilot.isMoving() && colorAdapter.getColorID() == foreground)
+					while(pilot.isMoving() 
+							&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == true)
 					{
 						Thread.yield();
 					}
@@ -208,18 +220,20 @@ public class TurnBehavior implements Behavior, CenterlineListener
 				//finish the turn (the rotation in degrees evaluates negative)
 				pilot.rotate(Math.abs(rotation)-130, true);
 				
-				while(pilot.isMoving() && colorAdapter.getColorID() != foreground)
+				while(pilot.isMoving() 
+						&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
 				{
 					Thread.yield();
 				}
 				
 				//Check if it never saw the foreground during the turn
-				if(colorAdapter.getColorID() != foreground)
+				if(sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
 				{	
 					//Rotate back to the starting point
 					pilot.rotate(130-Math.abs(rotation), true);
 						
-					while(pilot.isMoving() && colorAdapter.getColorID() != foreground)
+					while(pilot.isMoving() 
+							&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
 					{
 						Thread.yield();
 					}

@@ -46,19 +46,20 @@ public class MazeCompletionBehavior implements Behavior, CenterlineListener
 	 * @param None
 	 * @return boolean
 	 * @since 1.0.1 </br>
-	 *        Last modified: 2.1.2
+	 *        Last modified: 2.2.2
 	 */
 	@Override
 	public boolean takeControl()
 	{
-		if(direction == Direction.Finish)
+		if(direction == Direction.Finish && det.getIsScanning() == false)
 		{
 			return true;
 		}
 		//Must wait at least 2 seconds before being able to scan again
 		else if(System.currentTimeMillis()-timestamp >= 3000)
 		{
-			if(colorAdapter.getColorID() == config.getFinishColor() && det.getIsScanning() == false)
+			if(config.getSensorUtils().checkColorRange(colorAdapter.getColor(), config.getFinishColor()) == true 
+					&& det.getIsScanning() == false)
 			{
 				timestamp = System.currentTimeMillis();
 				return true;
@@ -92,7 +93,7 @@ public class MazeCompletionBehavior implements Behavior, CenterlineListener
 	 * @param None
 	 * @return Nothing
 	 * @since 1.0.1 </br>
-	 *        Last modified: 2.1.1
+	 *        Last modified: 2.2.2
 	 */
 	@Override
 	public void action() 
@@ -106,7 +107,7 @@ public class MazeCompletionBehavior implements Behavior, CenterlineListener
 		{
 			wrapUp();
 		}
-		else if(colorAdapter.getColorID() == config.getFinishColor())
+		else if(config.getSensorUtils().checkColorRange(colorAdapter.getColor(), config.getFinishColor()) == true)
 		{
 			while(det.getIsScanning())//Let the scan conclude
 			{

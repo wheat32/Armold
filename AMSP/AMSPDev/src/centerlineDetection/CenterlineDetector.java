@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import lejos.hardware.Sound;
 import lejos.hardware.sensor.EV3TouchSensor;
+import lejos.robotics.Color;
 import lejos.robotics.ColorAdapter;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.TouchAdapter;
@@ -11,6 +12,7 @@ import lejos.utility.Timer;
 import lejos.utility.TimerListener;
 import utils.Debugger;
 import utils.RobotConfig;
+import utils.SensorUtils;
 
 public class CenterlineDetector implements IntersectionType
 {
@@ -19,6 +21,7 @@ public class CenterlineDetector implements IntersectionType
 	private TouchAdapter[] touchAdapters = new TouchAdapter[2];
 	private RobotConfig config;
 	private Debugger debugger;
+	private SensorUtils sensorUtils;
 	private ColorAdapter colorAdapter;
 	/**
 	 * <b>This instance variable controls the timer.</b>
@@ -28,8 +31,8 @@ public class CenterlineDetector implements IntersectionType
 	 * @since 1.0.0
 	 */
 	private Timer service;
-	private int foregroundColor;
-	private int finishColor;
+	private Color foregroundColor;
+	private Color finishColor;
 	/**
 	 * <b>This instance variable holds the <code>CenterlineListeners</code>
 	 * <i>(or just listeners)</i> in an <code>ArrayList</code>.</b>
@@ -78,6 +81,7 @@ public class CenterlineDetector implements IntersectionType
 	{
 		this.config = config;
 		debugger = config.getDebugger();
+		sensorUtils = config.getSensorUtils();
 		motor = config.getColorScannerMotor();
 		motor.setSpeed(scanSpeed);
 		colorAdapter = new ColorAdapter(config.getColorSensor());
@@ -100,31 +104,6 @@ public class CenterlineDetector implements IntersectionType
 		{
 			touchAdapters[i] = new TouchAdapter(touchSensors[i]);
 		}
-	}
-
-	/**
-	 * <b>DEPRECATED. REMOVE BY 2.2.2</b> </br>
-	 * <i><b>Reason for deprecation:</b> instance is now set in the
-	 * constructor.</i>
-	 * <p>
-	 * This <i>static</i> method sets the instance of the CenterlineDetector for
-	 * other objects to get.
-	 * 
-	 * @author Krish
-	 * @param config
-	 *            <code>RobotConfig</code>
-	 * @param delay
-	 *            <code>int</code> - time (in milliseconds) between scan cycles
-	 * @param scanSpeed
-	 *            <code>int</code> - the speed at which the motor holding the
-	 *            color sensor rotates
-	 * @return Nothing
-	 * @since 1.0.0 </br>
-	 *        Last modified: Never
-	 */
-	public static void setInstance(RobotConfig config, int delay, int scanSpeed)
-	{
-		instance = new CenterlineDetector(config, delay, scanSpeed);
 	}
 
 	/**
@@ -196,7 +175,7 @@ public class CenterlineDetector implements IntersectionType
 		config.getMovePilotInstance().stop();
 		debugger.printToScreen("CenterlineDetector: Finish line scan requested.");
 
-		if(colorAdapter.getColorID() != finishColor)
+		if(sensorUtils.checkColorRange(colorAdapter.getColor(), finishColor) == false)
 		{
 			isScanning = false;
 			debugger.printToScreen("CenterlineDetector: Request result: False alarm.");
@@ -205,12 +184,13 @@ public class CenterlineDetector implements IntersectionType
 
 		motor.rotate(-45, true);
 
-		while(colorAdapter.getColorID() == finishColor && motor.isMoving())
+		while(sensorUtils.checkColorRange(colorAdapter.getColor(), finishColor) == true
+				&& motor.isMoving())
 		{
 			Thread.yield();
 		}
 
-		if(colorAdapter.getColorID() == finishColor)
+		if(sensorUtils.checkColorRange(colorAdapter.getColor(), finishColor) == true)
 		{
 			motor.rotateTo(0);
 			motor.flt();
@@ -257,7 +237,7 @@ public class CenterlineDetector implements IntersectionType
 	 * @param None
 	 * @return Direction <code>enum</code>
 	 * @since 1.0.0 </br>
-	 *        Last modified: 2.1.1
+	 *        Last modified: 2.2.2
 	 */
 	private Direction findLine()
 	{
@@ -267,25 +247,27 @@ public class CenterlineDetector implements IntersectionType
 		debugger.printToScreen("CenterlineDetector: Finding line");
 
 		// Check for the finish line before conducting routine scan
-		if(colorAdapter.getColorID() == finishColor)
+		if(sensorUtils.checkColorRange(colorAdapter.getColor(), finishColor) == true)
 		{
 			seesFinish = 3;
 		}
 
 		motor.rotate(-45, true);
 
-		while(colorAdapter.getColorID() != foregroundColor && motor.isMoving())
+		//While scanner is rotating right
+		while(sensorUtils.checkColorRange(colorAdapter.getColor(), foregroundColor) == false 
+				&& motor.isMoving())
 		{
 			Thread.yield();
 
-			if(colorAdapter.getColorID() != finishColor && seesFinish > 0)
+			if(sensorUtils.checkColorRange(colorAdapter.getColor(), finishColor) == false && seesFinish > 0)
 			{
 				seesFinish--;
 			}
 
 		}
 
-		if(colorAdapter.getColorID() != foregroundColor)
+		if(sensorUtils.checkColorRange(colorAdapter.getColor(), foregroundColor) == false)
 		{
 			Sound.beep();
 			motor.rotateTo(0);
@@ -294,7 +276,7 @@ public class CenterlineDetector implements IntersectionType
 			isScanning = false;
 			return Direction.DeadEnd;
 		}
-		else if(colorAdapter.getColorID() == finishColor && seesFinish > 0)
+		else if(sensorUtils.checkColorRange(colorAdapter.getColor(), finishColor) == true && seesFinish > 0)
 		{
 			debugger.printToScreen("CenterlineDetector: Found finish.");
 			isScanning = false;
@@ -381,10 +363,7 @@ public class CenterlineDetector implements IntersectionType
 		short accCounter = 0;
 		for(short checks = 0; checks < maxChecks; checks++)
 		{
-			int color = -1;
-			color = Math.round(colorAdapter.getColorID());
-
-			if(color == foregroundColor)
+			if(sensorUtils.checkColorRange(colorAdapter.getColor(), foregroundColor) == true)
 			{
 				accCounter++;
 			}

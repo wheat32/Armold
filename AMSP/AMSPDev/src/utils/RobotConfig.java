@@ -20,11 +20,13 @@ import lejos.robotics.navigation.MovePilot;
  */
 public class RobotConfig
 {
-	private int foreground = Color.BLACK;
-	private int finish = Color.BLUE;
-	private int border = Color.RED;
+	private Color foreground = new Color(6, 6, 8);
+	private Color finish = new Color(6, 9, 30);
+	private Color border = new Color(42, 6, 7);
+	private byte colorBuffer = 10;
 	
 	private Debugger debugger;
+	private SensorUtils sensorUtils;
 
 	private EV3TouchSensor[] touchSensors = new EV3TouchSensor[2];
 	private EV3ColorSensor colorSensor;
@@ -226,19 +228,24 @@ public class RobotConfig
 		return System.currentTimeMillis() - timeStamp;
 	}
 
-	public int getForegroundColor()
+	public Color getForegroundColor()
 	{
 		return foreground;
 	}
 
-	public int getFinishColor()
+	public Color getFinishColor()
 	{
 		return finish;
 	}
 
-	public int getBorderColor()
+	public Color getBorderColor()
 	{
 		return border;
+	}
+	
+	public byte getColorBuffer()
+	{
+		return colorBuffer;
 	}
 	
 	public Debugger getDebugger()
@@ -249,6 +256,16 @@ public class RobotConfig
 	public void setDebugger(Debugger debugger)
 	{
 		this.debugger = debugger;
+	}
+	
+	public SensorUtils getSensorUtils()
+	{
+		return sensorUtils;
+	}
+	
+	public void setSensorUtils(SensorUtils sensorUtils)
+	{
+		this.sensorUtils = sensorUtils;
 	}
 
 	public void resetTimeStamp()

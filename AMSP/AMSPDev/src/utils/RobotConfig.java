@@ -81,6 +81,16 @@ public class RobotConfig
 		}
 	}
 
+	public void closeAllSensors()
+	{
+		for(int i = 0; i < touchSensors.length; i++)
+		{
+			touchSensors[i].close();
+		}
+		
+		colorSensor.close();
+	}
+	
 	/**
 	 * Get the Color Sensor Port
 	 * 

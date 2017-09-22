@@ -103,6 +103,8 @@ public class Debugger implements Thread.UncaughtExceptionHandler
 	
 	public void exit(boolean immediateExit)
 	{
+		config.closeAllSensors();
+		
 		File file = null;
 		FileWriter fw = null;
 		BufferedWriter bw = null;

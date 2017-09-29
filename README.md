@@ -24,3 +24,4 @@ This is a respository for code dumping, issue tracking, and various documentatio
 - A Netgear WNA1100 WiFi dongle is currently the only WiFi dongle that is supported by the EV3’s firmware.
   - Source: https://github.com/mindboards/ev3sources/blob/master/README.md
 - Any sound files should be mono, 8kHz, and 8-bit. Use Audacity to edit sound files to these requirements.
+  - Reason: Armold is picky

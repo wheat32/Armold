@@ -294,6 +294,7 @@ public class CenterlineDetector implements IntersectionType
 	}
 
 	/**
+	 * <b>Javadocs must be re-written for this method!</b><p>
 	 * <b>This method adjusts the color sensor to find where the line is before
 	 * it begins moving.</b>
 	 * <p>
@@ -305,8 +306,7 @@ public class CenterlineDetector implements IntersectionType
 	 * touch sensor on the right while measuring the distance it rotated. It
 	 * will then rotate to the left half the distance it rotated to the right on
 	 * the previous step. Once the rotation stops, in theory, the sensor should
-	 * be rotated to the center point in front of the robot. Lastly, it will do
-	 * some minor rotations to the left and right until it finds the line. Once
+	 * be rotated to the center point in front of the robot. Once
 	 * the line is found the position of the sensor in relation to the robot
 	 * will be saved in memory for the duration of the run. Next, the color
 	 * sensor will rotate n degrees to the left, where it will remain while
@@ -316,93 +316,68 @@ public class CenterlineDetector implements IntersectionType
 	 * @param None
 	 * @return Nothing
 	 * @since 1.0.0 </br>
-	 *        Last modified: 2.1.1
+	 *        Last modified: 2.2.3
 	 */
 	public void calibrate()
 	{
 		isScanning = true;
-		colorAdapter.getColorID();
-		motor.setSpeed(motor.getSpeed() * 2);
-
-		// Ensure the color sensor does not start on a touch sensor.
-		motor.rotate(-12);// negative is right
+		
+		debugger.printToScreen("CenterlineDetector: Beginning calibration...");
+		
+		short oldMotorSpeed = (short) motor.getSpeed();
+		motor.setSpeed((int) (motor.getSpeed() * 2.5));
 
 		motor.rotate(180, true);
 
-		while(motor.isMoving() && !(touchAdapters[0].isPressed() || touchAdapters[1].isPressed()))
+		//Rotate to the left sensor
+		while(motor.isMoving() == true && touchAdapters[0].isPressed() == false 
+				&& sensorUtils.checkColorRange(colorAdapter.getColor(), foregroundColor) == false)
 		{
 			Thread.yield();
 		}
 
-		motor.flt();
+		if(sensorUtils.checkColorRange(colorAdapter.getColor(), foregroundColor) == true)
+		{
+			motor.resetTachoCount();
+			motor.setSpeed(oldMotorSpeed);
+			motor.rotate(20);
+			motor.flt();
+			makeReport(Direction.Straight);
+		
+			Sound.beepSequenceUp();
+	
+			debugger.printToScreen("CenterlineDetector: Finished calibrating.");
+			
+			isScanning = false;
+			return;
+		}
+		
+		motor.rotate(-180, true);//Rotate right
 
-		motor.resetTachoCount();
-
-		motor.rotate(-10);
-
-		motor.rotate(-180, true);
-
-		while(motor.isMoving() && !(touchAdapters[0].isPressed() || touchAdapters[1].isPressed()))
+		while(motor.isMoving() == true && touchAdapters[1].isPressed() == false
+				&& sensorUtils.checkColorRange(colorAdapter.getColor(), foregroundColor) == false)//[1] is right
 		{
 			Thread.yield();
 		}
-
-		motor.rotate(10);
-
-		motor.rotate(Math.abs(motor.getTachoCount() / 2 + 2));
-
-		while(motor.isMoving())
+		
+		if(sensorUtils.checkColorRange(colorAdapter.getColor(), foregroundColor) == true)
 		{
-			Thread.yield();
+			motor.resetTachoCount();
+			motor.setSpeed(oldMotorSpeed);
+			motor.rotate(20);
+			motor.flt();
+			makeReport(Direction.Straight);
+		
+			Sound.beepSequenceUp();
+	
+			debugger.printToScreen("CenterlineDetector: Finished calibrating.");
+			
+			isScanning = false;
+			return;
 		}
 
-		motor.flt();
-
-		// for added accuracy
-		short maxChecks = 4;
-		short accCounter = 0;
-		for(short checks = 0; checks < maxChecks; checks++)
-		{
-			if(sensorUtils.checkColorRange(colorAdapter.getColor(), foregroundColor) == true)
-			{
-				accCounter++;
-			}
-			else
-			{
-				if(motor.getTachoCount() > 0)
-				{
-					motor.rotate((int) (-checks * 1.5));
-				}
-				else
-				{
-					motor.rotate((int) (checks * 1.5));
-				}
-				motor.flt();
-			}
-		}
-		if(accCounter < maxChecks / 2)
-		{
-			Sound.buzz();
-			debugger.printToScreen("WARNING: CALIBRATION FAILED. Did not find line. " + "accCounter stopped at: "
-					+ accCounter + "/" + maxChecks);
-		}
-		// end added accuracy check
-
-		motor.resetTachoCount();
-
-		motor.setSpeed(motor.getSpeed() / 2);
-
-		motor.rotateTo(0);
-		motor.rotate(20);
-		motor.flt();
-
-		isScanning = false;
-
-		Sound.beepSequenceUp();
-
-		debugger.printToScreen("Finished Calibrating");
-
-		makeReport(Direction.Straight);
+		throw new RuntimeException("CenterlineDetector: Line was not found in the vicinity of the robot. "
+					+ "Aborting program...");
 	}
 
 	/**

@@ -189,7 +189,7 @@ public class TurnBehavior implements Behavior, CenterlineListener
 				throw new RuntimeException("[" + config.getTime() + "]"
 						+ "TurnBehavior: Went into right turn case.");
 			case LeftTurn:
-				int rotation = -20;
+				short rotation = -20;
 				
 				//Travel slightly forward to get in the middle of the intersection
 				pilot.travel(3.5);

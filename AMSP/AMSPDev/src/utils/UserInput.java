@@ -17,6 +17,7 @@ public class UserInput
 			@Override
 			public void timedOut() 
 			{
+				
 				switch(Button.getButtons())
 				{
 					case 32:

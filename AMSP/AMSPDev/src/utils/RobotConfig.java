@@ -80,16 +80,6 @@ public class RobotConfig
 			touchSensorPorts[i] = ports[i];
 		}
 	}
-
-	public void closeAllSensors()
-	{
-		for(int i = 0; i < touchSensors.length; i++)
-		{
-			touchSensors[i].close();
-		}
-		
-		colorSensor.close();
-	}
 	
 	/**
 	 * Get the Color Sensor Port
@@ -199,7 +189,7 @@ public class RobotConfig
 	}
 
 	/**
-	 * Sets the rotation speed of the robot Sets the angular velocity of the
+	 * Sets the rotation speed of the robot. Sets the angular velocity of the
 	 * rotate() methods
 	 * 
 	 * @param speed
@@ -277,7 +267,7 @@ public class RobotConfig
 	{
 		this.sensorUtils = sensorUtils;
 	}
-
+	
 	public void resetTimeStamp()
 	{
 		timeStamp = System.currentTimeMillis();

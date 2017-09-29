@@ -19,7 +19,7 @@ public class MazeCompletionBehavior implements Behavior, CenterlineListener
 	private ColorAdapter colorAdapter;
 	private Direction direction;
 	private CenterlineDetector det = CenterlineDetector.getInstance();
-	private long timestamp = 0;
+	private long timestamp = 0;//TODO add Javadoc for this variable
 	
 	public MazeCompletionBehavior(RobotConfig config)
 	{

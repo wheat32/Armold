@@ -1,68 +1,39 @@
-package centerlineDetection;
+package centerLineDetection;
 
 import java.util.ArrayList;
 
 import lejos.hardware.Sound;
-import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.robotics.Color;
 import lejos.robotics.ColorAdapter;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.TouchAdapter;
-import lejos.utility.Timer;
-import lejos.utility.TimerListener;
+import lejos.robotics.subsumption.Behavior;
 import utils.Debugger;
 import utils.RobotConfig;
 import utils.SensorUtils;
 
-public class CenterlineDetector implements IntersectionType
+public class CenterLineDetector implements IntersectionType, Behavior
 {
-	private RegulatedMotor motor;
-	private EV3TouchSensor[] touchSensors = new EV3TouchSensor[2];
+	//Hardware-related instance variables
+	private final RegulatedMotor colorMotor;
 	private TouchAdapter[] touchAdapters = new TouchAdapter[2];
-	private RobotConfig config;
-	private Debugger debugger;
-	private SensorUtils sensorUtils;
-	private ColorAdapter colorAdapter;
-	/**
-	 * <b>This instance variable controls the timer.</b>
-	 * <p>
-	 * As long as the service is running, scans will continue to happen.
-	 * 
-	 * @since 1.0.0
-	 */
-	private Timer service;
-	private Color foregroundColor;
-	private Color finishColor;
+	private final ColorAdapter colorAdapter;
+	
+	//AMSP objects
+	private final RobotConfig config;
+	private final Debugger debugger;
+	private final SensorUtils sensorUtils;
+	
 	/**
 	 * <b>This instance variable holds the <code>CenterlineListeners</code>
 	 * <i>(or just listeners)</i> in an <code>ArrayList</code>.</b>
 	 * 
 	 * @since 1.0.0
 	 */
-	private ArrayList<CenterlineListener> listeners = new ArrayList<>();
-	/**
-	 * <b>This <i>static</i> instance variable holds an instance of the
-	 * <code>CenterlineDetector</code> object.</b>
-	 * 
-	 * @since 1.0.0
-	 */
-	private static CenterlineDetector instance;
-	/**
-	 * <b>This instance variable is set to <code>true</code> whenever any scan
-	 * inside of this class is running and is set to <code>false</code> whenever
-	 * no scans from inside this class are running.</b>
-	 * 
-	 * @since 1.0.0
-	 */
-	private boolean isScanning = false;
-	/**
-	 * <b>If this instance variable is set to <code>true</code>, then all scans
-	 * inside this class will stop.</b>
-	 * 
-	 * @since 1.0.0
-	 */
-	private boolean stopScanning = false;
-
+	private ArrayList<CenterLineListener> listeners = new ArrayList<>();
+	private final Color foregroundColor;
+	private Direction direction;
+	
 	/**
 	 * <b>Constructor for the CenterlineDetector.</b>
 	 * 
@@ -71,61 +42,18 @@ public class CenterlineDetector implements IntersectionType
 	 *            <code>RobotConfig</code>
 	 * @param delay
 	 *            <code>int</code> - time (in milliseconds) between scan cycles
-	 * @param scanSpeed
-	 *            <code>int</code> - the speed at which the motor holding the
-	 *            color sensor rotates
 	 * @since 2.0.0 </br>
 	 *        Last modified: 2.1.1
 	 */
-	public CenterlineDetector(RobotConfig config, int delay, int scanSpeed)
+	public CenterLineDetector(RobotConfig config)
 	{
 		this.config = config;
 		debugger = config.getDebugger();
 		sensorUtils = config.getSensorUtils();
-		motor = config.getColorScannerMotor();
-		motor.setSpeed(scanSpeed);
-		colorAdapter = new ColorAdapter(config.getColorSensor());
-		foregroundColor = config.getForegroundColor();
-		finishColor = config.getFinishColor();
-
-		service = new Timer(delay, new TimerListener()
-		{
-			@Override
-			public void timedOut()
-			{
-				scan();
-			}
-		});
-
-		touchSensors = config.getTouchSensors();
-		instance = this;
-
-		for(int i = 0; i < touchSensors.length; i++)
-		{
-			touchAdapters[i] = new TouchAdapter(touchSensors[i]);
-		}
-	}
-
-	/**
-	 * <b>This <i>static</i> method returns an instance of the
-	 * CenterlineDetector.</b>
-	 * 
-	 * @author Krish
-	 * @param None
-	 * @return instance <code>CenterlineDetector</code> - an instance of the
-	 *         CenterlineDetector
-	 * @since 1.0.0 </br>
-	 *        Last modified: Never
-	 * @throws NullPointerException
-	 *             if there is no instance
-	 */
-	public static CenterlineDetector getInstance()
-	{
-		if(instance == null)
-		{
-			throw new NullPointerException("No instance");
-		}
-		return instance;
+		colorMotor = config.getColorScannerMotor();
+		colorAdapter = config.getColorAdapter();
+		touchAdapters = config.getTouchAdapter();
+		foregroundColor = config.foregroundColor;
 	}
 
 	/**
@@ -141,74 +69,14 @@ public class CenterlineDetector implements IntersectionType
 	 * @since 1.0.0 </br>
 	 *        Last modified: Never
 	 */
-	public void addListener(CenterlineListener listener)
+	public void addListener(CenterLineListener listener)
 	{
 		listeners.add(listener);
 	}
 
 	/**
-	 * <b>This method runs a short scan upon a request to see if the robot
-	 * has reached the finish line.</b>
+	 * <b>THE JAVADOC FOR THIS METHOD IS OUT OF DATE.</b>
 	 * <p>
-	 * This method sets <code>isScanning</code> to <code>true</code> and stops
-	 * the movement of the robot upon starting. It will check if the color
-	 * sensor sees the finish line color first. If it does <b>NOT</b>, it will
-	 * return <code>Direction.Straight</code>, leaving the method and setting
-	 * <code>isScanning</code> to <code>false</code>. </br>
-	 * If it does, it will confirm that it is on the finish line with a short
-	 * scan. The color sensor will rotate n degrees to the right, while checking
-	 * if it sees the finish line color the entire length of the rotation. If it
-	 * saw the finish line color the entire scan, it will return
-	 * <code>Direction.Finish</code>. If it did <b>NOT</b>, it will return
-	 * <code>Direction.Straight</code> and leave the method after setting
-	 * <code>isScanning</code> to <code>false</code>.
-	 * 
-	 * @author Nick
-	 * @param None
-	 * @return Direction <code>enum</code>
-	 * @since 2.1.0 </br>
-	 *        Last modified: Never
-	 */
-	public Direction requestFinishScan()
-	{
-		isScanning = true;
-		config.getMovePilotInstance().stop();
-		debugger.printToScreen("CenterlineDetector: Finish line scan requested.");
-
-		if(sensorUtils.checkColorRange(colorAdapter.getColor(), finishColor) == false)
-		{
-			isScanning = false;
-			debugger.printToScreen("CenterlineDetector: Request result: False alarm.");
-			return Direction.Straight;
-		}
-
-		motor.rotate(-45, true);
-
-		while(sensorUtils.checkColorRange(colorAdapter.getColor(), finishColor) == true
-				&& motor.isMoving())
-		{
-			Thread.yield();
-		}
-
-		if(sensorUtils.checkColorRange(colorAdapter.getColor(), finishColor) == true)
-		{
-			motor.rotateTo(0);
-			motor.flt();
-			isScanning = false;
-			return Direction.Finish;
-		}
-		else
-		{
-			motor.rotateTo(0);
-			motor.rotate(20);
-			motor.flt();
-			isScanning = false;
-			debugger.printToScreen("CenterlineDetector: Request result: False alarm.");
-			return Direction.Straight;
-		}
-	}
-
-	/**
 	 * <b>This method scans to make sure it is still following the line.</b>
 	 * <p>
 	 * &nbsp This method starts with setting <code>isScanning</code> to
@@ -237,58 +105,37 @@ public class CenterlineDetector implements IntersectionType
 	 * @param None
 	 * @return Direction <code>enum</code>
 	 * @since 1.0.0 </br>
-	 *        Last modified: 2.2.2
+	 *        Last modified: 2.2.4
 	 */
-	private Direction findLine()
+	private Direction readLine()
 	{
-		isScanning = true;
-		config.getMovePilotInstance().stop();
-		byte seesFinish = 0;
-		debugger.printToScreen("CenterlineDetector: Finding line");
-
-		// Check for the finish line before conducting routine scan
-		if(sensorUtils.checkColorRange(colorAdapter.getColor(), finishColor) == true)
+		if(sensorUtils.checkColorRange(colorAdapter.getColor(), foregroundColor) == true)
 		{
-			seesFinish = 3;
-		}
-
-		motor.rotate(-45, true);
-
-		//While scanner is rotating right
-		while(sensorUtils.checkColorRange(colorAdapter.getColor(), foregroundColor) == false 
-				&& motor.isMoving())
-		{
-			Thread.yield();
-
-			if(sensorUtils.checkColorRange(colorAdapter.getColor(), finishColor) == false && seesFinish > 0)
-			{
-				seesFinish--;
-			}
-
-		}
-
-		if(sensorUtils.checkColorRange(colorAdapter.getColor(), foregroundColor) == false)
-		{
-			Sound.beep();
-			motor.rotateTo(0);
-			motor.flt();
-			debugger.printToScreen("CenterlineDetector: Dead end detected.");
-			isScanning = false;
-			return Direction.DeadEnd;
-		}
-		else if(sensorUtils.checkColorRange(colorAdapter.getColor(), finishColor) == true && seesFinish > 0)
-		{
-			debugger.printToScreen("CenterlineDetector: Found finish.");
-			isScanning = false;
-			return Direction.Finish;
+			debugger.printToScreen("CenterLineDetector: Rotating color motor left...");
+			colorMotor.rotate(1, true);//Left
 		}
 		else
 		{
-			debugger.printToScreen("CenterlineDetector: Found path. Color is: "+ colorAdapter.getColorID()
-			+ ". (" + foregroundColor + ") is black.");
-			motor.rotateTo(20);
-			motor.flt();
-			isScanning = false;
+			debugger.printToScreen("CenterLineDetector: Rotating color motor right...");
+			colorMotor.rotate(-1, true);//Right
+		}
+		
+		if(colorMotor.getTachoCount() >= 25)//Left turn
+		{
+			config.getMovePilotInstance().stop();
+			Sound.beep();
+			debugger.printToScreen("CenterLineDetector: Found left turn.");
+			return Direction.LeftTurn;
+		}
+		else if(colorMotor.getTachoCount() <= -25)//Right turn
+		{
+			config.getMovePilotInstance().stop();
+			Sound.beep();
+			debugger.printToScreen("CenterLineDetector: Found right turn.");
+			return Direction.RightTurn;
+		}
+		else
+		{
 			return Direction.Straight;
 		}
 	}
@@ -316,21 +163,19 @@ public class CenterlineDetector implements IntersectionType
 	 * @param None
 	 * @return Nothing
 	 * @since 1.0.0 </br>
-	 *        Last modified: 2.2.3
+	 *        Last modified: 2.2.4
 	 */
 	public void calibrate()
 	{
-		isScanning = true;
+		debugger.printToScreen("CenterLineDetector: Beginning calibration...");
 		
-		debugger.printToScreen("CenterlineDetector: Beginning calibration...");
-		
-		short oldMotorSpeed = (short) motor.getSpeed();
-		motor.setSpeed((int) (motor.getSpeed() * 2.5));
+		byte oldMotorSpeed = (byte) colorMotor.getSpeed();
+		colorMotor.setSpeed(colorMotor.getSpeed()*2);
 
-		motor.rotate(180, true);
+		colorMotor.rotate(180, true);
 
 		//Rotate to the left sensor
-		while(motor.isMoving() == true && touchAdapters[0].isPressed() == false 
+		while(colorMotor.isMoving() == true && touchAdapters[0].isPressed() == false 
 				&& sensorUtils.checkColorRange(colorAdapter.getColor(), foregroundColor) == false)
 		{
 			Thread.yield();
@@ -338,23 +183,22 @@ public class CenterlineDetector implements IntersectionType
 
 		if(sensorUtils.checkColorRange(colorAdapter.getColor(), foregroundColor) == true)
 		{
-			motor.resetTachoCount();
-			motor.setSpeed(oldMotorSpeed);
-			motor.rotate(20);
-			motor.flt();
+			colorMotor.resetTachoCount();
+			colorMotor.setSpeed(oldMotorSpeed);
+			//Left
+			colorMotor.rotate(2);
+			colorMotor.flt();
 			makeReport(Direction.Straight);
 		
 			Sound.beepSequenceUp();
 	
-			debugger.printToScreen("CenterlineDetector: Finished calibrating.");
-			
-			isScanning = false;
+			debugger.printToScreen("CenterLineDetector: Finished calibrating.");
 			return;
 		}
 		
-		motor.rotate(-180, true);//Rotate right
+		colorMotor.rotate(-180, true);//Rotate right
 
-		while(motor.isMoving() == true && touchAdapters[1].isPressed() == false
+		while(colorMotor.isMoving() == true && touchAdapters[1].isPressed() == false
 				&& sensorUtils.checkColorRange(colorAdapter.getColor(), foregroundColor) == false)//[1] is right
 		{
 			Thread.yield();
@@ -362,46 +206,41 @@ public class CenterlineDetector implements IntersectionType
 		
 		if(sensorUtils.checkColorRange(colorAdapter.getColor(), foregroundColor) == true)
 		{
-			motor.resetTachoCount();
-			motor.setSpeed(oldMotorSpeed);
-			motor.rotate(20);
-			motor.flt();
+			colorMotor.resetTachoCount();
+			colorMotor.setSpeed(oldMotorSpeed);
+			colorMotor.rotate(2);
+			colorMotor.flt();
 			makeReport(Direction.Straight);
 		
 			Sound.beepSequenceUp();
 	
-			debugger.printToScreen("CenterlineDetector: Finished calibrating.");
-			
-			isScanning = false;
+			debugger.printToScreen("CenterLineDetector: Finished calibrating.");
 			return;
 		}
 
-		throw new RuntimeException("CenterlineDetector: Line was not found in the vicinity of the robot. "
+		throw new RuntimeException("CenterLineDetector: Line was not found in the vicinity of the robot. "
 					+ "Aborting program...");
 	}
 
-	/**
-	 * <b>This method gets called whenever a scan should be initiated, gets the
-	 * <code>Direction</code> by calling the <code>findLine()</code> method, and
-	 * sends it to the <code>makeReport()</code> method.</b>
-	 * <p>
-	 * This method only runs if <code>stopScanning</code> and
-	 * <code>isScanning</code> are set to <code>false</code>. This is mostly to
-	 * prevent conflicting scans or scanning during a turn.
-	 * 
-	 * @author Krish, Caroline, Nick
-	 * @param None
-	 * @return Nothing
-	 * @since 1.0.0 </br>
-	 *        Last modified: 2.0.0
-	 */
-	private void scan()
+	@Override
+	public boolean takeControl()
 	{
-		if(stopScanning == false && isScanning == false)
-		{
-			makeReport(findLine());
-		}
+		direction = readLine();
+		return (direction != Direction.Straight) ? true : false;
 	}
+
+	@Override
+	public void action()
+	{
+		this.makeReport(direction);
+	}
+
+	@Override
+	public void suppress()
+	{
+		//NOTHING
+	}
+	
 
 	/**
 	 * <b>This method gets called whenever a report must get sent to all of the
@@ -418,70 +257,13 @@ public class CenterlineDetector implements IntersectionType
 	 * @since 1.0.0 </br>
 	 *        Last modified: 2.0.0
 	 */
-	public void makeReport(Direction dir)
+	public synchronized void makeReport(Direction dir)
 	{
-		debugger.printToScreen("CenterlineDetector: Making report - Direction is " + dir);
-		for(CenterlineListener listener : listeners)
+		debugger.printToScreen("CenterLineDetector: Making report - Direction is " + dir);
+		direction = dir;
+		for(CenterLineListener listener : listeners)
 		{
-			listener.report(dir);
+			listener.getReport(dir);//Make the report
 		}
-	}
-
-	/**
-	 * <b>This method gets called whenever scans need to start/resume.</b>
-	 * <p>
-	 * When this method is called, <code>service.start()</code> gets called,
-	 * which resumes the scans and sets <code>stopScanning</code> to
-	 * <code>false</code>.
-	 * 
-	 * @author Krish, Caroline, Nick
-	 * @param None
-	 * @return Nothing
-	 * @since 1.0.0 </br>
-	 *        Last modified: 2.0.0
-	 * @throws NullPointerException
-	 *             if there are no listeners defined
-	 */
-	public void start()
-	{
-		if(listeners.size() == 0)
-		{
-			throw new NullPointerException("Centerline listeners not defined!");
-		}
-		service.start();
-		stopScanning = false;
-	}
-
-	/**
-	 * <b>This method gets called whenever scans need to stop.</b>
-	 * <p>
-	 * When this method is called, <code>service.stop()</code> gets called,
-	 * which stops the scans and sets <code>stopScanning</code> to
-	 * <code>true</code>.
-	 * 
-	 * @author Krish, Caroline, Nick
-	 * @param None
-	 * @return Nothing
-	 * @since 1.0.0 </br>
-	 *        Last modified: 2.0.0
-	 */
-	public void stop()
-	{
-		service.stop();
-		stopScanning = true;
-	}
-
-	/**
-	 * <b>Getter for the <code>isScanning</code> variable.</b>
-	 * 
-	 * @author Nick
-	 * @param None
-	 * @return boolean
-	 * @since 2.0.0 </br>
-	 *        Last modified: Never
-	 */
-	public boolean getIsScanning()
-	{
-		return isScanning;
 	}
 }

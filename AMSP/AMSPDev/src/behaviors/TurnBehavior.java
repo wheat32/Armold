@@ -1,32 +1,28 @@
 package behaviors;
 
-import centerlineDetection.CenterlineDetector;
-import centerlineDetection.CenterlineListener;
-import lejos.hardware.sensor.EV3TouchSensor;
+import centerLineDetection.CenterLineDetector;
+import centerLineDetection.CenterLineListener;
 import lejos.robotics.Color;
 import lejos.robotics.ColorAdapter;
 import lejos.robotics.RegulatedMotor;
-import lejos.robotics.TouchAdapter;
 import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.subsumption.Behavior;
 import utils.Debugger;
 import utils.RobotConfig;
 import utils.SensorUtils;
 
-public class TurnBehavior implements Behavior, CenterlineListener
+public class TurnBehavior implements Behavior, CenterLineListener
 {
 
 	private RegulatedMotor scannerMotor;
 	private ColorAdapter colorAdapter;
-	private EV3TouchSensor[] touchSensors = new EV3TouchSensor[2];
-	private TouchAdapter[] touchAdapters = new TouchAdapter[2];
 	private MovePilot pilot;
 	private RobotConfig config;
 	private Debugger debugger;
 	private SensorUtils sensorUtils;
 	private Color foreground;
-	private CenterlineDetector det = CenterlineDetector.getInstance();
-	private Direction direction = Direction.Straight;
+	private CenterLineDetector det;
+	private Direction direction = Direction.Straight;//TODO test this as null
 	
 	public TurnBehavior(RobotConfig config)
 	{
@@ -34,15 +30,9 @@ public class TurnBehavior implements Behavior, CenterlineListener
 		debugger = config.getDebugger();
 		sensorUtils = config.getSensorUtils();
 		scannerMotor = config.getColorScannerMotor();
-		colorAdapter = new ColorAdapter(config.getColorSensor());
-		touchSensors = config.getTouchSensors();
-		foreground = config.getForegroundColor();
+		colorAdapter = config.getColorAdapter();
 		pilot = config.getMovePilotInstance();
-		
-		for(int i = 0; i < touchSensors.length; i++)
-		{
-			touchAdapters[i] = new TouchAdapter(touchSensors[i]);
-		}
+		foreground = config.foregroundColor;
 	}
 	
 	/**
@@ -59,29 +49,9 @@ public class TurnBehavior implements Behavior, CenterlineListener
 	@Override
 	public boolean takeControl() 
 	{
-		if(det.getIsScanning() == false)
-		{
-			//If while going straight and see the foreground line, go into this block
-			if(direction == Direction.Straight 
-					&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == true
-					&& det.getIsScanning() == false)
-			{
-				debugger.printToScreen("Turn Behavior found left turn.");
-				det.stop();
-				det.makeReport(Direction.LeftTurn);
-				return true;
-			}
-			//If the Direction is any intersection type, go into this block
-			else if((direction == Direction.LeftTurn || direction == Direction.RightTurn 
-					|| direction == Direction.DeadEnd)
-					&& det.getIsScanning() == false)
-			{
-				det.stop();
-				return true;
-			}
-		}
-		
-		return false;
+		//If the Direction is any intersection type, go into this block
+		return (direction == Direction.LeftTurn || direction == Direction.RightTurn || direction == Direction.DeadEnd)
+				? true : false;
 	}
 
 	/**
@@ -127,12 +97,6 @@ public class TurnBehavior implements Behavior, CenterlineListener
 	{
 		debugger.printToScreen("TurnBehavior: Action for direction " + direction);
 		
-		while(det.getIsScanning())//Let the scan conclude
-		{
-			Thread.yield();
-		}
-		det.stop();
-		
 		pilot.stop();
 		scannerMotor.rotateTo(0);
 		scannerMotor.flt();
@@ -141,117 +105,68 @@ public class TurnBehavior implements Behavior, CenterlineListener
 		switch(direction)
 		{
 			case DeadEnd:
-				pilot.rotate(120, true);//positive is right
-					
-				while(pilot.isMoving() 
-						&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
-				{
-					Thread.yield();
-				}
-
-				pilot.stop();
-				//If the robot found the line again, break out of the switch.
-				//In this instance, it most likely found a right turn.
-				if(sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == true)
-				{
-					break;
-				}
+				pilot.rotate(200, true);//Positive is right
 				
-				//If it didn't find the line in the initial 120 degree rotation, we know it wasn't a right
-				//turn and it should rotate further to go back the way it came from
-				pilot.rotate(120, true);
-					
-				while(pilot.isMoving() 
-						&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
+				while(sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false 
+						&& pilot.isMoving() == true)
 				{
 					Thread.yield();
 				}
 				
-				//If it STILL didn't see the foreground line, it more than likely rotated past 180 degrees,
-				//so it should rotate back to the left 60 degrees to approximately be facing the way it
-				//came from.
-				if(sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
+				if(pilot.isMoving() == false)
 				{
-					pilot.rotate(-60, true);
-					
-					//Continue rotating back until it sees the foreground line color (because maybe it missed
-					//the color the first time going through). It's a "Jesus Take the Wheel" moment from
-					//here as it will blindly drive forward towards where the line might be.
-					while(pilot.isMoving() 
-							&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
-					{
-						Thread.yield();
-					}
+					pilot.rotate(-200);//Negative is left
+					throw new RuntimeException("TurnBehavior: Failed scan in the DeadEnd case.");
 				}
 				break;
 			case RightTurn:
-				//No right turn logic yet, and Direction is never set to RightTurn yet.
-				throw new RuntimeException("[" + config.getTime() + "]"
-						+ "TurnBehavior: Went into right turn case.");
-			case LeftTurn:
-				short rotation = -20;
-				
 				//Travel slightly forward to get in the middle of the intersection
 				pilot.travel(3.5);
-				//a small [rotation] degree turn followed by a [rotation] degree turn
-				pilot.rotate(rotation, true);
-					
-				//While rotating and doesn't see the foreground...
-				while(pilot.isMoving() 
-						&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
+				
+				pilot.rotate(200, true);//Positive is right
+				
+				while(sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false 
+						&& pilot.isMoving() == true)
 				{
 					Thread.yield();
 				}
 				
-				//If a foreground colored line was found right after the left turn began
-				if(sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == true)
+				if(pilot.isMoving() == false)
 				{
-					//Rotate until just past the line
-					pilot.rotate(-20, true);
-					
-					//While rotating and the color sensor sees the foreground color...
-					while(pilot.isMoving() 
-							&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == true)
-					{
-						Thread.yield();
-					}
+					pilot.rotate(-200);//Negative is left
+					det.makeReport(Direction.LeftTurn);
+					return;
 				}
+				break;
+			case LeftTurn:
+				//Travel slightly forward to get in the middle of the intersection
+				pilot.travel(3.5);
 				
-				//finish the turn (the rotation in degrees evaluates negative)
-				pilot.rotate(Math.abs(rotation)-130, true);
+				pilot.rotate(-120, true);//Negative is left
 				
-				while(pilot.isMoving() 
-						&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
+				while(sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false 
+						&& pilot.isMoving() == true)
 				{
 					Thread.yield();
 				}
 				
-				//Check if it never saw the foreground during the turn
-				if(sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
-				{	
-					//Rotate back to the starting point
-					pilot.rotate(130-Math.abs(rotation), true);
-						
-					while(pilot.isMoving() 
-							&& sensorUtils.checkColorRange(colorAdapter.getColor(), foreground) == false)
-					{
-						Thread.yield();
-					}
-					
+				if(pilot.isMoving() == false)
+				{
+					pilot.rotate(120);//Positive is right
 					det.makeReport(Direction.DeadEnd);
 					return;
 				}
 				break;
 			default:
-				throw new RuntimeException("[" + config.getTime() + "]"
-						+ "TurnBehavior: Went into the default case in action method.");
+				throw new RuntimeException("[" + config.getTime() + "] "
+						+ "TurnBehavior: Went into the default case in action method. "
+						+ "Direction was: " + direction + ".");
 		}
 		
 		pilot.stop();
-		scannerMotor.rotateTo(20);
-		scannerMotor.flt();
+		debugger.printToScreen("TurnBehavior: Finished action for direction " + direction);
 		det.makeReport(Direction.Straight);
-		det.start();
+		return;
 	}
 
 	@Override
@@ -261,13 +176,14 @@ public class TurnBehavior implements Behavior, CenterlineListener
 	}
 	
 	@Override
-	public void becomeListener(CenterlineDetector det) 
+	public void becomeListener(CenterLineDetector det) 
 	{
+		this.det = det;
 		det.addListener(this);
 	}
 
 	@Override
-	public void report(Direction direction) 
+	public void getReport(Direction direction) 
 	{
 		this.direction = direction;
 	}

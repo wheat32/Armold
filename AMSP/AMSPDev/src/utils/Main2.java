@@ -4,8 +4,8 @@ import behaviors.EmergencyBehavior;
 import behaviors.ForwardBehavior;
 import behaviors.MazeCompletionBehavior;
 import behaviors.TurnBehavior;
-import centerlineDetection.CenterlineDetector;
-import centerlineDetection.CenterlineListener;
+import centerLineDetection.CenterLineDetector;
+import centerLineDetection.CenterLineListener;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
@@ -29,52 +29,43 @@ public class Main2
 	{
 		//RobotConfig setup
 		RobotConfig config = new RobotConfig();
-		Port[] touchPorts = {SensorPort.S1, SensorPort.S4};//Required to be here
+		config.configureTouchSensorPorts(new Port[]{SensorPort.S1, SensorPort.S4});//Required to be here
 		config.configureDifferentialPilot(Motor.A, Motor.D, 2.1f, 3);
 		config.configureColorScannerMotor(Motor.B);
 		config.configureColorSensorPort(SensorPort.S3);
-		config.configureTouchSensorPorts(touchPorts);
-		config.setLinearSpeed(4);
+		config.setLinearSpeed(4.0);
 		config.setLinearAcceleration(3);
 		config.setAngularSpeed(24);
+		config.setColorScannerMotorRotationSpeed(42);
 		
 		Debugger debugger = new Debugger(config);
 		Thread.setDefaultUncaughtExceptionHandler(debugger);
 		config.setDebugger(debugger);
 		debugger.debugPrompt();
 		
-		SensorUtils sensorUtils = new SensorUtils(config);
-		config.setSensorUtils(sensorUtils);
-		
-		//Object declarators
-		CenterlineDetector det = new CenterlineDetector(config, 1400, 50);
-		UserInput userInput = new UserInput(64, debugger);
-		Arbitrator arby;
-		Behavior[] behaviors;
+		//Object declarations
+		config.setSensorUtils(new SensorUtils(config));
+		CenterLineDetector det = new CenterLineDetector(config);
+		new UserInput(64, debugger);
 		
 		//Behavior setups and object instantiations
 		Behavior b1 = new ForwardBehavior(config);
 		Behavior b2 = new TurnBehavior(config);
-		Behavior b3 = new MazeCompletionBehavior(config);
-		Behavior b4 = new EmergencyBehavior(config);
-		behaviors = new Behavior[] {b1, b3, b2, b4};//Priority: Lowest Priority <--> Highest Priority
-		arby = new Arbitrator(behaviors);
-		
-		System.out.println("\n\n\n\n\n\n\n");
+		//Behavior b3 = new MazeCompletionBehavior(config);
+		Behavior b4 = new EmergencyBehavior(config, det);
+		Behavior b5 = (Behavior) det;
+		Behavior[] behaviors = {b1, b5/*, b3*/, b2, b4};//Priority: Lowest Priority <--> Highest Priority
 		
 		//Create Listeners
-		((CenterlineListener)b2).becomeListener(det);
-		((CenterlineListener)b3).becomeListener(det);
-		
-		userInput.start();
+		((CenterLineListener) (b1)).becomeListener(det);
+		((CenterLineListener) (b2)).becomeListener(det);
+		//((CenterLineListener) (b3)).becomeListener(det);
 		
 		config.resetTimeStamp();
 		
 		//Calibrate
 		det.calibrate();
-		//Start the scan timer
-		det.start();
 		//Start the arbitrator
-		arby.go();
+		new Arbitrator(behaviors).go();
 	}
 }

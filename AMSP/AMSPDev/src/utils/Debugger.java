@@ -4,13 +4,16 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
 
 public class Debugger implements Thread.UncaughtExceptionHandler
 {
-	//Change this variable to get live debug feed to console
+	//Change this variable to true to get live debug feed to console
 	private boolean debuggingToConsole = false;
 	
 	private boolean debugToScreenEnabled = true;
@@ -29,12 +32,10 @@ public class Debugger implements Thread.UncaughtExceptionHandler
 			return;
 		}
 		
-		boolean buttonPressed = false;
-		boolean onYes = true;
+		boolean buttonPressed = true;//Initially set to true so it runs the first part of the loop
+		boolean onYes = false;//If false, will print "Yes   >No" initially
 		
-		System.out.println("\n\n\n\n");
-		System.out.println("Do you want debug\nto screen\nenabled?");
-		System.out.print(">Yes     No");
+		Sound.beep();
 		
 		loop: while(true)
 		{
@@ -76,6 +77,9 @@ public class Debugger implements Thread.UncaughtExceptionHandler
 						Sound.beep();
 					}
 					break;
+				case 32://Back button
+					Sound.beep();
+					System.exit(0);
 			}
 			
 			//Thread.sleep to prevent killing the CPU
@@ -110,11 +114,14 @@ public class Debugger implements Thread.UncaughtExceptionHandler
 		
 		try 
 		{
-			file = new File("output.txt");
+			file = new File("output2.txt");
 			
 			if(file.exists() == true && file != null)
 			{
-				file.delete();
+				if(file.delete() == false)
+				{
+					throw new RuntimeException("Debugger: Was unable to delete output file (ghost reference?)");
+				}
 			}
 			
 			file.createNewFile();

@@ -7,6 +7,7 @@ import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.robotics.Color;
 import lejos.robotics.ColorAdapter;
 import lejos.robotics.RegulatedMotor;
+import lejos.robotics.TouchAdapter;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
 import lejos.robotics.navigation.MovePilot;
@@ -20,15 +21,16 @@ import lejos.robotics.navigation.MovePilot;
  */
 public class RobotConfig
 {
-	private Color foreground = new Color(6, 6, 8);
-	private Color finish = new Color(6, 9, 30);
-	private Color border = new Color(42, 6, 7);
-	private byte colorBuffer = 10;
+	public final Color foregroundColor = new Color(6, 6, 8);//Black in in-house testing
+	public final Color finishColor = new Color(6, 9, 30);//Blue in in-house testing
+	public final Color borderColor = new Color(42, 6, 7);//Red in in-house testing
+	private final byte colorBuffer = 10;
 	
 	private Debugger debugger;
 	private SensorUtils sensorUtils;
 
 	private EV3TouchSensor[] touchSensors = new EV3TouchSensor[2];
+	private TouchAdapter[] touchAdapters = new TouchAdapter[2];
 	private EV3ColorSensor colorSensor;
 	private ColorAdapter colorAdapter;
 
@@ -127,12 +129,28 @@ public class RobotConfig
 		return touchSensors;
 	}
 	
+	public TouchAdapter[] getTouchAdapter()
+	{
+		if (touchAdapters[0] == null)
+		{
+			if(touchSensors[0] == null)
+			{
+				getTouchSensors();//Initialize the touch sensors
+			}
+			
+			for(int i = 0; i < touchSensors.length; i++)
+			{
+				touchAdapters[i] = new TouchAdapter(touchSensors[i]);
+			}
+		}
+		return touchAdapters;
+	}
+	
 	public ColorAdapter getColorAdapter()
 	{
-	
 		if (colorAdapter == null)
 		{
-			colorAdapter = new ColorAdapter(colorSensor);
+			colorAdapter = new ColorAdapter(getColorSensor());
 		}
 		return colorAdapter;
 	}
@@ -212,6 +230,11 @@ public class RobotConfig
 	{
 		movePilot.setAngularAcceleration(acceleration);
 	}
+	
+	public void setColorScannerMotorRotationSpeed(int speed)
+	{
+		colorScannerMotor.setSpeed(speed);
+	}
 
 	public RegulatedMotor getColorScannerMotor()
 	{
@@ -226,21 +249,6 @@ public class RobotConfig
 	public long getTime()
 	{
 		return System.currentTimeMillis() - timeStamp;
-	}
-
-	public Color getForegroundColor()
-	{
-		return foreground;
-	}
-
-	public Color getFinishColor()
-	{
-		return finish;
-	}
-
-	public Color getBorderColor()
-	{
-		return border;
 	}
 	
 	public byte getColorBuffer()

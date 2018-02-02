@@ -1,4 +1,4 @@
-package centerlineDetection;
+package centerLineDetection;
 
 public interface IntersectionType
 {

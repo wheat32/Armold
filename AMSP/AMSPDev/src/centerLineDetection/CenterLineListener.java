@@ -1,6 +1,6 @@
-package centerlineDetection;
+package centerLineDetection;
 
-public interface CenterlineListener extends IntersectionType
+public interface CenterLineListener extends IntersectionType
 {
 	/**
 	 * <b>This abstract method reports a <code>Direction</code> called direction.</b>
@@ -12,7 +12,7 @@ public interface CenterlineListener extends IntersectionType
 	 * @author Krish
 	 * @since 1.0.0 
 	 */
-	void report(Direction direction);
+	void getReport(Direction direction);
 	/**
 	 * <b>This abstract method gives a <code>CenterlineDetector</code> called det.</b>
 	 * <p>
@@ -23,5 +23,5 @@ public interface CenterlineListener extends IntersectionType
 	 * @author Krish
 	 * @since 1.0.0
 	 */
-	void becomeListener(CenterlineDetector det);
+	void becomeListener(CenterLineDetector det);
 }

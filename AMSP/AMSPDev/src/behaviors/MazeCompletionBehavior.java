@@ -2,31 +2,27 @@ package behaviors;
 
 import java.io.File;
 
-import centerlineDetection.CenterlineDetector;
-import centerlineDetection.CenterlineListener;
+import centerLineDetection.CenterLineDetector;
+import centerLineDetection.CenterLineListener;
 import lejos.hardware.Sound;
-import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.robotics.ColorAdapter;
 import lejos.robotics.subsumption.Behavior;
 import utils.Debugger;
 import utils.RobotConfig;
 
-public class MazeCompletionBehavior implements Behavior, CenterlineListener
+public class MazeCompletionBehavior implements Behavior, CenterLineListener
 {
 	private RobotConfig config;
 	private Debugger debugger;
-	private EV3ColorSensor sensor;
 	private ColorAdapter colorAdapter;
 	private Direction direction;
-	private CenterlineDetector det = CenterlineDetector.getInstance();
 	private long timestamp = 0;//TODO add Javadoc for this variable
 	
 	public MazeCompletionBehavior(RobotConfig config)
 	{
 		this.config = config;
 		debugger = config.getDebugger();
-		sensor = config.getColorSensor();
-		colorAdapter = new ColorAdapter(sensor);
+		colorAdapter = config.getColorAdapter();
 	}
 	
 	/**
@@ -51,15 +47,14 @@ public class MazeCompletionBehavior implements Behavior, CenterlineListener
 	@Override
 	public boolean takeControl()
 	{
-		if(direction == Direction.Finish && det.getIsScanning() == false)
+		if(direction == Direction.Finish)
 		{
 			return true;
 		}
 		//Must wait at least 2 seconds before being able to scan again
 		else if(System.currentTimeMillis()-timestamp >= 3000)
 		{
-			if(config.getSensorUtils().checkColorRange(colorAdapter.getColor(), config.getFinishColor()) == true 
-					&& det.getIsScanning() == false)
+			if(config.getSensorUtils().checkColorRange(colorAdapter.getColor(), config.finishColor) == true)
 			{
 				timestamp = System.currentTimeMillis();
 				return true;
@@ -100,25 +95,21 @@ public class MazeCompletionBehavior implements Behavior, CenterlineListener
 	{
 		debugger.printToScreen("MazeCompletionBehavior: In action method.");
 		
-		det.stop();
 		config.getMovePilotInstance().stop();
 		
 		if(direction == Direction.Finish)
 		{
 			wrapUp();
 		}
-		else if(config.getSensorUtils().checkColorRange(colorAdapter.getColor(), config.getFinishColor()) == true)
+		else if(config.getSensorUtils().checkColorRange(colorAdapter.getColor(), config.finishColor) == true)
 		{
-			while(det.getIsScanning())//Let the scan conclude
-			{
-				Thread.yield();
-			}
+
 			
 			debugger.printToScreen("MazeCompletionBehavior: Requesting scan for finish line.");
 			
 			Sound.beep();
 			
-			if(det.requestFinishScan() == Direction.Finish)
+			if(requestFinishScan() == Direction.Finish)
 			{
 				wrapUp();
 			}
@@ -128,7 +119,6 @@ public class MazeCompletionBehavior implements Behavior, CenterlineListener
 		
 		timestamp = System.currentTimeMillis();
 		config.getMovePilotInstance().travel(-0.4);
-		det.start();
 	}
 
 	@Override
@@ -158,15 +148,72 @@ public class MazeCompletionBehavior implements Behavior, CenterlineListener
 	}
 	
 	@Override
-	public void becomeListener(CenterlineDetector det) 
+	public void becomeListener(CenterLineDetector det) 
 	{
 		det.addListener(this);
 	}
 
 	@Override
-	public void report(Direction direction) 
+	public void getReport(Direction direction) 
 	{
 		this.direction = direction;
 	}
 
+	/**
+	 * <b>This method runs a short scan upon a request to see if the robot
+	 * has reached the finish line.</b>
+	 * <p>
+	 * This method sets <code>isScanning</code> to <code>true</code> and stops
+	 * the movement of the robot upon starting. It will check if the color
+	 * sensor sees the finish line color first. If it does <b>NOT</b>, it will
+	 * return <code>Direction.Straight</code>, leaving the method and setting
+	 * <code>isScanning</code> to <code>false</code>. </br>
+	 * If it does, it will confirm that it is on the finish line with a short
+	 * scan. The color sensor will rotate n degrees to the right, while checking
+	 * if it sees the finish line color the entire length of the rotation. If it
+	 * saw the finish line color the entire scan, it will return
+	 * <code>Direction.Finish</code>. If it did <b>NOT</b>, it will return
+	 * <code>Direction.Straight</code> and leave the method after setting
+	 * <code>isScanning</code> to <code>false</code>.
+	 * 
+	 * @author Nick
+	 * @param None
+	 * @return Direction <code>enum</code>
+	 * @since 2.1.0 </br>
+	 *        Last modified: Never
+	 */
+	public Direction requestFinishScan()
+	{
+		config.getMovePilotInstance().stop();
+		debugger.printToScreen("CenterlineDetector: Finish line scan requested.");
+
+		if(config.getSensorUtils().checkColorRange(colorAdapter.getColor(), config.finishColor) == false)
+		{
+			debugger.printToScreen("CenterlineDetector: Request result: False alarm.");
+			return Direction.Straight;
+		}
+
+		config.getColorScannerMotor().rotate(-45, true);
+
+		while(config.getSensorUtils().checkColorRange(colorAdapter.getColor(), config.finishColor) == true
+				&& config.getColorScannerMotor().isMoving())
+		{
+			Thread.yield();
+		}
+
+		if(config.getSensorUtils().checkColorRange(colorAdapter.getColor(), config.finishColor) == true)
+		{
+			config.getColorScannerMotor().rotateTo(0);
+			config.getColorScannerMotor().flt();
+			return Direction.Finish;
+		}
+		else
+		{
+			config.getColorScannerMotor().rotateTo(0);
+			config.getColorScannerMotor().rotate(20);
+			config.getColorScannerMotor().flt();
+			debugger.printToScreen("CenterlineDetector: Request result: False alarm.");
+			return Direction.Straight;
+		}
+	}
 }

@@ -1,7 +1,8 @@
 package behaviors;
 
-import centerlineDetection.CenterlineDetector;
-import centerlineDetection.IntersectionType;
+import centerLineDetection.CenterLineDetector;
+import centerLineDetection.IntersectionType;
+import lejos.hardware.Sound;
 import lejos.robotics.ColorAdapter;
 import lejos.robotics.subsumption.Behavior;
 import utils.Debugger;
@@ -12,11 +13,12 @@ public class EmergencyBehavior implements Behavior, IntersectionType
 	private RobotConfig config;
 	private Debugger debugger;
 	private ColorAdapter colorAdapter;
-	private CenterlineDetector det = CenterlineDetector.getInstance();
+	private CenterLineDetector det;
 	
-	public EmergencyBehavior(RobotConfig config)
+	public EmergencyBehavior(RobotConfig config, CenterLineDetector det)
 	{
 		this.config = config;
+		this.det = det;
 		debugger = config.getDebugger();
 		colorAdapter = new ColorAdapter(config.getColorSensor());
 	}
@@ -36,13 +38,8 @@ public class EmergencyBehavior implements Behavior, IntersectionType
 	@Override
 	public boolean takeControl()
 	{		
-		if(config.getSensorUtils().checkColorRange(colorAdapter.getColor(), config.getBorderColor()) == true
-				&& det.getIsScanning() == false)
-		{
-			det.stop();
-			return true;
-		}
-		return false;
+		return (config.getSensorUtils().checkColorRange(colorAdapter.getColor(), config.borderColor) == true) 
+				? true : false;
 	}
 
 	/**
@@ -58,10 +55,12 @@ public class EmergencyBehavior implements Behavior, IntersectionType
 	@Override
 	public void action() 
 	{
-		debugger.printToScreen("EmergencyBehavior: Boarder recovery initialized.");
+		Sound.beep();
+		debugger.printToScreen("EmergencyBehavior: Boarder recovery activated.");
 		config.getMovePilotInstance().stop();
 		config.getMovePilotInstance().travel(-3);
 		det.makeReport(Direction.DeadEnd);
+		return;
 	}
 
 	@Override

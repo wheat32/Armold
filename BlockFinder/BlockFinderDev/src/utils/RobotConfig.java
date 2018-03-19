@@ -25,7 +25,6 @@ public class RobotConfig
 	public final Color border = new Color(42, 6, 7);
 	public final byte colorBuffer = 10;
 	
-	private Debugger debugger;
 	private SensorUtils sensorUtils;
 
 	private EV3ColorSensor colorSensor;
@@ -201,16 +200,6 @@ public class RobotConfig
 	public long getTime()
 	{
 		return System.currentTimeMillis() - timeStamp;
-	}
-	
-	public Debugger getDebugger()
-	{
-		return debugger;
-	}
-	
-	public void setDebugger(Debugger debugger)
-	{
-		this.debugger = debugger;
 	}
 	
 	public SensorUtils getSensorUtils()

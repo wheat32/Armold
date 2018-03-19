@@ -1,5 +1,8 @@
 package utils;
 
+import arbitrator.Arbitrator;
+import arbitrator.Behavior;
+import behaviors.MoveForward;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.SensorPort;
 
@@ -9,7 +12,6 @@ public class Main
 	{
 		//Setup
 		RobotConfig config = new RobotConfig();
-		config.setDebugger(new Debugger(config));
 		
 		//RobotConfig setup
 		config.configureDifferentialPilot(Motor.B, Motor.C, 2.1f, 3);
@@ -20,10 +22,15 @@ public class Main
 		config.setLinearAcceleration(3);
 		config.setAngularSpeed(24);
 		
+		//Behavior setup
+		Behavior moveForward = new MoveForward(config);
+		
 		//Object Declarators
+		Debugger.setConfig(config);
 		new UserInput(64).start();
 		
 		//Start runtime
-		config.getDebugger().debugPrompt();
+		Debugger.debugPrompt();
+		new Arbitrator(new Behavior[] {moveForward});
 	}
 }

@@ -11,18 +11,18 @@ import lejos.hardware.Sound;
 public class Debugger implements Thread.UncaughtExceptionHandler
 {
 	//Change this variable to get live debug feed to console
-	private boolean debuggingToConsole = false;
+	private static boolean debuggingToConsole = false;
 	
-	private boolean debugToScreenEnabled = true;
-	private RobotConfig config;
-	private StringBuilder outputColl = new StringBuilder();
+	private static boolean debugToScreenEnabled = true;
+	private static RobotConfig config;
+	private static StringBuilder outputColl = new StringBuilder();
 	
-	public Debugger(RobotConfig config)
+	public static void setConfig(RobotConfig config)
 	{
-		this.config = config;
+		Debugger.config = config;
 	}
 	
-	public void debugPrompt()
+	public static void debugPrompt()
 	{
 		if(debuggingToConsole == true)
 		{
@@ -92,7 +92,7 @@ public class Debugger implements Thread.UncaughtExceptionHandler
 		debugToScreenEnabled = onYes;
 	}
 	
-	public void printToScreen(String str)
+	public static void printToScreen(String str)
 	{
 		outputColl.append("[" + config.getTime() + "] " + str + "\n");
 		
@@ -102,7 +102,7 @@ public class Debugger implements Thread.UncaughtExceptionHandler
 		}
 	}
 	
-	public void exit(boolean immediateExit)
+	public static void exit(boolean immediateExit)
 	{
 		File file = null;
 		FileWriter fw = null;

@@ -3,11 +3,10 @@ package arbitrator;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import utils.RobotConfig;
+import utils.Debugger;
 
 public class Arbitrator
 {
-	private final RobotConfig config;
 	private final Behavior[] behaviors;
 	/**
 	 * If inAction is in -1, then no action is being ran
@@ -19,20 +18,14 @@ public class Arbitrator
 	 * Priority is as follows: highest priority <-----> lowest priority
 	 * @param behaviors
 	 */
-	public Arbitrator(RobotConfig config, Behavior[] behaviors)
+	public Arbitrator(Behavior[] behaviors)
 	{
 		if(behaviors == null || behaviors.length == 0)
 		{
 			throw new RuntimeException("Arbitrator: Behavior passed to the arbitrator are empty");
 		}
 		
-		if(config == null)
-		{
-			throw new RuntimeException("Arbitrator: RobotConfig passed to Arbitator is null");
-		}
-		
 		this.behaviors = behaviors;
-		this.config = config;
 	}
 	
 	public void startArbitrator(short delay)
@@ -60,7 +53,7 @@ public class Arbitrator
 				}
 				
 				stopArbitrator();
-				config.getDebugger().printToScreen("Arbitrator: No behaviors requested control.");
+				Debugger.printToScreen("Arbitrator: No behaviors requested control.");
 			}
 		};
 		controlTimer = new Timer();

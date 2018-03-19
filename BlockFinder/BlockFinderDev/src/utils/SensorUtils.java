@@ -18,8 +18,8 @@ public class SensorUtils
 		
 		for(int i = 0; i < currColorElems.length; i++)
 		{
-			if(currColorElems[i] - targetColorElems[i] > config.getColorBuffer()
-					|| currColorElems[i] - targetColorElems[i] < config.getColorBuffer()*-1)
+			if(currColorElems[i] - targetColorElems[i] > config.colorBuffer
+					|| currColorElems[i] - targetColorElems[i] < config.colorBuffer*-1)
 			{
 				return false;
 			}

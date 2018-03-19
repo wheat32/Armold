@@ -9,6 +9,9 @@ public class Arbitrator
 {
 	private final RobotConfig config;
 	private final Behavior[] behaviors;
+	/**
+	 * If inAction is in -1, then no action is being ran
+	 */
 	private short inAction = -1;
 	private Timer controlTimer;
 	
@@ -41,12 +44,19 @@ public class Arbitrator
 			{
 				for(short i = 0; i < behaviors.length; i++)
 				{
+					//(i < inAction) checks priority
 					if(behaviors[i].control() == true && (inAction == -1 || i < inAction))
 					{
 						behaviors[i].action();
 						inAction = i;
 						return;
 					}
+				}
+				
+				//Check if no actions are being ran
+				if(inAction == -1)
+				{
+					throw new RuntimeException("No behavior needs an action");
 				}
 				
 				stopArbitrator();

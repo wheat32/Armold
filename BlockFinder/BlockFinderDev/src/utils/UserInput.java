@@ -34,9 +34,4 @@ public class UserInput
 	{
 		service.start();
 	}
-	
-	public void stop()
-	{
-		service.stop();
-	}
 }

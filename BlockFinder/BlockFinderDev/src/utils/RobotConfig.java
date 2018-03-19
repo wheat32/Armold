@@ -3,7 +3,7 @@ package utils;
 import lejos.hardware.motor.NXTRegulatedMotor;
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.hardware.sensor.EV3TouchSensor;
+import lejos.hardware.sensor.EV3IRSensor;
 import lejos.robotics.Color;
 import lejos.robotics.ColorAdapter;
 import lejos.robotics.RegulatedMotor;
@@ -20,20 +20,21 @@ import lejos.robotics.navigation.MovePilot;
  */
 public class RobotConfig
 {
-	private Color foreground = new Color(6, 6, 8);
-	private Color finish = new Color(6, 9, 30);
-	private Color border = new Color(42, 6, 7);
-	private byte colorBuffer = 10;
+	public final Color foreground = new Color(6, 6, 8);
+	public final Color finish = new Color(6, 9, 30);
+	public final Color border = new Color(42, 6, 7);
+	public final byte colorBuffer = 10;
 	
 	private Debugger debugger;
 	private SensorUtils sensorUtils;
 
-	private EV3TouchSensor[] touchSensors = new EV3TouchSensor[2];
 	private EV3ColorSensor colorSensor;
 	private ColorAdapter colorAdapter;
+	
+	private EV3IRSensor irSensor;
 
 	private Port colorSensorPort;
-	private Port[] touchSensorPorts = new Port[2];
+	private Port irSensorPort;
 
 	private RegulatedMotor colorScannerMotor;
 
@@ -73,34 +74,6 @@ public class RobotConfig
 		colorSensorPort = port;
 	}
 
-	public void configureTouchSensorPorts(Port[] ports)
-	{
-		for(int i = 0; i < ports.length; i++)
-		{
-			touchSensorPorts[i] = ports[i];
-		}
-	}
-	
-	/**
-	 * Get the Color Sensor Port
-	 * 
-	 * @return the sensor port
-	 */
-	public Port getColorSensorPort()
-	{
-		return colorSensorPort;
-	}
-
-	/**
-	 * Get the Touch Sensor Port
-	 * 
-	 * @return the sensor port
-	 */
-	public Port[] getTouchSensorPort()
-	{
-		return touchSensorPorts;
-	}
-
 	/**
 	 * Configures Color sensor turret motor.
 	 * 
@@ -110,23 +83,12 @@ public class RobotConfig
 	{
 		colorScannerMotor = motor;
 	}
-
-	public EV3TouchSensor[] getTouchSensors()
-	{
-		if(touchSensors[0] == null)
-		{
-			if(touchSensorPorts[0] == null)
-			{
-				throw new NullPointerException("Touch sensor ports undefined!");
-			}
-			for(int i = 0; i < touchSensorPorts.length; i++)
-			{
-				touchSensors[i] = new EV3TouchSensor(touchSensorPorts[i]);
-			}
-		}
-		return touchSensors;
-	}
 	
+	public void configureIRSensorPort(Port port)
+	{
+		irSensorPort = port;
+	}
+
 	public ColorAdapter getColorAdapter()
 	{
 	
@@ -148,6 +110,19 @@ public class RobotConfig
 			colorSensor = new EV3ColorSensor(colorSensorPort);
 		}
 		return colorSensor;
+	}
+	
+	public EV3IRSensor getIRSensor()
+	{
+		if(irSensor == null)
+		{
+			if(irSensorPort == null)
+			{
+				throw new NullPointerException("IR sensor port undefined!");
+			}
+			irSensor = new EV3IRSensor(irSensorPort);
+		}
+		return irSensor;
 	}
 
 	/**
@@ -226,26 +201,6 @@ public class RobotConfig
 	public long getTime()
 	{
 		return System.currentTimeMillis() - timeStamp;
-	}
-
-	public Color getForegroundColor()
-	{
-		return foreground;
-	}
-
-	public Color getFinishColor()
-	{
-		return finish;
-	}
-
-	public Color getBorderColor()
-	{
-		return border;
-	}
-	
-	public byte getColorBuffer()
-	{
-		return colorBuffer;
 	}
 	
 	public Debugger getDebugger()

@@ -7,14 +7,12 @@ public class MoveForward implements Behavior
 	@Override
 	public boolean control()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public void action()
 	{
-		// TODO Auto-generated method stub
 		
 	}
 }
